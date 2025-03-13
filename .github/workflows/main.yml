@@ -1,0 +1,44 @@
+name: Build, Pack, and Publish NuGet Package
+
+on:
+  push:
+    tags:
+      - '*'  # Runs on any tag push
+
+jobs:
+  pack-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Setup .NET (adjust the version as needed)
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      # 3. Run GitVersion to calculate version numbers based on your GitVersion.yml
+      - name: GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion@v0.9.14
+
+      # 4. Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # 5. Build the project
+      - name: Build project
+        run: dotnet build --configuration Release --no-restore
+
+      # 6. Pack the project into a NuGet package
+      - name: Pack NuGet Package
+        run: |
+          dotnet pack --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
+      
+      # 7. Push the package to nuget.org
+      - name: Push NuGet Package
+        run: |
+          dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
