@@ -2,33 +2,15 @@ assembly-versioning-scheme: MajorMinorPatch
 assembly-file-versioning-format : '{Major}.{Minor}.{Patch}.{env:BUILD_BUILDID ?? 0}'
 assembly-informational-format: '{SemVer}+{EscapedBranchName}.{ShortSha}'
 commit-date-format: 'yyyyMMddHHmmssFFF'
-continuous-delivery-fallback-tag: alpha
 commit-message-incrementing: Disabled
 #update-build-number: false
 branches:
   release:
-    tag: rc
+    label: rc
   feature:
     mode: ContinuousDeployment
-    tag: alpha
+    label: alpha
   hotfix:
-    tag: rc
+    label: rc
   develop:
-    tag: beta
-  rp:
-    mode: ContinuousDeployment
-    tag: beta
-    increment: Inherit
-    prevent-increment-of-merged-branch-version: false
-    track-merge-target: false
-    regex: ^rp?[/-]
-    source-branches:
-    - develop
-    - feature
-    - hotfix
-    - support
-    tracks-release-branches: false
-    is-release-branch: false
-    is-mainline: false
-    pre-release-weight: 30000
-
+    label: beta

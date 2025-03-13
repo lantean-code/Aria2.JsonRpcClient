@@ -1,45 +1,88 @@
-name: Build, Pack, and Publish NuGet Package
+name: Build, Pack, Publish NuGet Package & Generate API Docs
 
 on:
   push:
-    tags:
-      - '*'  # Runs on any tag push
-  workflow_dispatch:  # Allows manual triggering from the GitHub UI
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '**'
+  workflow_dispatch:
 
 jobs:
-  pack-and-publish:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
-
-      # 2. Setup .NET (adjust the version as needed)
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/checkout@v2
         with:
-          dotnet-version: '8.0.x'
+          fetch-depth: 0  # Fetch full history for GitVersion
 
-      # 3. Run GitVersion to calculate version numbers based on your GitVersion.yml
-      - name: GitVersion
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v3.0.0
+        with:
+          versionSpec: '6.0.0'
+
+      - name: Determine Version
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.14
+        run: |
+          VERSION=$(dotnet gitversion /output json /showvariable FullSemVer)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+        shell: bash
 
-      # 4. Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
 
-      # 5. Build the project
-      - name: Build project
+      - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      # 6. Pack the project into a NuGet package
+      - name: Run Tests
+        run: dotnet test --no-build --configuration Release
+
       - name: Pack NuGet Package
+        if: github.ref == 'refs/heads/master'
         run: |
-          dotnet pack --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
-      
-      # 7. Push the package to nuget.org
+          dotnet pack --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ env.VERSION }}
+
       - name: Push NuGet Package
+        if: github.ref == 'refs/heads/master'
         run: |
-          dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+          dotnet nuget push ./artifacts/Aria2.JsonRpcClient.${{ env.VERSION }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Check if Tag Exists
+        id: check_tag
+        run: |
+          if git rev-parse "${{ env.VERSION }}" >/dev/null 2>&1; then
+            echo "TAG_EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "TAG_EXISTS=false" >> $GITHUB_ENV
+          fi
+
+      - name: Create GitHub Release
+        if: github.ref == 'refs/heads/master' && env.TAG_EXISTS == 'false'
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ env.VERSION }}
+          release_name: Release ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset
+        if: github.ref == 'refs/heads/master' && env.TAG_EXISTS == 'false'
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/Aria2.JsonRpcClient.${{ env.VERSION }}.nupkg
+          asset_name: Aria2.JsonRpcClient.${{ env.VERSION }}.nupkg
+          asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

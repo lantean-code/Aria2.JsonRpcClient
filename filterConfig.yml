@@ -1,0 +1,22 @@
+apiRules:
+  # Exclude the <Clone>$() method (from records)
+  - exclude:
+      uidRegex: "^.*(<Clone>\\$\\(\\))$"
+  # Exclude all Equals(...) overloads
+  - exclude:
+      uidRegex: "^.*\\.Equals\\(.*\\)$"
+  # Exclude GetHashCode()
+  - exclude:
+      uidRegex: "^.*\\.GetHashCode\\(\\)$"
+  # Exclude PrintMembers(...)
+  - exclude:
+      uidRegex: "^.*\\.PrintMembers\\(.*\\)$"
+  # Exclude ToString()
+  - exclude:
+      uidRegex: "^.*\\.ToString\\(\\)$"
+  # Exclude operator ==(...)
+  - exclude:
+      uidRegex: "^.*operator\\s*==\\(.*\\)$"
+  # Exclude operator !=(...)
+  - exclude:
+      uidRegex: "^.*operator\\s*!=\\(.*\\)$"
