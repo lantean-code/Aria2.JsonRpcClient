@@ -1,0 +1,16 @@
+assembly-versioning-scheme: MajorMinorPatch
+assembly-file-versioning-format : '{Major}.{Minor}.{Patch}.{env:BUILD_BUILDID ?? 0}'
+assembly-informational-format: '{SemVer}+{EscapedBranchName}.{ShortSha}'
+commit-date-format: 'yyyyMMddHHmmssFFF'
+commit-message-incrementing: Disabled
+#update-build-number: false
+branches:
+  release:
+    label: rc
+  feature:
+    mode: ContinuousDeployment
+    label: alpha
+  hotfix:
+    label: rc
+  develop:
+    label: beta

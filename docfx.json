@@ -1,0 +1,22 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [ "Aria2.JsonRpcClient/Aria2.JsonRpcClient.csproj" ],
+          "cwd": "."
+        }
+      ],
+      "dest": "api",
+      "filter": "filterConfig.yml"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [ "**/*.md", "api/**.yml" ]
+      }
+    ],
+    "dest": "_site"
+  }
+}
