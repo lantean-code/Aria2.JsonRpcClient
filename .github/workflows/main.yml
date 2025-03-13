@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - '*'  # Runs on any tag push
+  workflow_dispatch:  # Allows manual triggering from the GitHub UI
 
 jobs:
   pack-and-publish:
