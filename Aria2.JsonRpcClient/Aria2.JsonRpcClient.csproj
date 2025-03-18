@@ -6,6 +6,9 @@
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>12</LangVersion>
+  </PropertyGroup>
+  
+  <PropertyGroup>
     <PackageId>Aria2.JsonRpcClient</PackageId>
     <Version>1.0.0</Version>
     <Authors>ahjephson</Authors>
@@ -17,11 +20,24 @@
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageTags>aria aria2 download manager jsonrpc json rpc client websocket</PackageTags>
     <Copyright>Copyright 2025 ahjephson</Copyright>
+    <ProjectUrl>https://github.com/lantean-code/Aria2.JsonRpcClient/wiki</ProjectUrl>  
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <EnableSourceLink>true</EnableSourceLink>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.2" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Polly" Version="8.5.2" />
     <PackageReference Include="PolySharp" Version="1.15.0">
       <PrivateAssets>all</PrivateAssets>
