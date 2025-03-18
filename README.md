@@ -297,4 +297,4 @@ Contributions are welcome! Please fork the repository, create your feature branc
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](https://raw.githubusercontent.com/lantean-code/Aria2Mud/refs/heads/master/LICENSE.txt) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://raw.githubusercontent.com/lantean-code/Aria2.JsonRpcClient/refs/heads/master/LICENSE.txt) file for details.

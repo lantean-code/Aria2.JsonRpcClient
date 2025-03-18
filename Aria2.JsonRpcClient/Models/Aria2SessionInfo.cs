@@ -8,7 +8,7 @@ namespace Aria2.JsonRpcClient.Models
     public record Aria2SessionInfo
     {
         /// <summary>
-        /// Gets the session ID generated for this aria2 session.
+        /// Session ID, which is generated each time when aria2 is invoked.
         /// </summary>
         [JsonPropertyName("sessionId")]
         public required string SessionId { get; init; }

@@ -5,7 +5,7 @@ namespace Aria2.JsonRpcClient.Models
     /// <summary>
     /// Represents the status of a download.
     /// </summary>
-    public enum Status
+    public enum StatusOptions
     {
         /// <summary>
         /// Currently downloading/seeding.

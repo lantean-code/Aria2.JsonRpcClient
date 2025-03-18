@@ -8,141 +8,152 @@ namespace Aria2.JsonRpcClient.Models
     public record Aria2Status
     {
         /// <summary>
-        /// Gets the unique GID of the download.
+        /// GID of the download.
         /// </summary>
         [JsonPropertyName("gid")]
         public string? Gid { get; init; }
 
         /// <summary>
-        /// Gets the current status (e.g. active, waiting, paused, error, complete, removed).
+        /// <see cref="StatusOptions.Active"/> for currently downloading/seeding downloads.
+        /// <see cref="StatusOptions.Waiting"/> for downloads in the queue; download is not started.
+        /// <see cref="StatusOptions.Paused"/> for paused downloads.
+        /// <see cref="StatusOptions.Error"/> for downloads that were stopped because of error.
+        /// <see cref="StatusOptions.Complete"/> for stopped and completed downloads.
+        /// <see cref="StatusOptions.Removed"/> for the downloads removed by user.
         /// </summary>
         [JsonPropertyName("status")]
-        public Status? Status { get; init; }
+        public StatusOptions? Status { get; init; }
 
         /// <summary>
-        /// Gets the total length of the download in bytes.
+        /// Total length of the download in bytes.
         /// </summary>
         [JsonPropertyName("totalLength")]
-        public string? TotalLength { get; init; }
+        public long? TotalLength { get; init; }
 
         /// <summary>
-        /// Gets the completed length in bytes.
+        /// Completed length of the download in bytes.
         /// </summary>
         [JsonPropertyName("completedLength")]
-        public string? CompletedLength { get; init; }
+        public long? CompletedLength { get; init; }
 
         /// <summary>
-        /// Gets the upload length in bytes.
+        /// Uploaded length of the download in bytes.
         /// </summary>
         [JsonPropertyName("uploadLength")]
-        public string? UploadLength { get; init; }
+        public long? UploadLength { get; init; }
 
         /// <summary>
-        /// Gets the hexadecimal representation of the download progress.
+        /// Hexadecimal representation of the download progress. The highest bit corresponds to the piece at index 0. Any set bits indicate loaded pieces, while unset bits indicate not yet loaded and/or missing pieces. Any overflow bits at the end are set to zero. When the download was not started yet, this key will not be included in the response.
         /// </summary>
         [JsonPropertyName("bitfield")]
         public string? Bitfield { get; init; }
 
         /// <summary>
-        /// Gets the current download speed in bytes/sec.
+        /// Download speed of this download measured in bytes/sec.
         /// </summary>
         [JsonPropertyName("downloadSpeed")]
-        public string? DownloadSpeed { get; init; }
+        public long? DownloadSpeed { get; init; }
 
         /// <summary>
-        /// Gets the current upload speed in bytes/sec.
+        /// Upload speed of this download measured in bytes/sec.
         /// </summary>
         [JsonPropertyName("uploadSpeed")]
-        public string? UploadSpeed { get; init; }
+        public long? UploadSpeed { get; init; }
 
         /// <summary>
-        /// Gets the info hash (for BitTorrent downloads).
+        /// InfoHash. BitTorrent only.
         /// </summary>
         [JsonPropertyName("infoHash")]
         public string? InfoHash { get; init; }
 
         /// <summary>
-        /// Gets the number of seeders connected (for BitTorrent).
+        /// The number of seeders aria2 has connected to. BitTorrent only.
         /// </summary>
         [JsonPropertyName("numSeeders")]
-        public string? NumSeeders { get; init; }
+        public int? NumSeeders { get; init; }
 
         /// <summary>
-        /// Gets a value indicating whether the local endpoint is a seeder.
+        /// true if the local endpoint is a seeder. Otherwise false. BitTorrent only.
         /// </summary>
         [JsonPropertyName("seeder")]
-        public string? Seeder { get; init; }
+        public bool? Seeder { get; init; }
 
         /// <summary>
-        /// Gets the piece length in bytes.
+        /// Piece length in bytes.
         /// </summary>
         [JsonPropertyName("pieceLength")]
-        public string? PieceLength { get; init; }
+        public long? PieceLength { get; init; }
 
         /// <summary>
-        /// Gets the total number of pieces.
+        /// The number of pieces.
         /// </summary>
         [JsonPropertyName("numPieces")]
-        public string? NumPieces { get; init; }
+        public int? NumPieces { get; init; }
 
         /// <summary>
-        /// Gets the number of connections (peers or servers) used.
+        /// The number of peers/servers aria2 has connected to.
         /// </summary>
         [JsonPropertyName("connections")]
-        public string? Connections { get; init; }
+        public int? Connections { get; init; }
 
         /// <summary>
-        /// Gets the error code as a string (if any).
+        /// The code of the last error for this item, if any. This value is only available for stopped/completed downloads.
         /// </summary>
         [JsonPropertyName("errorCode")]
-        public string? ErrorCode { get; init; }
+        public Aria2ErrorCode? ErrorCode { get; init; }
 
         /// <summary>
-        /// Gets the human-readable error message.
+        /// The (hopefully) human readable error message associated to <see cref="ErrorCode"/>.
         /// </summary>
         [JsonPropertyName("errorMessage")]
         public string? ErrorMessage { get; init; }
 
         /// <summary>
-        /// Gets the list of GIDs generated as a result of this download.
+        /// List of GIDs which are generated as the result of this download. For example, when aria2 downloads a Metalink file, it generates downloads described in the Metalink (see the <see cref="Aria2DownloadOptions.FollowMetalink"/> option). This value is useful to track auto-generated downloads. If there are no such downloads, this will be null.
         /// </summary>
         [JsonPropertyName("followedBy")]
         public IReadOnlyList<string>? FollowedBy { get; init; }
 
         /// <summary>
-        /// Gets the reverse link from auto-generated downloads.
+        /// The reverse link for <see cref="FollowedBy"/>. A download included in <see cref="FollowedBy"/> has this object's GID in its following value.
         /// </summary>
         [JsonPropertyName("following")]
         public string? Following { get; init; }
 
         /// <summary>
-        /// Gets the parent GID for downloads that are part of another download.
+        /// GID of a parent download. Some downloads are a part of another download. For example, if a file in a Metalink has BitTorrent resources, the downloads of ".torrent" files are parts of that parent. If this download has no parent, this key will not be included in the response.
         /// </summary>
         [JsonPropertyName("belongsTo")]
         public string? BelongsTo { get; init; }
 
         /// <summary>
-        /// Gets the directory where the files are saved.
+        /// Directory to save files.
         /// </summary>
         [JsonPropertyName("dir")]
         public string? Dir { get; init; }
 
         /// <summary>
-        /// Gets the list of files associated with this download.
+        /// Returns the list of files.
         /// </summary>
         [JsonPropertyName("files")]
         public IReadOnlyList<Aria2File>? Files { get; init; }
 
         /// <summary>
-        /// Gets the number of verified bytes while hash checking.
+        /// Contains information retrieved from the .torrent (file). BitTorrent only.
         /// </summary>
-        [JsonPropertyName("verifiedLength")]
-        public string? VerifiedLength { get; init; }
+        [JsonPropertyName("bittorrent")]
+        public Aria2Bittorrent? Bittorrent { get; init; }
 
         /// <summary>
-        /// Gets a value indicating whether the download is pending integrity verification.
+        /// The number of verified number of bytes while the files are being hash checked. This will be null unless this download is being hash checked.
+        /// </summary>
+        [JsonPropertyName("verifiedLength")]
+        public long? VerifiedLength { get; init; }
+
+        /// <summary>
+        /// true if this download is waiting for the hash check in a queue. This will be null unless this download is in the queue.
         /// </summary>
         [JsonPropertyName("verifyIntegrityPending")]
-        public string? VerifyIntegrityPending { get; init; }
+        public bool? VerifyIntegrityPending { get; init; }
     }
 }

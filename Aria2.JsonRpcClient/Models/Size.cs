@@ -33,5 +33,48 @@ namespace Aria2.JsonRpcClient.Models
                 _ => throw new ArgumentOutOfRangeException(nameof(sizeType), sizeType, null),
             };
         }
+
+        /// <summary>
+        /// Tries to parse a size value from a string.
+        /// </summary>
+        /// <param name="s">A string containing a size to convert.</param>
+        /// <param name="result"></param>
+        /// <returns>True if <paramref name="s"/> was converted successfully; otherwise, false.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static bool TryParse(string s, out Size result)
+        {
+            s = s.Trim();
+
+            var unit = s[^1];
+
+            if (unit != 'M' && unit != 'K' && unit != 'm' && unit != 'k')
+            {
+                result = default;
+                return false;
+            }
+
+            var sizeType = unit switch
+            {
+                'M' => SizeType.Megabytes,
+                'm' => SizeType.Megabytes,
+                'K' => SizeType.Kilobytes,
+                'k' => SizeType.Kilobytes,
+                _ => throw new ArgumentOutOfRangeException(nameof(s), unit, null),
+            };
+
+            if (!double.TryParse(s[..^1], out var sizeValue))
+            {
+                result = default;
+                return false;
+            }
+
+            result = new Size
+            {
+                Value = sizeValue,
+                SizeType = sizeType,
+            };
+
+            return true;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Aria2.JsonRpcClient.Models
 {
@@ -8,21 +8,21 @@ namespace Aria2.JsonRpcClient.Models
     public record Aria2ServerDetail
     {
         /// <summary>
-        /// Gets the original URI of the server.
+        /// Original URI.
         /// </summary>
         [JsonPropertyName("uri")]
         public required string Uri { get; init; }
 
         /// <summary>
-        /// Gets the current URI used for downloading (may differ due to redirection).
+        /// This is the URI currently used for downloading. If redirection is involved, currentUri and uri may differ.
         /// </summary>
         [JsonPropertyName("currentUri")]
         public required string CurrentUri { get; init; }
 
         /// <summary>
-        /// Gets the download speed from this server (in bytes/sec).
+        /// Download speed (byte/sec).
         /// </summary>
         [JsonPropertyName("downloadSpeed")]
-        public required string DownloadSpeed { get; init; }
+        public long DownloadSpeed { get; init; }
     }
 }
