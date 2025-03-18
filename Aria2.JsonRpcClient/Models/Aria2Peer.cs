@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Aria2.JsonRpcClient.Models
 {
@@ -8,57 +8,57 @@ namespace Aria2.JsonRpcClient.Models
     public record Aria2Peer
     {
         /// <summary>
-        /// Gets the percent-encoded peer ID.
+        /// Percent-encoded peer ID.
         /// </summary>
         [JsonPropertyName("peerId")]
         public string? PeerId { get; init; }
 
         /// <summary>
-        /// Gets the IP address of the peer.
+        /// IP address of the peer.
         /// </summary>
         [JsonPropertyName("ip")]
         public required string Ip { get; init; }
 
         /// <summary>
-        /// Gets the port number of the peer (as a string).
+        /// Port number of the peer.
         /// </summary>
         [JsonPropertyName("port")]
-        public required string Port { get; init; }
+        public int Port { get; init; }
 
         /// <summary>
-        /// Gets the hexadecimal representation of the peer's download progress.
+        /// Hexadecimal representation of the download progress of the peer. The highest bit corresponds to the piece at index 0. Set bits indicate the piece is available and unset bits indicate the piece is missing. Any spare bits at the end are set to zero.
         /// </summary>
         [JsonPropertyName("bitfield")]
         public string? Bitfield { get; init; }
 
         /// <summary>
-        /// Gets whether aria2 is choking the peer.
+        /// true if aria2 is choking the peer. Otherwise false.
         /// </summary>
         [JsonPropertyName("amChoking")]
-        public required string AmChoking { get; init; }
+        public bool AmChoking { get; init; }
 
         /// <summary>
-        /// Gets whether the peer is choking aria2.
+        /// true if the peer is choking aria2. Otherwise false.
         /// </summary>
         [JsonPropertyName("peerChoking")]
-        public required string PeerChoking { get; init; }
+        public bool PeerChoking { get; init; }
 
         /// <summary>
-        /// Gets the download speed from the peer in bytes/sec.
+        /// Download speed (byte/sec) that this client obtains from the peer.
         /// </summary>
         [JsonPropertyName("downloadSpeed")]
-        public required string DownloadSpeed { get; init; }
+        public long DownloadSpeed { get; init; }
 
         /// <summary>
-        /// Gets the upload speed to the peer in bytes/sec.
+        /// Upload speed(byte/sec) that this client uploads to the peer.
         /// </summary>
         [JsonPropertyName("uploadSpeed")]
-        public required string UploadSpeed { get; init; }
+        public long UploadSpeed { get; init; }
 
         /// <summary>
-        /// Gets whether the peer is a seeder.
+        /// true if this peer is a seeder. Otherwise false.
         /// </summary>
         [JsonPropertyName("seeder")]
-        public required string Seeder { get; init; }
+        public bool Seeder { get; init; }
     }
 }

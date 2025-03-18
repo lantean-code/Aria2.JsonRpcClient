@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Aria2.JsonRpcClient.Models
 {
@@ -8,39 +8,39 @@ namespace Aria2.JsonRpcClient.Models
     public record Aria2GlobalStat
     {
         /// <summary>
-        /// Gets the overall download speed in bytes/sec.
+        /// Overall download speed (byte/sec).
         /// </summary>
         [JsonPropertyName("downloadSpeed")]
-        public required string DownloadSpeed { get; init; }
+        public long DownloadSpeed { get; init; }
 
         /// <summary>
-        /// Gets the overall upload speed in bytes/sec.
+        /// Overall upload speed(byte/sec).
         /// </summary>
         [JsonPropertyName("uploadSpeed")]
-        public required string UploadSpeed { get; init; }
+        public long UploadSpeed { get; init; }
 
         /// <summary>
-        /// Gets the number of active downloads.
+        /// The number of active downloads.
         /// </summary>
         [JsonPropertyName("numActive")]
-        public required string NumActive { get; init; }
+        public int NumActive { get; init; }
 
         /// <summary>
-        /// Gets the number of waiting downloads.
+        /// The number of waiting downloads.
         /// </summary>
         [JsonPropertyName("numWaiting")]
-        public required string NumWaiting { get; init; }
+        public int NumWaiting { get; init; }
 
         /// <summary>
-        /// Gets the number of stopped downloads in the current session.
+        /// The number of stopped downloads in the current session. This value is capped by the --max-download-result option.
         /// </summary>
         [JsonPropertyName("numStopped")]
-        public required string NumStopped { get; init; }
+        public int NumStopped { get; init; }
 
         /// <summary>
-        /// Gets the total number of stopped downloads in the session.
+        /// The number of stopped downloads in the current session and not capped by the --max-download-result option.
         /// </summary>
         [JsonPropertyName("numStoppedTotal")]
-        public required string NumStoppedTotal { get; init; }
+        public int NumStoppedTotal { get; init; }
     }
 }

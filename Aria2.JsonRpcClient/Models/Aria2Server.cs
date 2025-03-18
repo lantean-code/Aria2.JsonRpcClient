@@ -8,10 +8,10 @@ namespace Aria2.JsonRpcClient.Models
     public record Aria2Server
     {
         /// <summary>
-        /// Gets the file index (as a string) corresponding to the group.
+        /// Index of the file, starting at 1, in the same order as files appear in the multi-file metalink.
         /// </summary>
         [JsonPropertyName("index")]
-        public required string Index { get; init; }
+        public int Index { get; init; }
 
         /// <summary>
         /// Gets the list of server details.

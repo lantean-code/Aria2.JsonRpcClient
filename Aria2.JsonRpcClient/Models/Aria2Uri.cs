@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Aria2.JsonRpcClient.Models
 {
@@ -8,21 +8,15 @@ namespace Aria2.JsonRpcClient.Models
     public record Aria2Uri
     {
         /// <summary>
-        /// Gets the URI.
+        /// The URI.
         /// </summary>
         [JsonPropertyName("uri")]
         public required string Uri { get; init; }
 
         /// <summary>
-        /// Gets the status of the URI (e.g. used, waiting).
+        /// URI status.
         /// </summary>
         [JsonPropertyName("status")]
-        public required string Status { get; init; }
-
-        /// <summary>
-        /// Gets a value indicating whether this URI is selected.
-        /// </summary>
-        [JsonPropertyName("isSelected")]
-        public string? IsSelected { get; init; }
+        public UriStatusOptions Status { get; init; }
     }
 }
