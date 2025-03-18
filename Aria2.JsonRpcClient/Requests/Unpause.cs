@@ -5,8 +5,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record Unpause : JsonRpcRequest<string>
     {
-        /// <inheritdoc cref="IAria2Client.Unpause(string)"/>
-        public Unpause(string gid) : base("aria2.unpause", gid)
+        /// <inheritdoc cref="IAria2Client.Unpause"/>
+        public Unpause(string gid, string? id = null) : base("aria2.unpause", gid, id)
         {
         }
     }

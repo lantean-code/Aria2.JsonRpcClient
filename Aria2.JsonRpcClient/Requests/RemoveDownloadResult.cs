@@ -5,8 +5,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record RemoveDownloadResult : JsonRpcRequest
     {
-        /// <inheritdoc cref="IAria2Client.RemoveDownloadResult(string)"/>/>
-        public RemoveDownloadResult(string gid) : base("aria2.removeDownloadResult", gid)
+        /// <inheritdoc cref="IAria2Client.RemoveDownloadResult"/>/>
+        public RemoveDownloadResult(string gid, string? id = null) : base("aria2.removeDownloadResult", gid, id)
         {
         }
     }

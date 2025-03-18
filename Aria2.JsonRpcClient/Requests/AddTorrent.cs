@@ -7,8 +7,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record AddTorrent : JsonRpcRequest<string>
     {
-        /// <inheritdoc cref="IAria2Client.AddTorrent(string, Aria2DownloadOptions?, int?)"/>
-        public AddTorrent(string torrent, Aria2DownloadOptions? options = null, int? position = null) : base("aria2.addTorrent", [torrent, options, position])
+        /// <inheritdoc cref="IAria2Client.AddTorrent"/>
+        public AddTorrent(string torrent, Aria2DownloadOptions? options = null, int? position = null, string? id = null) : base("aria2.addTorrent", [torrent, options, position], id)
         {
         }
     }

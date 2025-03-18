@@ -8,8 +8,13 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record MultiCall : JsonRpcRequest<IReadOnlyList<JsonElement[]>>
     {
+        /// <inheritdoc cref="IAria2Client.SystemMulticall(JsonRpcRequest[], string?)"/>/>
+        public MultiCall(JsonRpcRequest[] requests, string? id = null) : base("system.multicall", [requests.Select(MapRequest).ToArray()], id)
+        {
+        }
+
         /// <inheritdoc cref="IAria2Client.SystemMulticall(JsonRpcRequest[])"/>/>
-        public MultiCall(JsonRpcRequest[] requests) : base("system.multicall", [requests.Select(MapRequest).ToArray()])
+        public MultiCall(params JsonRpcRequest[] requests) : this(requests, null)
         {
         }
 

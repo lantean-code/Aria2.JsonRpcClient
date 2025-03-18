@@ -6,7 +6,7 @@ namespace Aria2.JsonRpcClient.Requests
     public sealed record GetGlobalOption : JsonRpcRequest<IReadOnlyDictionary<string, string?>>
     {
         /// <inheritdoc cref="IAria2Client.GetGlobalOption"/>
-        public GetGlobalOption() : base("aria2.getGlobalOption", JsonRpcParameters.Empty)
+        public GetGlobalOption(string? id = null) : base("aria2.getGlobalOption", JsonRpcParameters.Empty, id)
         {
         }
     }

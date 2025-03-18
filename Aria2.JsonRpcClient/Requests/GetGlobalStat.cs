@@ -8,7 +8,7 @@ namespace Aria2.JsonRpcClient.Requests
     public sealed record GetGlobalStat : JsonRpcRequest<Aria2GlobalStat>
     {
         /// <inheritdoc cref="IAria2Client.GetGlobalStat"/>
-        public GetGlobalStat() : base("aria2.getGlobalStat", JsonRpcParameters.Empty)
+        public GetGlobalStat(string? id = null) : base("aria2.getGlobalStat", JsonRpcParameters.Empty, id)
         {
         }
     }

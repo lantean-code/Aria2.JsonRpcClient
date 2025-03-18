@@ -7,8 +7,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record AddUri : JsonRpcRequest<string>
     {
-        /// <inheritdoc cref="IAria2Client.AddUri(string[], Aria2DownloadOptions?, int?)"/>
-        public AddUri(string[] uris, Aria2DownloadOptions? options = null, int? position = null) : base("aria2.addUri", [uris, options, position])
+        /// <inheritdoc cref="IAria2Client.AddUri"/>
+        public AddUri(string[] uris, Aria2DownloadOptions? options = null, int? position = null, string? id = null) : base("aria2.addUri", [uris, options, position], id)
         {
         }
     }
