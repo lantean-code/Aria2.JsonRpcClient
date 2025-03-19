@@ -51,5 +51,15 @@
     <None Include="..\LICENSE.txt" Pack="true" PackagePath="\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Aria2.JsonRpcClient.Test</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
+    </AssemblyAttribute>    
+    
+  </ItemGroup>
+
 </Project>
 

@@ -192,10 +192,10 @@ namespace Aria2.JsonRpcClient
         #region Option Methods
 
         /// <inheritdoc/>
-        public Task<Aria2Option> GetOption(string gid, string? id = null)
+        public Task<Aria2Options> GetOption(string gid, string? id = null)
         {
             var request = new GetOption(gid, id);
-            return ExecuteRequest<Aria2Option>(request);
+            return ExecuteRequest<Aria2Options>(request);
         }
 
         /// <inheritdoc/>

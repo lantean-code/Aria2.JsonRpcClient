@@ -27,6 +27,7 @@ namespace Aria2.JsonRpcClient
             _options.Converters.Add(new JsonStringEnumConverter<StreamPieceSelectorOptions>());
             _options.Converters.Add(new JsonStringEnumConverter<UriSelectorOptions>());
             _options.Converters.Add(new JsonStringEnumConverter<UriStatusOptions>());
+            _options.Converters.Add(new JsonStringEnumConverter<TorrentModeOptions>());
 
             _options.Converters.Add(new Aria2ErrorCodeConverter());
             _options.Converters.Add(new BooleanOrStringToBoolConverter());

@@ -3,7 +3,7 @@ namespace Aria2.JsonRpcClient
     /// <summary>
     /// A collection of parameters for a JSON-RPC request.
     /// </summary>
-    public class JsonRpcParameters : List<object>
+    public class JsonRpcParameters : List<object?>
     {
         /// <summary>
         /// Adds a value to the collection if it is not null.
@@ -12,10 +12,6 @@ namespace Aria2.JsonRpcClient
         /// <param name="value"></param>
         public void Add<T>(T value)
         {
-            if (value is null)
-            {
-                return;
-            }
             base.Add(value);
         }
 
