@@ -6,7 +6,7 @@ namespace Aria2.JsonRpcClient.Requests
     public sealed record ForcePauseAll : JsonRpcRequest
     {
         /// <inheritdoc cref="IAria2Client.ForcePauseAll"/>
-        public ForcePauseAll() : base("aria2.forcePauseAll", JsonRpcParameters.Empty)
+        public ForcePauseAll(string? id = null) : base("aria2.forcePauseAll", JsonRpcParameters.Empty, id)
         {
         }
     }

@@ -7,8 +7,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record TellStopped : JsonRpcRequest<IReadOnlyList<Aria2Status>>
     {
-        /// <inheritdoc cref="IAria2Client.TellStopped(int, int, string[])"/>
-        public TellStopped(int offset, int num, string[]? keys = null) : base("aria2.tellStopped", [offset, num, keys])
+        /// <inheritdoc cref="IAria2Client.TellStopped"/>
+        public TellStopped(int offset, int num, string[]? keys = null, string? id = null) : base("aria2.tellStopped", [offset, num, keys], id)
         {
         }
     }

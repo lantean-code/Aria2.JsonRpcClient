@@ -7,8 +7,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record GetFiles : JsonRpcRequest<IReadOnlyList<Aria2File>>
     {
-        /// <inheritdoc cref="IAria2Client.GetFiles(string)"/>
-        public GetFiles(string gid) : base("aria2.getFiles", gid)
+        /// <inheritdoc cref="IAria2Client.GetFiles"/>
+        public GetFiles(string gid, string? id = null) : base("aria2.getFiles", gid, id)
         {
         }
     }

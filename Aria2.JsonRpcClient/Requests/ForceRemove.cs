@@ -5,8 +5,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record ForceRemove : JsonRpcRequest<string>
     {
-        /// <inheritdoc cref="IAria2Client.ForceRemove(string)"/>
-        public ForceRemove(string gid) : base("aria2.forceRemove", gid)
+        /// <inheritdoc cref="IAria2Client.ForceRemove"/>
+        public ForceRemove(string gid, string? id = null) : base("aria2.forceRemove", gid, id)
         {
         }
     }

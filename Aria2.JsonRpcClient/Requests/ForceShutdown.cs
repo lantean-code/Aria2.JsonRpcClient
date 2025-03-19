@@ -6,7 +6,7 @@ namespace Aria2.JsonRpcClient.Requests
     public sealed record ForceShutdown : JsonRpcRequest
     {
         /// <inheritdoc cref="IAria2Client.ForceShutdown"/>/>
-        public ForceShutdown() : base("aria2.forceShutdown", JsonRpcParameters.Empty)
+        public ForceShutdown(string? id = null) : base("aria2.forceShutdown", JsonRpcParameters.Empty, id)
         {
         }
     }

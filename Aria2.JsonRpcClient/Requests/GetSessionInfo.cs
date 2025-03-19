@@ -8,7 +8,7 @@ namespace Aria2.JsonRpcClient.Requests
     public sealed record GetSessionInfo : JsonRpcRequest<Aria2SessionInfo>
     {
         /// <inheritdoc cref="IAria2Client.GetSessionInfo"/>
-        public GetSessionInfo() : base("aria2.getSessionInfo", JsonRpcParameters.Empty)
+        public GetSessionInfo(string? id = null) : base("aria2.getSessionInfo", JsonRpcParameters.Empty, id)
         {
         }
     }

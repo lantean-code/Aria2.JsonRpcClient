@@ -6,7 +6,7 @@ namespace Aria2.JsonRpcClient.Requests
     public sealed record ListMethods : JsonRpcRequest<IReadOnlyList<string>>
     {
         /// <inheritdoc cref="IAria2Client.SystemListMethods"/>/>
-        public ListMethods() : base("system.listMethods", JsonRpcParameters.Empty)
+        public ListMethods(string? id = null) : base("system.listMethods", JsonRpcParameters.Empty, id)
         {
         }
     }

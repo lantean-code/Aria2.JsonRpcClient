@@ -7,8 +7,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record TellStatus : JsonRpcRequest<Aria2Status>
     {
-        /// <inheritdoc cref="IAria2Client.TellStatus(string, string[])"/>
-        public TellStatus(string gid, string[]? keys = null) : base("aria2.tellStatus", [gid, keys])
+        /// <inheritdoc cref="IAria2Client.TellStatus"/>
+        public TellStatus(string gid, string[]? keys = null, string? id = null) : base("aria2.tellStatus", [gid, keys], id)
         {
         }
     }

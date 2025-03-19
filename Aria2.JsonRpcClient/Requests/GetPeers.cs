@@ -7,8 +7,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record GetPeers : JsonRpcRequest<IReadOnlyList<Aria2Peer>>
     {
-        /// <inheritdoc cref="IAria2Client.GetPeers(string)"/>
-        public GetPeers(string gid) : base("aria2.getPeers", gid)
+        /// <inheritdoc cref="IAria2Client.GetPeers"/>
+        public GetPeers(string gid, string? id = null) : base("aria2.getPeers", gid, id)
         {
         }
     }

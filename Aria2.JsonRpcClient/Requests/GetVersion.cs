@@ -8,7 +8,7 @@ namespace Aria2.JsonRpcClient.Requests
     public sealed record GetVersion : JsonRpcRequest<Aria2Version>
     {
         /// <inheritdoc cref="IAria2Client.GetVersion"/>
-        public GetVersion() : base("aria2.getVersion", JsonRpcParameters.Empty)
+        public GetVersion(string? id = null) : base("aria2.getVersion", JsonRpcParameters.Empty, id)
         {
         }
     }

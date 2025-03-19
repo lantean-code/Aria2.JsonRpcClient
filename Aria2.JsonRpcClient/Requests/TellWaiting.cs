@@ -7,8 +7,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record TellWaiting : JsonRpcRequest<IReadOnlyList<Aria2Status>>
     {
-        /// <inheritdoc cref="IAria2Client.TellWaiting(int, int, string[])"/>
-        public TellWaiting(int offset, int num, string[]? keys = null) : base("aria2.tellWaiting", [offset, num, keys])
+        /// <inheritdoc cref="IAria2Client.TellWaiting"/>
+        public TellWaiting(int offset, int num, string[]? keys = null, string? id = null) : base("aria2.tellWaiting", [offset, num, keys], id)
         {
         }
     }

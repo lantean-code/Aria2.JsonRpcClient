@@ -7,8 +7,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record TellActive : JsonRpcRequest<IReadOnlyList<Aria2Status>>
     {
-        /// <inheritdoc cref="IAria2Client.TellActive(string[])"/>
-        public TellActive(string[]? keys = null) : base("aria2.tellActive", [keys])
+        /// <inheritdoc cref="IAria2Client.TellActive"/>
+        public TellActive(string[]? keys = null, string? id = null) : base("aria2.tellActive", [keys], id)
         {
         }
     }

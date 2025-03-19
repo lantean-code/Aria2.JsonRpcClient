@@ -6,7 +6,7 @@ namespace Aria2.JsonRpcClient.Requests
     public sealed record ListNotifications : JsonRpcRequest<IReadOnlyList<string>>
     {
         /// <inheritdoc cref="IAria2Client.SystemListNotifications"/>/>
-        public ListNotifications() : base("system.listNotifications", JsonRpcParameters.Empty)
+        public ListNotifications(string? id = null) : base("system.listNotifications", JsonRpcParameters.Empty, id)
         {
         }
     }
