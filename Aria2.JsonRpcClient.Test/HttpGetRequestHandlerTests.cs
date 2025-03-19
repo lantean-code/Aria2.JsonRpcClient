@@ -1,4 +1,7 @@
 using System.Net;
+#if NET48
+using System.Net.Http;
+#endif
 using System.Text;
 using System.Text.Json;
 using Aria2.JsonRpcClient.Requests;

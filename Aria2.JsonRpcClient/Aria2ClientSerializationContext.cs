@@ -36,6 +36,7 @@ namespace Aria2.JsonRpcClient
     [JsonSerializable(typeof(JsonRpcNotification))]
     [JsonSerializable(typeof(JsonRpcRequest))]
     [JsonSerializable(typeof(JsonRpcResponse))]
+    [JsonSerializable(typeof(JsonRpcError))]
     [JsonSerializable(typeof(Aria2DownloadOptions))]
     [JsonSerializable(typeof(Requests.AddMetalink))]
     [JsonSerializable(typeof(Requests.AddTorrent))]

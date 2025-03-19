@@ -311,9 +311,12 @@ namespace Aria2.JsonRpcClient
                     var typeInfo = Aria2ClientSerializationContext.Default.GetTypeInfo(method.ReturnType);
                     if (typeInfo is null)
                     {
-                        throw new InvalidOperationException($"The JsonTypeInfo for '{method.ReturnType}' is has not been registered.");
+                        value = response[0].Deserialize(method.ReturnType, Aria2ClientSerialization.Options);
                     }
-                    value = response[0].Deserialize(typeInfo);
+                    else
+                    {
+                        value = response[0].Deserialize(typeInfo);
+                    }
 #else
                     value = response[0].Deserialize(method.ReturnType, Aria2ClientSerialization.Options);
 #endif
