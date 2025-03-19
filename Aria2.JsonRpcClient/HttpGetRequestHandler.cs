@@ -1,7 +1,6 @@
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using Aria2.JsonRpcClient.Models;
 using Microsoft.Extensions.Options;
 
 namespace Aria2.JsonRpcClient

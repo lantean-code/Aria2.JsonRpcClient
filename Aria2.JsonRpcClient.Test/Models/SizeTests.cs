@@ -1,6 +1,4 @@
-using System;
 using FluentAssertions;
-using Xunit;
 using Aria2.JsonRpcClient.Models;
 
 namespace Aria2.JsonRpcClient.Test.Models
