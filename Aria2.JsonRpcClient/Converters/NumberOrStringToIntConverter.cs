@@ -17,7 +17,7 @@ namespace Aria2.JsonRpcClient.Converters
             }
             else
             {
-                throw new JsonException($"Invalid token type for long, expects {JsonTokenType.Number} or {JsonTokenType.String} but found {reader.TokenType}.");
+                throw new JsonException($"Invalid token type for int, expects {JsonTokenType.Number} or {JsonTokenType.String} but found {reader.TokenType}.");
             }
         }
 

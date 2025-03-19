@@ -41,7 +41,7 @@ namespace Aria2.JsonRpcClient.Models
         /// <returns></returns>
         public override readonly string ToString()
         {
-            return $"{Value.ToString("0.################", CultureInfo.InvariantCulture)}{GetSize(SizeType)}";
+            return $"{Value.ToString("0.##", CultureInfo.InvariantCulture)}{GetSize(SizeType)}";
         }
 
         private static string GetSize(SizeType sizeType)

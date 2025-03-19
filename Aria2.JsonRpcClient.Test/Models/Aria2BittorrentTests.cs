@@ -12,11 +12,6 @@ namespace Aria2.JsonRpcClient.Test.Models
 {
     public class Aria2BittorrentTests
     {
-        public Aria2BittorrentTests()
-        {
-            
-        }
-
         [Fact]
         public void GIVEN_InvalidJson_WHEN_Deserializing_THEN_ShouldThrowJsonException()
         {

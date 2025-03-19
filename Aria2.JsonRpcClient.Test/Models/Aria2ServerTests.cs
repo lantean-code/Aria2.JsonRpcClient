@@ -1,0 +1,39 @@
+using System;
+using System.Text.Json;
+using FluentAssertions;
+using Xunit;
+using Aria2.JsonRpcClient.Models;
+
+namespace Aria2.JsonRpcClient.Test.Models
+{
+    public class Aria2ServerTests
+    {
+        [Fact]
+        public void GIVEN_InvalidJson_WHEN_Deserializing_THEN_ShouldThrowJsonException()
+        {
+            var json = "InvalidJson";
+
+            Action act = () => JsonSerializer.Deserialize<Aria2Server>(json, Aria2ClientSerialization.Options);
+
+            act.Should().Throw<JsonException>();
+        }
+
+        [Fact]
+        public void GIVEN_ValidJson_WHEN_Deserializing_THEN_ShouldReturnObject()
+        {
+            var json = "{\"index\":\"1\",\"servers\":[{\"uri\":\"http://server.example.com/original\",\"currentUri\":\"http://server.example.com/current\",\"downloadSpeed\":\"2048\"}]}";
+
+            var result = JsonSerializer.Deserialize<Aria2Server>(json, Aria2ClientSerialization.Options);
+
+            result.Should().NotBeNull();
+
+            result.Index.Should().Be(1);
+
+            result.Servers.Should().NotBeNull();
+            result.Servers.Should().HaveCount(1);
+            result.Servers[0].Uri.Should().Be("http://server.example.com/original");
+            result.Servers[0].CurrentUri.Should().Be("http://server.example.com/current");
+            result.Servers[0].DownloadSpeed.Should().Be(2048);
+        }
+    }
+}

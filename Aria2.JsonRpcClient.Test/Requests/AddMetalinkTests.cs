@@ -24,13 +24,24 @@ namespace Aria2.JsonRpcClient.Test.Requests
         }
 
         [Fact]
-        public void GIVEN_WithUriAndPositionButWithoutOptions_WHEN_Constructing_THEN_CreateValidRequestWithParametersAtCorrectPositions()
+        public void GIVEN_WithUriAndPosition_WHEN_Constructing_THEN_CreateValidRequestWithParametersAtCorrectPositions()
         {
             var target = new AddMetalink("Uri", position: 5);
             target.Method.Should().Be("aria2.addMetalink");
             target.Parameters[0].Should().Be("Uri");
             target.Parameters[1].Should().BeNull();
             target.Parameters[2].Should().Be(5);
+        }
+
+        [Fact]
+        public void GIVEN_WithUriAndId_WHEN_Constructing_THEN_CreateValidRequestWithParametersAtCorrectPositions()
+        {
+            var target = new AddMetalink("Uri", id: "id");
+            target.Method.Should().Be("aria2.addMetalink");
+            target.Parameters[0].Should().Be("Uri");
+            target.Parameters[1].Should().BeNull();
+            target.Parameters[2].Should().BeNull();
+            target.Id.Should().Be("id");
         }
     }
 }
