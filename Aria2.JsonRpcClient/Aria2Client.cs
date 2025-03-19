@@ -1,6 +1,6 @@
+using System.Text.Json;
 using Aria2.JsonRpcClient.Models;
 using Aria2.JsonRpcClient.Requests;
-using System.Text.Json;
 
 namespace Aria2.JsonRpcClient
 {
@@ -307,7 +307,16 @@ namespace Aria2.JsonRpcClient
                 }
                 else
                 {
-                    value = response[0].Deserialize(method.ReturnType);
+#if NET8_0_OR_GREATER
+                    var typeInfo = Aria2ClientSerializationContext.Default.GetTypeInfo(method.ReturnType);
+                    if (typeInfo is null)
+                    {
+                        throw new InvalidOperationException($"The JsonTypeInfo for '{method.ReturnType}' is has not been registered.");
+                    }
+                    value = response[0].Deserialize(typeInfo);
+#else
+                    value = response[0].Deserialize(method.ReturnType, Aria2ClientSerialization.Options);
+#endif
                 }
                 responses.Add(value);
             }
@@ -329,7 +338,7 @@ namespace Aria2.JsonRpcClient
             return ExecuteRequest<IReadOnlyList<string>>(request);
         }
 
-        #endregion System Methods
+#endregion System Methods
 
         #region Execute Request Methods
 

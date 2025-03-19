@@ -63,7 +63,20 @@ namespace Aria2.JsonRpcClient
         public async Task<JsonRpcResponse<TResponse>> SendRequest<TResponse>(JsonRpcRequest request)
         {
             var rawResponse = await SendWebSocketRequestAsync(request);
-            var response = rawResponse.Deserialize<JsonRpcResponse<TResponse>>(Aria2ClientSerialization.Options);
+            JsonRpcResponse<TResponse>? response;
+#if NET8_0_OR_GREATER
+            var typeInfo = Aria2ClientSerializationContext.Default.GetTypeInfo(typeof(JsonRpcResponse<TResponse>));
+            if (typeInfo is null)
+            {
+                response = rawResponse.Deserialize<JsonRpcResponse<TResponse>>(Aria2ClientSerialization.Options);
+            }
+            else
+            {
+                response = (JsonRpcResponse<TResponse>?)rawResponse.Deserialize(typeInfo);
+            }
+#else
+            response = rawResponse.Deserialize<JsonRpcResponse<TResponse>>(Aria2ClientSerialization.Options);
+#endif
             if (response is null)
             {
                 throw new Exception("Invalid JSON-RPC response.");
@@ -75,7 +88,11 @@ namespace Aria2.JsonRpcClient
         public async Task<JsonRpcResponse> SendRequest(JsonRpcRequest request)
         {
             var rawResponse = await SendWebSocketRequestAsync(request);
+#if NET8_0_OR_GREATER
+            var response = rawResponse.Deserialize(Aria2ClientSerializationContext.Default.JsonRpcResponse);
+#else
             var response = rawResponse.Deserialize<JsonRpcResponse>(Aria2ClientSerialization.Options);
+#endif
             if (response is null)
             {
                 throw new Exception("Invalid JSON-RPC response.");
@@ -101,7 +118,11 @@ namespace Aria2.JsonRpcClient
 
             request.EnsureSecret(_secret);
 
+#if NET8_0_OR_GREATER
+            var jsonRequest = JsonSerializer.Serialize(request, Aria2ClientSerializationContext.Default.JsonRpcRequest);
+#else
             var jsonRequest = JsonSerializer.Serialize(request, Aria2ClientSerialization.Options);
+#endif
             var requestBytes = Encoding.UTF8.GetBytes(jsonRequest);
             await _webSocket.SendAsync(
                 new ArraySegment<byte>(requestBytes),
@@ -223,7 +244,11 @@ namespace Aria2.JsonRpcClient
 
         private void HandleNotification(JsonElement root)
         {
+#if NET8_0_OR_GREATER
+            var response = root.Deserialize(Aria2ClientSerializationContext.Default.JsonRpcNotification);
+#else
             var response = root.Deserialize<JsonRpcNotification>(Aria2ClientSerialization.Options);
+#endif
             if (response is null || response.Parameters.Count == 0)
             {
                 return;

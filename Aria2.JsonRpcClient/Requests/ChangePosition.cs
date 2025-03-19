@@ -1,4 +1,3 @@
-
 namespace Aria2.JsonRpcClient.Requests
 {
     /// <summary>

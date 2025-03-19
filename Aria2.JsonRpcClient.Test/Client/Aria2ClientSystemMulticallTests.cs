@@ -1,7 +1,7 @@
-using Moq;
-using FluentAssertions;
 using System.Text.Json;
 using Aria2.JsonRpcClient.Requests;
+using FluentAssertions;
+using Moq;
 
 namespace Aria2.JsonRpcClient.Test.Client
 {

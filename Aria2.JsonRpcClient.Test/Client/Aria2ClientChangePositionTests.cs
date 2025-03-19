@@ -1,6 +1,6 @@
-using Moq;
-using FluentAssertions;
 using Aria2.JsonRpcClient.Requests;
+using FluentAssertions;
+using Moq;
 
 namespace Aria2.JsonRpcClient.Test.Client
 {
@@ -19,7 +19,7 @@ namespace Aria2.JsonRpcClient.Test.Client
         public async Task GIVEN_ValidParameters_WHEN_ChangePosition_THEN_ShouldPassChangePositionRequestToHandler()
         {
             var expected = 1;
-            var response = new JsonRpcResponse<int> {Result = expected, Error = null, Id = "Id", JsonRpc = "JsonRpc" };
+            var response = new JsonRpcResponse<int> { Result = expected, Error = null, Id = "Id", JsonRpc = "JsonRpc" };
             var gid = "Gid1";
             var pos = 2;
             var how = "how";
@@ -37,5 +37,3 @@ namespace Aria2.JsonRpcClient.Test.Client
         }
     }
 }
-
-

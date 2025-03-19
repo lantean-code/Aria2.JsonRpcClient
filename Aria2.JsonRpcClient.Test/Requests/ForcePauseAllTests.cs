@@ -12,7 +12,6 @@ namespace Aria2.JsonRpcClient.Test.Requests
 
             target.Method.Should().Be("aria2.forcePauseAll");
             target.Parameters.Should().BeEquivalentTo(JsonRpcParameters.Empty);
-            
         }
 
         [Fact]

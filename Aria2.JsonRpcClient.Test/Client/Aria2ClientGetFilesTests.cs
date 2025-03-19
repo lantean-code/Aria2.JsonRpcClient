@@ -1,7 +1,7 @@
-using Moq;
-using FluentAssertions;
-using Aria2.JsonRpcClient.Requests;
 using Aria2.JsonRpcClient.Models;
+using Aria2.JsonRpcClient.Requests;
+using FluentAssertions;
+using Moq;
 
 namespace Aria2.JsonRpcClient.Test.Client
 {
@@ -19,7 +19,7 @@ namespace Aria2.JsonRpcClient.Test.Client
         [Fact]
         public async Task GIVEN_ValidGid_WHEN_GetFiles_THEN_ShouldPassGetFilesRequestToHandler()
         {
-            var expected = new List<Aria2File> {  };
+            var expected = new List<Aria2File> { };
             var response = new JsonRpcResponse<IReadOnlyList<Aria2File>> { Result = expected.AsReadOnly(), Error = null, Id = "Id", JsonRpc = "JsonRpc" };
             var gid = "Gid1";
 

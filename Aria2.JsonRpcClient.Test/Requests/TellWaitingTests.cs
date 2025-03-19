@@ -1,5 +1,5 @@
-using FluentAssertions;
 using Aria2.JsonRpcClient.Requests;
+using FluentAssertions;
 
 namespace Aria2.JsonRpcClient.Test.Requests
 {
@@ -15,7 +15,6 @@ namespace Aria2.JsonRpcClient.Test.Requests
             target.Parameters[0].Should().Be(0);
             target.Parameters[1].Should().Be(10);
             target.Parameters[2].Should().BeNull();
-            
         }
 
         [Fact]

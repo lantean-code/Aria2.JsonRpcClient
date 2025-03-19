@@ -22,7 +22,6 @@ namespace Aria2.JsonRpcClient.Test.Requests
             target.Parameters[2].Should().BeEquivalentTo(delUris);
             target.Parameters[3].Should().BeEquivalentTo(addUris);
             target.Parameters[4].Should().BeNull();
-            
         }
 
         [Fact]
@@ -43,7 +42,6 @@ namespace Aria2.JsonRpcClient.Test.Requests
             target.Parameters[2].Should().BeEquivalentTo(delUris);
             target.Parameters[3].Should().BeEquivalentTo(addUris);
             target.Parameters[4].Should().Be(position);
-            
         }
 
         [Fact]

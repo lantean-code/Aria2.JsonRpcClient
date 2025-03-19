@@ -18,7 +18,7 @@ namespace Aria2.JsonRpcClient.Models
         public SizeType SizeType { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Size"/> struct. 
+        /// Initializes a new instance of the <see cref="Size"/> struct.
         /// </summary>
         public Size()
         {

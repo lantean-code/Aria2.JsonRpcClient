@@ -1,4 +1,4 @@
-﻿namespace Aria2.JsonRpcClient
+namespace Aria2.JsonRpcClient
 {
     internal readonly struct GidWrapper
     {

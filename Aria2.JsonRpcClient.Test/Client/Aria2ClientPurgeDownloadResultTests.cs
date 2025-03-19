@@ -30,4 +30,3 @@ namespace Aria2.JsonRpcClient.Test.Client
         }
     }
 }
-

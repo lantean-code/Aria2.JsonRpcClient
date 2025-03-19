@@ -79,7 +79,6 @@ namespace Aria2.JsonRpcClient.Test.Models
         [InlineData(30, Aria2ErrorCode.JsonRpcParseError)]
         [InlineData(31, Aria2ErrorCode.Reserved)]
         [InlineData(32, Aria2ErrorCode.ChecksumValidationFailed)]
-
         public void GIVEN_InputAsInt_WHEN_Deserializing_THEN_ReturnsExpected(int input, Aria2ErrorCode expected)
         {
             JsonSerializer.Deserialize<Aria2ErrorCode>(input, Aria2ClientSerialization.Options).Should().Be(expected);

@@ -1,6 +1,6 @@
 using System.Text.Json;
-using FluentAssertions;
 using Aria2.JsonRpcClient.Models;
+using FluentAssertions;
 
 namespace Aria2.JsonRpcClient.Test.Models
 {

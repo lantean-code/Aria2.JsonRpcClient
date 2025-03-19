@@ -15,7 +15,6 @@ namespace Aria2.JsonRpcClient.Test.Requests
             target.Parameters[0].Should().Be("gid123");
             target.Parameters[1].Should().Be(10);
             target.Parameters[2].Should().Be("up");
-            
         }
 
         [Fact]

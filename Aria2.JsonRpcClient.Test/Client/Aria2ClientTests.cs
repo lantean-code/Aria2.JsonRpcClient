@@ -1,5 +1,5 @@
-using Moq;
 using FluentAssertions;
+using Moq;
 
 namespace Aria2.JsonRpcClient.Test.Client
 {
@@ -87,5 +87,3 @@ namespace Aria2.JsonRpcClient.Test.Client
         }
     }
 }
-
-

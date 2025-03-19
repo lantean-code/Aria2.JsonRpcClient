@@ -1,16 +1,9 @@
-using System;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
+using Aria2.JsonRpcClient.Requests;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
-using Xunit;
-using Aria2.JsonRpcClient;
-using Aria2.JsonRpcClient.Models;
-using Aria2.JsonRpcClient.Requests;
 
 namespace Aria2.JsonRpcClient.Test
 {
@@ -42,6 +35,7 @@ namespace Aria2.JsonRpcClient.Test
         private class NullResponseHttpMessageHandler : HttpMessageHandler
         {
             public Uri? RequestedUri { get; private set; }
+
             protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
                 RequestedUri = request.RequestUri;

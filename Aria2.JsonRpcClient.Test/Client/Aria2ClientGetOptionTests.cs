@@ -1,7 +1,7 @@
-using Moq;
-using FluentAssertions;
-using Aria2.JsonRpcClient.Requests;
 using Aria2.JsonRpcClient.Models;
+using Aria2.JsonRpcClient.Requests;
+using FluentAssertions;
+using Moq;
 
 namespace Aria2.JsonRpcClient.Test.Client
 {
@@ -36,4 +36,3 @@ namespace Aria2.JsonRpcClient.Test.Client
         }
     }
 }
-

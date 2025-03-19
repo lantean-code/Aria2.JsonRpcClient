@@ -252,7 +252,6 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var downloadOptions = new Aria2DownloadOptions
             {
-                
             };
 
             var json = JsonSerializer.Serialize(downloadOptions, Aria2ClientSerialization.Options);

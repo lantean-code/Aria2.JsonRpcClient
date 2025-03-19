@@ -16,7 +16,6 @@ namespace Aria2.JsonRpcClient.Test.Requests
             target.Parameters.Should().HaveCount(2);
             target.Parameters[0].Should().Be("gid123");
             target.Parameters[1].Should().BeEquivalentTo(new { Dir = "MyDownloadDir" });
-            
         }
 
         [Fact]

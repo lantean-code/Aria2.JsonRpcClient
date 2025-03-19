@@ -1,5 +1,5 @@
-using Moq;
 using Aria2.JsonRpcClient.Requests;
+using Moq;
 
 namespace Aria2.JsonRpcClient.Test.Client
 {

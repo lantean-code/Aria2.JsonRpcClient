@@ -430,7 +430,7 @@ namespace Aria2.JsonRpcClient
         event Action<string> DownloadStarted;
 
         /// <summary>
-        /// This notification will be sent when a download is paused. 
+        /// This notification will be sent when a download is paused.
         /// The paramter is the GID of the download.
         /// </summary>
         event Action<string> DownloadPaused;

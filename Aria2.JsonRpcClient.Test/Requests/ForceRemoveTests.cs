@@ -13,7 +13,6 @@ namespace Aria2.JsonRpcClient.Test.Requests
             target.Method.Should().Be("aria2.forceRemove");
             target.Parameters.Should().HaveCount(1);
             target.Parameters[0].Should().Be("gid123");
-            
         }
 
         [Fact]
