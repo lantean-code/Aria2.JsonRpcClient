@@ -13,7 +13,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -43,8 +42,12 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Run Tests (excluding .NET 4.8)
-        run: dotnet test --no-build --configuration Release --filter "TestCategory!=net48"
+      # Run tests for Linux-compatible frameworks
+      - name: Run Tests for net8.0
+        run: dotnet test --no-build --configuration Release --framework net8.0
+
+      - name: Run Tests for net9.0
+        run: dotnet test --no-build --configuration Release --framework net9.0
 
       - name: Pack NuGet Package
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
@@ -100,3 +103,21 @@ jobs:
           asset_content_type: application/xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  net48:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # On Windows, .NET Framework 4.8 is preinstalled so no extra setup is needed.
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run Tests for net48
+        run: dotnet test --no-build --configuration Release --framework net48
