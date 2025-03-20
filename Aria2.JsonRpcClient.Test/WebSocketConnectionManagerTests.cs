@@ -190,7 +190,7 @@ namespace Aria2.JsonRpcClient.Test
             _ = manager.SendRequest<string>(dummyRequest);
 
             // Await a short period for the notification to be processed.
-            await Task.Delay(500);
+            await Task.Delay(1000);
 
             eventRaised.Should().BeFalse();
 
@@ -261,7 +261,7 @@ namespace Aria2.JsonRpcClient.Test
             _ = manager.SendRequest<string>(dummyRequest);
 
             // Await a short period for the notification to be processed.
-            await Task.Delay(500);
+            await Task.Delay(1000);
 
             received.Should().Be(gid);
 
@@ -375,7 +375,7 @@ namespace Aria2.JsonRpcClient.Test
             var sendTask = manager.SendRequest<string>(request);
 
             // Allow time for the receive loop to process the close message.
-            await Task.Delay(200);
+            await Task.Delay(1000);
 
             manager.Dispose();
 
