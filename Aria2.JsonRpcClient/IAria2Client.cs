@@ -265,8 +265,8 @@ namespace Aria2.JsonRpcClient
         /// <param name="gid">The GID of the download.</param>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.getOption"/>
-        /// <returns>An <see cref="Aria2Option"/> object with the download's options.</returns>
-        Task<Aria2Option> GetOption(string gid, string? id = null);
+        /// <returns>An <see cref="Aria2Options"/> object with the download's options.</returns>
+        Task<Aria2Options> GetOption(string gid, string? id = null);
 
         /// <summary>
         /// Changes the options for the download denoted by <paramref name="gid"/>.
@@ -430,7 +430,7 @@ namespace Aria2.JsonRpcClient
         event Action<string> DownloadStarted;
 
         /// <summary>
-        /// This notification will be sent when a download is paused. 
+        /// This notification will be sent when a download is paused.
         /// The paramter is the GID of the download.
         /// </summary>
         event Action<string> DownloadPaused;

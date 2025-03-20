@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Aria2.JsonRpcClient.Models
 {
     /// <summary>
@@ -16,12 +18,30 @@ namespace Aria2.JsonRpcClient.Models
         public SizeType SizeType { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Size"/> struct.
+        /// </summary>
+        public Size()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Size"/> struct.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="sizeType"></param>
+        public Size(double value, SizeType sizeType)
+        {
+            Value = value;
+            SizeType = sizeType;
+        }
+
+        /// <summary>
         /// Converts the size value to a string.
         /// </summary>
         /// <returns></returns>
         public override readonly string ToString()
         {
-            return $"{Value}{GetSize(SizeType)}";
+            return $"{Value.ToString("0.##", CultureInfo.InvariantCulture)}{GetSize(SizeType)}";
         }
 
         private static string GetSize(SizeType sizeType)

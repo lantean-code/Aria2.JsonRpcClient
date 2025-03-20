@@ -1,6 +1,6 @@
+using System.Text.Json;
 using Aria2.JsonRpcClient.Models;
 using Aria2.JsonRpcClient.Requests;
-using System.Text.Json;
 
 namespace Aria2.JsonRpcClient
 {
@@ -17,7 +17,6 @@ namespace Aria2.JsonRpcClient
         public Aria2Client(IRequestHandler requestHandler, INotificationHandler notificationHandler)
         {
             _requestHandler = requestHandler;
-
             notificationHandler.OnDownloadStarted += gid => DownloadStarted?.Invoke(gid);
             notificationHandler.OnDownloadPaused += gid => DownloadPaused?.Invoke(gid);
             notificationHandler.OnDownloadStopped += gid => DownloadStopped?.Invoke(gid);
@@ -192,10 +191,10 @@ namespace Aria2.JsonRpcClient
         #region Option Methods
 
         /// <inheritdoc/>
-        public Task<Aria2Option> GetOption(string gid, string? id = null)
+        public Task<Aria2Options> GetOption(string gid, string? id = null)
         {
             var request = new GetOption(gid, id);
-            return ExecuteRequest<Aria2Option>(request);
+            return ExecuteRequest<Aria2Options>(request);
         }
 
         /// <inheritdoc/>
@@ -307,7 +306,7 @@ namespace Aria2.JsonRpcClient
                 }
                 else
                 {
-                    value = response[0].Deserialize(method.ReturnType);
+                    value = Serializer.Deserialize(response[0], method.ReturnType);
                 }
                 responses.Add(value);
             }

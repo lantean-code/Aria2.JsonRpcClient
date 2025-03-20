@@ -23,7 +23,7 @@ namespace Aria2.JsonRpcClient.Converters
 
         public override void Write(Utf8JsonWriter writer, long value, JsonSerializerOptions options)
         {
-            writer.WriteNumberValue(value);
+            writer.WriteStringValue(value.ToString());
         }
     }
 }

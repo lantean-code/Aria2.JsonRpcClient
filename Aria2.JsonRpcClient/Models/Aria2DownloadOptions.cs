@@ -16,21 +16,21 @@ namespace Aria2.JsonRpcClient.Models
         /// The format of PROXY is '[http://][USER:PASSWORD@]HOST[:PORT]'.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-all-proxy"/>
-        [JsonPropertyName("all-proxy")]
+        [JsonPropertyName("all-proxy"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? AllProxy { get; set; }
 
         /// <summary>
         /// Set password for the all-proxy option.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-all-proxy-passwd"/>
-        [JsonPropertyName("all-proxy-passwd")]
+        [JsonPropertyName("all-proxy-passwd"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? AllProxyPasswd { get; set; }
 
         /// <summary>
         /// Set user for the all-proxy option.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-all-proxy-user"/>
-        [JsonPropertyName("all-proxy-user")]
+        [JsonPropertyName("all-proxy-user"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? AllProxyUser { get; set; }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-allow-overwrite"/>
-        [JsonPropertyName("allow-overwrite")]
+        [JsonPropertyName("allow-overwrite"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? AllowOverwrite { get; set; }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-allow-piece-length-change"/>
-        [JsonPropertyName("allow-piece-length-change")]
+        [JsonPropertyName("allow-piece-length-change"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? AllowPieceLengthChange { get; set; }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-always-resume"/>
-        [JsonPropertyName("always-resume")]
+        [JsonPropertyName("always-resume"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? AlwaysResume { get; set; }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-async-dns"/>
-        [JsonPropertyName("async-dns")]
+        [JsonPropertyName("async-dns"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? AsyncDns { get; set; }
 
         /// <summary>
@@ -80,20 +80,20 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-auto-file-renaming"/>
-        [JsonPropertyName("auto-file-renaming")]
+        [JsonPropertyName("auto-file-renaming"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? AutoFileRenaming { get; set; }
 
         /// <summary>
         /// Allow hook command invocation after hash check (see <see cref="CheckIntegrity"/> option)
         /// in BitTorrent download.
-        /// By default, when hash check succeeds, the command given by 
+        /// By default, when hash check succeeds, the command given by
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-on-bt-download-complete"/>
         /// is executed.
         /// To disable this action, give 'false' to this option.
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-enable-hook-after-hash-check"/>
-        [JsonPropertyName("bt-enable-hook-after-hash-check")]
+        [JsonPropertyName("bt-enable-hook-after-hash-check"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? BtEnableHookAfterHashCheck { get; set; }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-enable-lpd"/>
-        [JsonPropertyName("bt-enable-lpd")]
+        [JsonPropertyName("bt-enable-lpd"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? BtEnableLpd { get; set; }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Aria2.JsonRpcClient.Models
         /// See also the <see cref="BtTracker"/> option.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-exclude-tracker"/>
-        [JsonPropertyName("bt-exclude-tracker")]
+        [JsonPropertyName("bt-exclude-tracker"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? BtExcludeTracker { get; set; }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Although this function is named 'external', it can accept any kind of IP addresses.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-external-ip"/>
-        [JsonPropertyName("bt-external-ip")]
+        [JsonPropertyName("bt-external-ip"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? BtExternalIp { get; set; }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-force-encryption"/>
-        [JsonPropertyName("bt-force-encryption")]
+        [JsonPropertyName("bt-force-encryption"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? BtForceEncryption { get; set; }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-hash-check-seed"/>
-        [JsonPropertyName("bt-hash-check-seed")]
+        [JsonPropertyName("bt-hash-check-seed"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? BtHashCheckSeed { get; set; }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-load-saved-metadata"/>
-        [JsonPropertyName("bt-load-saved-metadata")]
+        [JsonPropertyName("bt-load-saved-metadata"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? BtLoadSavedMetadata { get; set; }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '55'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-max-peers"/>
-        [JsonPropertyName("bt-max-peers")]
+        [JsonPropertyName("bt-max-peers"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? BtMaxPeers { get; set; }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-metadata-only"/>
-        [JsonPropertyName("bt-metadata-only")]
+        [JsonPropertyName("bt-metadata-only"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? BtMetadataOnly { get; set; }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: <see cref="BtMinCryptoLevelOptions.Plain"/>.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-min-crypto-level"/>
-        [JsonPropertyName("bt-min-crypto-level")]
+        [JsonPropertyName("bt-min-crypto-level"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public BtMinCryptoLevelOptions? BtMinCryptoLevel { get; set; }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace Aria2.JsonRpcClient.Models
         /// If SIZE is omitted, SIZE = 1M is used.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-prioritize-piece"/>
-        [JsonPropertyName("bt-prioritize-piece")]
+        [JsonPropertyName("bt-prioritize-piece"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? BtPrioritizePiece { get; set; }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-remove-unselected-file"/>
-        [JsonPropertyName("bt-remove-unselected-file")]
+        [JsonPropertyName("bt-remove-unselected-file"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? BtRemoveUnselectedFile { get; set; }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '50K'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-request-peer-speed-limit"/>
-        [JsonPropertyName("bt-request-peer-speed-limit")]
+        [JsonPropertyName("bt-request-peer-speed-limit"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Size? BtRequestPeerSpeedLimit { get; set; }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-require-crypto"/>
-        [JsonPropertyName("bt-require-crypto")]
+        [JsonPropertyName("bt-require-crypto"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? BtRequireCrypto { get; set; }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-save-metadata"/>
-        [JsonPropertyName("bt-save-metadata")]
+        [JsonPropertyName("bt-save-metadata"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? BtSaveMetadata { get; set; }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-seed-unverified"/>
-        [JsonPropertyName("bt-seed-unverified")]
+        [JsonPropertyName("bt-seed-unverified"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? BtSeedUnverified { get; set; }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '0'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-stop-timeout"/>
-        [JsonPropertyName("bt-stop-timeout")]
+        [JsonPropertyName("bt-stop-timeout"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? BtStopTimeout { get; set; }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace Aria2.JsonRpcClient.Models
         /// These URIs are not affected by the URIs removed by the <see cref="BtExcludeTracker"/> option because they are added after those are removed.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-tracker"/>
-        [JsonPropertyName("bt-tracker")]
+        [JsonPropertyName("bt-tracker"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? BtTracker { get; set; }
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '60'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-tracker-connect-timeout"/>
-        [JsonPropertyName("bt-tracker-connect-timeout")]
+        [JsonPropertyName("bt-tracker-connect-timeout"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? BtTrackerConnectTimeout { get; set; }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '0'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-tracker-interval"/>
-        [JsonPropertyName("bt-tracker-interval")]
+        [JsonPropertyName("bt-tracker-interval"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? BtTrackerInterval { get; set; }
 
         /// <summary>
@@ -294,7 +294,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '60'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-bt-tracker-timeout"/>
-        [JsonPropertyName("bt-tracker-timeout")]
+        [JsonPropertyName("bt-tracker-timeout"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? BtTrackerTimeout { get; set; }
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-check-integrity"/>
-        [JsonPropertyName("check-integrity")]
+        [JsonPropertyName("check-integrity"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? CheckIntegrity { get; set; }
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace Aria2.JsonRpcClient.Models
         /// This option applies only to HTTP(S)/FTP downloads.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-checksum"/>
-        [JsonPropertyName("checksum")]
+        [JsonPropertyName("checksum"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Checksum { get; set; }
 
         /// <summary>
@@ -335,7 +335,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-conditional-get"/>
-        [JsonPropertyName("conditional-get")]
+        [JsonPropertyName("conditional-get"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? ConditionalGet { get; set; }
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '60'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-connect-timeout"/>
-        [JsonPropertyName("connect-timeout")]
+        [JsonPropertyName("connect-timeout"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? ConnectTimeout { get; set; }
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-content-disposition-default-utf8"/>
-        [JsonPropertyName("content-disposition-default-utf8")]
+        [JsonPropertyName("content-disposition-default-utf8"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? ContentDispositionDefaultUtf8 { get; set; }
 
         /// <summary>
@@ -362,14 +362,14 @@ namespace Aria2.JsonRpcClient.Models
         /// Currently, this option is only applicable to HTTP(S)/FTP downloads.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-continue"/>
-        [JsonPropertyName("continue")]
+        [JsonPropertyName("continue"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? @Continue { get; set; }
 
         /// <summary>
         /// The directory to store the downloaded file.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-dir"/>
-        [JsonPropertyName("dir")]
+        [JsonPropertyName("dir"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Dir { get; set; }
 
         /// <summary>
@@ -380,7 +380,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-dry-run"/>
-        [JsonPropertyName("dry-run")]
+        [JsonPropertyName("dry-run"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? DryRun { get; set; }
 
         /// <summary>
@@ -388,7 +388,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-enable-http-keep-alive"/>
-        [JsonPropertyName("enable-http-keep-alive")]
+        [JsonPropertyName("enable-http-keep-alive"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? EnableHttpKeepAlive { get; set; }
 
         /// <summary>
@@ -396,7 +396,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-enable-http-pipelining"/>
-        [JsonPropertyName("enable-http-pipelining")]
+        [JsonPropertyName("enable-http-pipelining"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? EnableHttpPipelining { get; set; }
 
         /// <summary>
@@ -405,7 +405,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-enable-mmap"/>
-        [JsonPropertyName("enable-mmap")]
+        [JsonPropertyName("enable-mmap"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? EnableMmap { get; set; }
 
         /// <summary>
@@ -414,7 +414,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-enable-peer-exchange"/>
-        [JsonPropertyName("enable-peer-exchange")]
+        [JsonPropertyName("enable-peer-exchange"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? EnablePeerExchange { get; set; }
 
         /// <summary>
@@ -427,7 +427,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'prealloc'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-file-allocation"/>
-        [JsonPropertyName("file-allocation")]
+        [JsonPropertyName("file-allocation"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public FileAllocationOptions? FileAllocation { get; set; }
 
         /// <summary>
@@ -439,7 +439,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-follow-metalink"/>
-        [JsonPropertyName("follow-metalink")]
+        [JsonPropertyName("follow-metalink"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public FollowMetalinkOptions? FollowMetalink { get; set; }
 
         /// <summary>
@@ -449,17 +449,17 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-follow-torrent"/>
-        [JsonPropertyName("follow-torrent")]
+        [JsonPropertyName("follow-torrent"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? FollowTorrent { get; set; }
 
         /// <summary>
-        /// Force saving the download with 
+        /// Force saving the download with
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-save-session"/>
         /// even if completed or removed.
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-force-save"/>
-        [JsonPropertyName("force-save")]
+        [JsonPropertyName("force-save"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? ForceSave { get; set; }
 
         /// <summary>
@@ -470,7 +470,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'ARIA2USER@'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-ftp-passwd"/>
-        [JsonPropertyName("ftp-passwd")]
+        [JsonPropertyName("ftp-passwd"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? FtpPasswd { get; set; }
 
         /// <summary>
@@ -479,7 +479,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-ftp-pasv"/>
-        [JsonPropertyName("ftp-pasv")]
+        [JsonPropertyName("ftp-pasv"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? FtpPasv { get; set; }
 
         /// <summary>
@@ -489,21 +489,21 @@ namespace Aria2.JsonRpcClient.Models
         /// The format of PROXY is '[http://][USER:PASSWORD@]HOST[:PORT]'.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-ftp-proxy"/>
-        [JsonPropertyName("ftp-proxy")]
+        [JsonPropertyName("ftp-proxy"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? FtpProxy { get; set; }
 
         /// <summary>
         /// Set password for the <see cref="FtpProxy"/> option.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-ftp-proxy-passwd"/>
-        [JsonPropertyName("ftp-proxy-passwd")]
+        [JsonPropertyName("ftp-proxy-passwd"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? FtpProxyPasswd { get; set; }
 
         /// <summary>
         /// Set user for the <see cref="FtpProxy"/> option.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-ftp-proxy-user"/>
-        [JsonPropertyName("ftp-proxy-user")]
+        [JsonPropertyName("ftp-proxy-user"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? FtpProxyUser { get; set; }
 
         /// <summary>
@@ -511,7 +511,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-ftp-reuse-connection"/>
-        [JsonPropertyName("ftp-reuse-connection")]
+        [JsonPropertyName("ftp-reuse-connection"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? FtpReuseConnection { get; set; }
 
         /// <summary>
@@ -520,7 +520,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'binary'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-ftp-type"/>
-        [JsonPropertyName("ftp-type")]
+        [JsonPropertyName("ftp-type"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public FtpTypeOptions? FtpType { get; set; }
 
         /// <summary>
@@ -528,7 +528,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'anonymous'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-ftp-user"/>
-        [JsonPropertyName("ftp-user")]
+        [JsonPropertyName("ftp-user"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? FtpUser { get; set; }
 
         /// <summary>
@@ -536,12 +536,12 @@ namespace Aria2.JsonRpcClient.Models
         /// The GID must be a 16-character hex string (only 0-9, a-f, A-F allowed, with no leading zeros stripped).
         /// The all-zero GID is reserved and must not be used.
         /// The GID must be unique; otherwise an error is reported and the download is not added.
-        /// This option is useful when restoring sessions saved using 
+        /// This option is useful when restoring sessions saved using
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-save-session"/>
         /// option.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-gid"/>
-        [JsonPropertyName("gid")]
+        [JsonPropertyName("gid"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Gid { get; set; }
 
         /// <summary>
@@ -550,7 +550,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-hash-check-only"/>
-        [JsonPropertyName("hash-check-only")]
+        [JsonPropertyName("hash-check-only"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? HashCheckOnly { get; set; }
 
         /// <summary>
@@ -558,7 +558,7 @@ namespace Aria2.JsonRpcClient.Models
         /// This option can be used repeatedly to specify more than one header.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-header"/>
-        [JsonPropertyName("header")]
+        [JsonPropertyName("header"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Header { get; set; }
 
         /// <summary>
@@ -567,7 +567,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-http-accept-gzip"/>
-        [JsonPropertyName("http-accept-gzip")]
+        [JsonPropertyName("http-accept-gzip"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? HttpAcceptGzip { get; set; }
 
         /// <summary>
@@ -577,7 +577,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-http-auth-challenge"/>
-        [JsonPropertyName("http-auth-challenge")]
+        [JsonPropertyName("http-auth-challenge"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? HttpAuthChallenge { get; set; }
 
         /// <summary>
@@ -586,14 +586,14 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-http-no-cache"/>
-        [JsonPropertyName("http-no-cache")]
+        [JsonPropertyName("http-no-cache"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? HttpNoCache { get; set; }
 
         /// <summary>
         /// Set HTTP password. This affects all URIs.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-http-passwd"/>
-        [JsonPropertyName("http-passwd")]
+        [JsonPropertyName("http-passwd"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? HttpPasswd { get; set; }
 
         /// <summary>
@@ -603,28 +603,28 @@ namespace Aria2.JsonRpcClient.Models
         /// The format of PROXY is '[http://][USER:PASSWORD@]HOST[:PORT]'.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-http-proxy"/>
-        [JsonPropertyName("http-proxy")]
+        [JsonPropertyName("http-proxy"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? HttpProxy { get; set; }
 
         /// <summary>
         /// Set password for the http-proxy option.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-http-proxy-passwd"/>
-        [JsonPropertyName("http-proxy-passwd")]
+        [JsonPropertyName("http-proxy-passwd"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? HttpProxyPasswd { get; set; }
 
         /// <summary>
         /// Set user for the http-proxy option.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-http-proxy-user"/>
-        [JsonPropertyName("http-proxy-user")]
+        [JsonPropertyName("http-proxy-user"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? HttpProxyUser { get; set; }
 
         /// <summary>
         /// Set HTTP user. This affects all URIs.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-http-user"/>
-        [JsonPropertyName("http-user")]
+        [JsonPropertyName("http-user"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? HttpUser { get; set; }
 
         /// <summary>
@@ -634,21 +634,21 @@ namespace Aria2.JsonRpcClient.Models
         /// The format of PROXY is '[http://][USER:PASSWORD@]HOST[:PORT]'.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-https-proxy"/>
-        [JsonPropertyName("https-proxy")]
+        [JsonPropertyName("https-proxy"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? HttpsProxy { get; set; }
 
         /// <summary>
         /// Set password for the https-proxy option.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-https-proxy-passwd"/>
-        [JsonPropertyName("https-proxy-passwd")]
+        [JsonPropertyName("https-proxy-passwd"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? HttpsProxyPasswd { get; set; }
 
         /// <summary>
         /// Set user for the https-proxy option.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-https-proxy-user"/>
-        [JsonPropertyName("https-proxy-user")]
+        [JsonPropertyName("https-proxy-user"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? HttpsProxyUser { get; set; }
 
         /// <summary>
@@ -658,7 +658,7 @@ namespace Aria2.JsonRpcClient.Models
         /// This option can be specified multiple times.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-index-out"/>
-        [JsonPropertyName("index-out")]
+        [JsonPropertyName("index-out"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? IndexOut { get; set; }
 
         /// <summary>
@@ -669,7 +669,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '0'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-lowest-speed-limit"/>
-        [JsonPropertyName("lowest-speed-limit")]
+        [JsonPropertyName("lowest-speed-limit"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Size? LowestSpeedLimit { get; set; }
 
         /// <summary>
@@ -677,7 +677,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '1'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-max-connection-per-server"/>
-        [JsonPropertyName("max-connection-per-server")]
+        [JsonPropertyName("max-connection-per-server"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? MaxConnectionPerServer { get; set; }
 
         /// <summary>
@@ -687,7 +687,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '0'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-max-download-limit"/>
-        [JsonPropertyName("max-download-limit")]
+        [JsonPropertyName("max-download-limit"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Size? MaxDownloadLimit { get; set; }
 
         /// <summary>
@@ -698,7 +698,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '0'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-max-file-not-found"/>
-        [JsonPropertyName("max-file-not-found")]
+        [JsonPropertyName("max-file-not-found"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? MaxFileNotFound { get; set; }
 
         /// <summary>
@@ -708,7 +708,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '9223372036854775807'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-max-mmap-limit"/>
-        [JsonPropertyName("max-mmap-limit")]
+        [JsonPropertyName("max-mmap-limit"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Size? MaxMmapLimit { get; set; }
 
         /// <summary>
@@ -719,7 +719,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '0'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-max-resume-failure-tries"/>
-        [JsonPropertyName("max-resume-failure-tries")]
+        [JsonPropertyName("max-resume-failure-tries"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? MaxResumeFailureTries { get; set; }
 
         /// <summary>
@@ -728,7 +728,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '5'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-max-tries"/>
-        [JsonPropertyName("max-tries")]
+        [JsonPropertyName("max-tries"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? MaxTries { get; set; }
 
         /// <summary>
@@ -739,7 +739,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '0'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-max-upload-limit"/>
-        [JsonPropertyName("max-upload-limit")]
+        [JsonPropertyName("max-upload-limit"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Size? MaxUploadLimit { get; set; }
 
         /// <summary>
@@ -748,7 +748,7 @@ namespace Aria2.JsonRpcClient.Models
         /// If URI points to a directory, URI must end with '/'.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-metalink-base-uri"/>
-        [JsonPropertyName("metalink-base-uri")]
+        [JsonPropertyName("metalink-base-uri"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? MetalinkBaseUri { get; set; }
 
         /// <summary>
@@ -758,14 +758,14 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-metalink-enable-unique-protocol"/>
-        [JsonPropertyName("metalink-enable-unique-protocol")]
+        [JsonPropertyName("metalink-enable-unique-protocol"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? MetalinkEnableUniqueProtocol { get; set; }
 
         /// <summary>
         /// Specify the language of the file to download.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-metalink-language"/>
-        [JsonPropertyName("metalink-language")]
+        [JsonPropertyName("metalink-language"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? MetalinkLanguage { get; set; }
 
         /// <summary>
@@ -773,14 +773,14 @@ namespace Aria2.JsonRpcClient.Models
         /// A comma-delimited list of locations is acceptable, for example: 'jp,us'.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-metalink-location"/>
-        [JsonPropertyName("metalink-location")]
+        [JsonPropertyName("metalink-location"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? MetalinkLocation { get; set; }
 
         /// <summary>
         /// Specify the operating system of the file to download.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-metalink-os"/>
-        [JsonPropertyName("metalink-os")]
+        [JsonPropertyName("metalink-os"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? MetalinkOs { get; set; }
 
         /// <summary>
@@ -790,14 +790,14 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'none'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-metalink-preferred-protocol"/>
-        [JsonPropertyName("metalink-preferred-protocol")]
+        [JsonPropertyName("metalink-preferred-protocol"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public MetalinkPreferredProtocolOptions? MetalinkPreferredProtocol { get; set; }
 
         /// <summary>
         /// Specify the version of the file to download.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-metalink-version"/>
-        [JsonPropertyName("metalink-version")]
+        [JsonPropertyName("metalink-version"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? MetalinkVersion { get; set; }
 
         /// <summary>
@@ -809,7 +809,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '20M'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-min-split-size"/>
-        [JsonPropertyName("min-split-size")]
+        [JsonPropertyName("min-split-size"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Size? MinSplitSize { get; set; }
 
         /// <summary>
@@ -818,7 +818,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '5M'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-no-file-allocation-limit"/>
-        [JsonPropertyName("no-file-allocation-limit")]
+        [JsonPropertyName("no-file-allocation-limit"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Size? NoFileAllocationLimit { get; set; }
 
         /// <summary>
@@ -826,7 +826,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Netrc support is enabled by default.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-no-netrc"/>
-        [JsonPropertyName("no-netrc")]
+        [JsonPropertyName("no-netrc"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? NoNetrc { get; set; }
 
         /// <summary>
@@ -834,7 +834,7 @@ namespace Aria2.JsonRpcClient.Models
         /// with or without a subnet mask where no proxy should be used.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-no-proxy"/>
-        [JsonPropertyName("no-proxy")]
+        [JsonPropertyName("no-proxy"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? NoProxy { get; set; }
 
         /// <summary>
@@ -843,7 +843,7 @@ namespace Aria2.JsonRpcClient.Models
         /// When the 'force-sequential' (-Z) option is used, this option is ignored.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-out"/>
-        [JsonPropertyName("out")]
+        [JsonPropertyName("out"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Out { get; set; }
 
         /// <summary>
@@ -854,7 +854,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-parameterized-uri"/>
-        [JsonPropertyName("parameterized-uri")]
+        [JsonPropertyName("parameterized-uri"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? ParameterizedUri { get; set; }
 
         /// <summary>
@@ -863,7 +863,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-pause"/>
-        [JsonPropertyName("pause")]
+        [JsonPropertyName("pause"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? Pause { get; set; }
 
         /// <summary>
@@ -874,7 +874,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-pause-metadata"/>
-        [JsonPropertyName("pause-metadata")]
+        [JsonPropertyName("pause-metadata"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? PauseMetadata { get; set; }
 
         /// <summary>
@@ -885,7 +885,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '1M'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-piece-length"/>
-        [JsonPropertyName("piece-length")]
+        [JsonPropertyName("piece-length"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Size? PieceLength { get; set; }
 
         /// <summary>
@@ -895,7 +895,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'get'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-proxy-method"/>
-        [JsonPropertyName("proxy-method")]
+        [JsonPropertyName("proxy-method"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ProxyMethodOptions? ProxyMethod { get; set; }
 
         /// <summary>
@@ -903,7 +903,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-realtime-chunk-checksum"/>
-        [JsonPropertyName("realtime-chunk-checksum")]
+        [JsonPropertyName("realtime-chunk-checksum"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? RealtimeChunkChecksum { get; set; }
 
         /// <summary>
@@ -913,7 +913,7 @@ namespace Aria2.JsonRpcClient.Models
         /// This may be useful when used together with the <see cref="ParameterizedUri"/> option.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-referer"/>
-        [JsonPropertyName("referer")]
+        [JsonPropertyName("referer"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Referer { get; set; }
 
         /// <summary>
@@ -921,7 +921,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-remote-time"/>
-        [JsonPropertyName("remote-time")]
+        [JsonPropertyName("remote-time"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? RemoteTime { get; set; }
 
         /// <summary>
@@ -930,7 +930,7 @@ namespace Aria2.JsonRpcClient.Models
         /// This is useful for users behind proxy servers which disable resume.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-remove-control-file"/>
-        [JsonPropertyName("remove-control-file")]
+        [JsonPropertyName("remove-control-file"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? RemoveControlFile { get; set; }
 
         /// <summary>
@@ -939,7 +939,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '0'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-retry-wait"/>
-        [JsonPropertyName("retry-wait")]
+        [JsonPropertyName("retry-wait"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? RetryWait { get; set; }
 
         /// <summary>
@@ -947,20 +947,20 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-reuse-uri"/>
-        [JsonPropertyName("reuse-uri")]
+        [JsonPropertyName("reuse-uri"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? ReuseUri { get; set; }
 
         /// <summary>
         /// Save the uploaded torrent or metalink metadata in the directory specified by the <see cref="Dir"/> option.
         /// The file name consists of the SHA-1 hash hex string of metadata plus an extension.
         /// For torrent, the extension is '.torrent'. For metalink, it is '.meta4'.
-        /// If 'false' is given, the downloads added by aria2.addTorrent or aria2.addMetalink will not be saved by 
+        /// If 'false' is given, the downloads added by aria2.addTorrent or aria2.addMetalink will not be saved by
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-save-session"/>
         /// option.
         /// Default: 'true'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-rpc-save-upload-metadata"/>
-        [JsonPropertyName("rpc-save-upload-metadata")]
+        [JsonPropertyName("rpc-save-upload-metadata"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? RpcSaveUploadMetadata { get; set; }
 
         /// <summary>
@@ -973,7 +973,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '1.0'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-seed-ratio"/>
-        [JsonPropertyName("seed-ratio")]
+        [JsonPropertyName("seed-ratio"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? SeedRatio { get; set; }
 
         /// <summary>
@@ -981,7 +981,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Note: Specifying '0' disables seeding after download completed.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-seed-time"/>
-        [JsonPropertyName("seed-time")]
+        [JsonPropertyName("seed-time"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public double? SeedTime { get; set; }
 
         /// <summary>
@@ -991,7 +991,7 @@ namespace Aria2.JsonRpcClient.Models
         /// or a combination (e.g. '1-5,8,9').
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-select-file"/>
-        [JsonPropertyName("select-file")]
+        [JsonPropertyName("select-file"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? SelectFile { get; set; }
 
         /// <summary>
@@ -1003,7 +1003,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '5'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-split"/>
-        [JsonPropertyName("split")]
+        [JsonPropertyName("split"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? Split { get; set; }
 
         /// <summary>
@@ -1014,7 +1014,7 @@ namespace Aria2.JsonRpcClient.Models
         /// If not set, no validation takes place.
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-ssh-host-key-md"/>
-        [JsonPropertyName("ssh-host-key-md")]
+        [JsonPropertyName("ssh-host-key-md"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? SshHostKeyMd { get; set; }
 
         /// <summary>
@@ -1037,7 +1037,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'default'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-stream-piece-selector"/>
-        [JsonPropertyName("stream-piece-selector")]
+        [JsonPropertyName("stream-piece-selector"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public StreamPieceSelectorOptions? StreamPieceSelector { get; set; }
 
         /// <summary>
@@ -1045,7 +1045,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: '60'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-timeout"/>
-        [JsonPropertyName("timeout")]
+        [JsonPropertyName("timeout"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? Timeout { get; set; }
 
         /// <summary>
@@ -1058,7 +1058,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'feedback'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-uri-selector"/>
-        [JsonPropertyName("uri-selector")]
+        [JsonPropertyName("uri-selector"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public UriSelectorOptions? UriSelector { get; set; }
 
         /// <summary>
@@ -1066,7 +1066,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'false'
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-use-head"/>
-        [JsonPropertyName("use-head")]
+        [JsonPropertyName("use-head"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? UseHead { get; set; }
 
         /// <summary>
@@ -1074,7 +1074,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Default: 'aria2/$VERSION' (with $VERSION replaced by the package version).
         /// </summary>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-user-agent"/>
-        [JsonPropertyName("user-agent")]
+        [JsonPropertyName("user-agent"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? UserAgent { get; set; }
     }
 }

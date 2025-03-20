@@ -1,7 +1,5 @@
 using System.Net;
 using System.Text;
-using System.Text.Json;
-using Aria2.JsonRpcClient.Models;
 using Microsoft.Extensions.Options;
 
 namespace Aria2.JsonRpcClient
@@ -34,24 +32,14 @@ namespace Aria2.JsonRpcClient
         public async Task<JsonRpcResponse<TResponse>> SendRequest<TResponse>(JsonRpcRequest request)
         {
             var responseContent = await SendHttpRequest(request);
-            var response = JsonSerializer.Deserialize<JsonRpcResponse<TResponse>>(responseContent, Aria2ClientSerialization.Options);
-            if (response is null)
-            {
-                throw new Exception("Invalid JSON-RPC response.");
-            }
-            return response;
+            return Serializer.Deserialize<JsonRpcResponse<TResponse>>(responseContent);
         }
 
         /// <inheritdoc />
         public async Task<JsonRpcResponse> SendRequest(JsonRpcRequest request)
         {
             var responseContent = await SendHttpRequest(request);
-            var response = JsonSerializer.Deserialize<JsonRpcResponse>(responseContent, Aria2ClientSerialization.Options);
-            if (response is null)
-            {
-                throw new Exception("Invalid JSON-RPC response.");
-            }
-            return response;
+            return Serializer.Deserialize<JsonRpcResponse>(responseContent);
         }
 
         /// <summary>
@@ -67,7 +55,7 @@ namespace Aria2.JsonRpcClient
             request.EnsureSecret(_secret);
 
             // Serialize the 'params' value to JSON.
-            var jsonParams = JsonSerializer.Serialize(request.Parameters, Aria2ClientSerialization.Options);
+            var jsonParams = Serializer.Serialize(request.Parameters);
 
             // Convert the JSON string to UTF-8 bytes and then Base64-encode the result.
             var base64Params = Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonParams));

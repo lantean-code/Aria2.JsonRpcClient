@@ -182,5 +182,4 @@ namespace Aria2.JsonRpcClient.Models
         /// </summary>
         ChecksumValidationFailed = 32
     }
-
 }

@@ -6,5 +6,4 @@ namespace Aria2.JsonRpcClient
 
         Task<JsonRpcResponse> SendRequest(JsonRpcRequest jsonRpcRequest);
     }
-
 }

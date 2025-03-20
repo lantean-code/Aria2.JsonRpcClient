@@ -12,6 +12,6 @@ namespace Aria2.JsonRpcClient
         public required string Message { get; init; }
 
         [JsonExtensionData]
-        public IDictionary<string, JsonElement> ExtensionData { get; init; } = new Dictionary<string, JsonElement>();
+        public IDictionary<string, JsonElement> ExtensionData { get; set; } = new Dictionary<string, JsonElement>();
     }
 }

@@ -27,7 +27,7 @@ namespace Aria2.JsonRpcClient.Converters
 
         public override void Write(Utf8JsonWriter writer, Aria2ErrorCode value, JsonSerializerOptions options)
         {
-            writer.WriteNumberValue((int)value);
+            writer.WriteStringValue(((int)value).ToString());
         }
     }
 }

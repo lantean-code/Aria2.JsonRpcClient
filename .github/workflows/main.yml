@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - develop
   pull_request:
     branches:
       - '**'
@@ -12,7 +13,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -42,30 +42,36 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Run Tests
-        run: dotnet test --no-build --configuration Release
+      # Run tests for Linux-compatible frameworks
+      - name: Run Tests for net8.0
+        run: dotnet test --no-build --configuration Release --framework net8.0
+
+      - name: Run Tests for net9.0
+        run: dotnet test --no-build --configuration Release --framework net9.0
 
       - name: Pack NuGet Package
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
         run: |
           dotnet pack --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ env.VERSION }}
 
       - name: Push NuGet Package
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
         run: |
           dotnet nuget push ./artifacts/Aria2.JsonRpcClient.${{ env.VERSION }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
-      - name: Check if Tag Exists
-        id: check_tag
+      - name: Check if Release Exists
+        if: github.ref == 'refs/heads/master'
+        id: check_release
         run: |
-          if git rev-parse "${{ env.VERSION }}" >/dev/null 2>&1; then
-            echo "TAG_EXISTS=true" >> $GITHUB_ENV
+          response=$(curl --silent --header "Authorization: token ${{ secrets.GITHUB_TOKEN }}" --header "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.VERSION }})
+          if echo "$response" | grep -q "Not Found"; then
+            echo "RELEASE_EXISTS=false" >> $GITHUB_ENV
           else
-            echo "TAG_EXISTS=false" >> $GITHUB_ENV
+            echo "RELEASE_EXISTS=true" >> $GITHUB_ENV
           fi
 
       - name: Create GitHub Release
-        if: github.ref == 'refs/heads/master' && env.TAG_EXISTS == 'false'
+        if: github.ref == 'refs/heads/master' && env.RELEASE_EXISTS == 'false'
         id: create_release
         uses: actions/create-release@v1
         with:
@@ -76,8 +82,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Release Asset
-        if: github.ref == 'refs/heads/master' && env.TAG_EXISTS == 'false'
+      - name: Upload Release Asset (NuGet Package)
+        if: github.ref == 'refs/heads/master' && env.RELEASE_EXISTS == 'false'
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -86,3 +92,32 @@ jobs:
           asset_content_type: application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset (XML Documentation)
+        if: github.ref == 'refs/heads/master' && env.RELEASE_EXISTS == 'false'
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/Aria2.JsonRpcClient.xml
+          asset_name: Aria2.JsonRpcClient.xml
+          asset_content_type: application/xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  net48:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # On Windows, .NET Framework 4.8 is preinstalled so no extra setup is needed.
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run Tests for net48
+        run: dotnet test --no-build --configuration Release --framework net48
