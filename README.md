@@ -22,6 +22,9 @@ This library supports **.NET Standard 2.0**, **.NET 8.0**, and **.NET 9.0**.
 - **Comprehensive JSON‑RPC Models:**  
   Includes models for download options, status, global statistics, and more, reflecting the full capabilities of aria2's JSON‑RPC interface.
 
+- **Uses System.Text.Json:**  
+  For .NET 8.0 and above, source generators are use to improve performance. NET Standard 2.0 falls back to reflection based type discovery.
+
 ## Installation
 
 Install the package via the .NET CLI:
