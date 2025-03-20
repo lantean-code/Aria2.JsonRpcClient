@@ -16,11 +16,12 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/lantean-code/Aria2.JsonRpcClient</RepositoryUrl>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>..\Artifacts\Aria2.JsonRpcClient.xml</DocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageTags>aria aria2 download manager jsonrpc json rpc client websocket</PackageTags>
     <Copyright>Copyright 2025 ahjephson</Copyright>
-    <ProjectUrl>https://github.com/lantean-code/Aria2.JsonRpcClient/wiki</ProjectUrl>  
+    <ProjectUrl>https://github.com/lantean-code/Aria2.JsonRpcClient/wiki</ProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
