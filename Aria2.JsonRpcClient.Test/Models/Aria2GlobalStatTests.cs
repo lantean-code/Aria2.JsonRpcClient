@@ -11,7 +11,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<Aria2GlobalStat>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<Aria2GlobalStat>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -21,7 +21,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "{\"downloadSpeed\":\"1024\",\"uploadSpeed\":\"512\",\"numActive\":\"5\",\"numWaiting\":\"3\",\"numStopped\":\"2\",\"numStoppedTotal\":\"4\"}";
 
-            var result = JsonSerializer.Deserialize<Aria2GlobalStat>(json, Aria2ClientSerialization.Options);
+            var result = Serializer.Deserialize<Aria2GlobalStat>(json);
 
             result.Should().NotBeNull();
 

@@ -9,7 +9,7 @@ namespace Aria2.JsonRpcClient.Test.Requests
         public void GIVEN_WithGidFileIndexDelUrisAddUris_WHEN_Constructing_THEN_ShouldCreateJsonRequestWithCorrectNameAndParameters()
         {
             var gid = "gid123";
-            int fileIndex = 1;
+            var fileIndex = 1;
             IEnumerable<string> delUris = new[] { "http://example.com/del1", "http://example.com/del2" };
             IEnumerable<string> addUris = new[] { "http://example.com/add1", "http://example.com/add2" };
 
@@ -28,10 +28,10 @@ namespace Aria2.JsonRpcClient.Test.Requests
         public void GIVEN_WithGidFileIndexDelUrisAddUrisAndPosition_WHEN_Constructing_THEN_CreateValidRequestWithParametersAtCorrectPositions()
         {
             var gid = "gid123";
-            int fileIndex = 1;
+            var fileIndex = 1;
             IEnumerable<string> delUris = new[] { "http://example.com/del1", "http://example.com/del2" };
             IEnumerable<string> addUris = new[] { "http://example.com/add1", "http://example.com/add2" };
-            int position = 5;
+            var position = 5;
 
             var target = new ChangeUri(gid, fileIndex, delUris, addUris, position: position);
 
@@ -48,7 +48,7 @@ namespace Aria2.JsonRpcClient.Test.Requests
         public void GIVEN_WithGidFileIndexDelUrisAddUrisAndId_WHEN_Constructing_THEN_CreateValidRequestWithParametersAtCorrectPositions()
         {
             var gid = "gid123";
-            int fileIndex = 1;
+            var fileIndex = 1;
             IEnumerable<string> delUris = new[] { "http://example.com/del1", "http://example.com/del2" };
             IEnumerable<string> addUris = new[] { "http://example.com/add1", "http://example.com/add2" };
 

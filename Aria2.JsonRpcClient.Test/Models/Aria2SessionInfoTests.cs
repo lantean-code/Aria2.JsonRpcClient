@@ -11,7 +11,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<Aria2SessionInfo>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<Aria2SessionInfo>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -21,7 +21,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "{\"sessionId\":\"session123\"}";
 
-            var result = JsonSerializer.Deserialize<Aria2SessionInfo>(json, Aria2ClientSerialization.Options);
+            var result = Serializer.Deserialize<Aria2SessionInfo>(json);
 
             result.Should().NotBeNull();
             result.SessionId.Should().Be("session123");

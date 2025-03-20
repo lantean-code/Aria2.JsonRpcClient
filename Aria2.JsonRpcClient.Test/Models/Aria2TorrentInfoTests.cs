@@ -11,7 +11,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<Aria2TorrentInfo>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<Aria2TorrentInfo>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -21,7 +21,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "{\"name\":\"sample torrent\"}";
 
-            var result = JsonSerializer.Deserialize<Aria2TorrentInfo>(json, Aria2ClientSerialization.Options);
+            var result = Serializer.Deserialize<Aria2TorrentInfo>(json);
 
             result.Should().NotBeNull();
 

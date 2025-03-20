@@ -11,7 +11,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<Aria2Peer>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<Aria2Peer>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -21,7 +21,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "{\"peerId\":\"peer123\",\"ip\":\"192.168.1.50\",\"port\":\"6881\",\"bitfield\":\"ff00\",\"amChoking\":\"false\",\"peerChoking\":\"true\",\"downloadSpeed\":\"10240\",\"uploadSpeed\":\"5120\",\"seeder\":\"true\"}";
 
-            var result = JsonSerializer.Deserialize<Aria2Peer>(json, Aria2ClientSerialization.Options);
+            var result = Serializer.Deserialize<Aria2Peer>(json);
 
             result.Should().NotBeNull();
 

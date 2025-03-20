@@ -10,7 +10,7 @@ namespace Aria2.JsonRpcClient.Test
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<JsonRpcResponse>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<JsonRpcResponse>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -20,7 +20,7 @@ namespace Aria2.JsonRpcClient.Test
         {
             var json = "{\"jsonrpc\":\"2.0\",\"id\":\"testId\",\"error\":{\"code\":-32600,\"message\":\"Invalid Request\"},\"customKey\":\"customValue\"}";
 
-            var response = JsonSerializer.Deserialize<JsonRpcResponse>(json, Aria2ClientSerialization.Options);
+            var response = Serializer.Deserialize<JsonRpcResponse>(json);
 
             response.Should().NotBeNull();
             response.JsonRpc.Should().Be("2.0");
@@ -35,7 +35,7 @@ namespace Aria2.JsonRpcClient.Test
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<JsonRpcResponse<string>>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<JsonRpcResponse<string>>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -45,7 +45,7 @@ namespace Aria2.JsonRpcClient.Test
         {
             var json = "{\"jsonrpc\":\"2.0\",\"id\":\"testId\",\"result\":\"someResult\",\"anotherKey\":\"anotherValue\"}";
 
-            var response = JsonSerializer.Deserialize<JsonRpcResponse<string>>(json, Aria2ClientSerialization.Options);
+            var response = Serializer.Deserialize<JsonRpcResponse<string>>(json);
 
             response.Should().NotBeNull();
             response.JsonRpc.Should().Be("2.0");

@@ -12,7 +12,7 @@ namespace Aria2.JsonRpcClient.Test.Models
             // Arrange
             var json = "InvalidJson";
             // Act
-            var act = () => JsonSerializer.Deserialize<Aria2Bittorrent>(json, Aria2ClientSerialization.Options);
+            var act = () => Serializer.Deserialize<Aria2Bittorrent>(json);
             // Assert
             act.Should().Throw<JsonException>();
         }
@@ -22,7 +22,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "{ \"announceList\": [\"test\"], \"comment\": \"comment\", \"creationDate\": \"946684800\", \"mode\": \"single\", \"info\": null }";
 
-            var result = JsonSerializer.Deserialize<Aria2Bittorrent>(json, Aria2ClientSerialization.Options);
+            var result = Serializer.Deserialize<Aria2Bittorrent>(json);
 
             result.Should().NotBeNull();
 

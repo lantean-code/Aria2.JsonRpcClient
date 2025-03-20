@@ -31,7 +31,7 @@ namespace Aria2.JsonRpcClient.Test
         [Fact]
         public void GIVEN_StringValue_WHEN_ImplicitConversionFromString_THEN_ReturnsParametersWithValue()
         {
-            string value = "test";
+            var value = "test";
 
             JsonRpcParameters parameters = value;
 
@@ -43,7 +43,7 @@ namespace Aria2.JsonRpcClient.Test
         [Fact]
         public void GIVEN_IntValue_WHEN_ImplicitConversionFromInt_THEN_ReturnsParametersWithValue()
         {
-            int value = 99;
+            var value = 99;
 
             JsonRpcParameters parameters = value;
 
@@ -55,7 +55,7 @@ namespace Aria2.JsonRpcClient.Test
         [Fact]
         public void GIVEN_EmptyProperty_WHEN_Accessed_THEN_ReturnsEmptyParameters()
         {
-            JsonRpcParameters parameters = JsonRpcParameters.Empty;
+            var parameters = JsonRpcParameters.Empty;
 
             parameters.Should().NotBeNull();
             parameters.Count.Should().Be(0);

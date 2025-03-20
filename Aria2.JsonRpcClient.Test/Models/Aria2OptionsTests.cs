@@ -11,7 +11,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<Aria2Options>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<Aria2Options>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -21,7 +21,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "{\"option1\":\"value1\",\"option2\":\"value2\"}";
 
-            var result = JsonSerializer.Deserialize<Aria2Options>(json, Aria2ClientSerialization.Options);
+            var result = Serializer.Deserialize<Aria2Options>(json);
 
             result.Should().NotBeNull();
 

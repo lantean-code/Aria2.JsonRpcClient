@@ -17,7 +17,6 @@ namespace Aria2.JsonRpcClient
         public Aria2Client(IRequestHandler requestHandler, INotificationHandler notificationHandler)
         {
             _requestHandler = requestHandler;
-
             notificationHandler.OnDownloadStarted += gid => DownloadStarted?.Invoke(gid);
             notificationHandler.OnDownloadPaused += gid => DownloadPaused?.Invoke(gid);
             notificationHandler.OnDownloadStopped += gid => DownloadStopped?.Invoke(gid);
@@ -307,19 +306,7 @@ namespace Aria2.JsonRpcClient
                 }
                 else
                 {
-#if NET8_0_OR_GREATER
-                    var typeInfo = Aria2ClientSerializationContext.Default.GetTypeInfo(method.ReturnType);
-                    if (typeInfo is null)
-                    {
-                        value = response[0].Deserialize(method.ReturnType, Aria2ClientSerialization.Options);
-                    }
-                    else
-                    {
-                        value = response[0].Deserialize(typeInfo);
-                    }
-#else
-                    value = response[0].Deserialize(method.ReturnType, Aria2ClientSerialization.Options);
-#endif
+                    value = Serializer.Deserialize(response[0], method.ReturnType);
                 }
                 responses.Add(value);
             }
@@ -341,7 +328,7 @@ namespace Aria2.JsonRpcClient
             return ExecuteRequest<IReadOnlyList<string>>(request);
         }
 
-#endregion System Methods
+        #endregion System Methods
 
         #region Execute Request Methods
 

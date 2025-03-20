@@ -12,7 +12,7 @@ namespace Aria2.JsonRpcClient.Test.Models
             // Arrange
             var json = "InvalidJson";
             // Act
-            Action act = () => JsonSerializer.Deserialize<Aria2File>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<Aria2File>(json);
             // Assert
             act.Should().Throw<JsonException>();
         }
@@ -25,7 +25,7 @@ namespace Aria2.JsonRpcClient.Test.Models
             // The "uris" property is an array populated with one sample Aria2Uri object.
             var json = "{\"index\":\"1\",\"path\":\"some/file/path.txt\",\"length\":\"123456\",\"completedLength\":\"654321\",\"selected\":\"true\",\"uris\":[{\"uri\":\"http://example.com/file\",\"status\":\"used\"}]}";
             // Act
-            var result = JsonSerializer.Deserialize<Aria2File>(json, Aria2ClientSerialization.Options);
+            var result = Serializer.Deserialize<Aria2File>(json);
             // Assert
             result.Should().NotBeNull();
             result.Index.Should().Be(1);

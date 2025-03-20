@@ -11,7 +11,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<SystemMulticallRequest>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<SystemMulticallRequest>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -21,7 +21,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "{\"methodName\":\"system.methodName\",\"params\":[\"param1\",\"42\"]}";
 
-            var result = JsonSerializer.Deserialize<SystemMulticallRequest>(json, Aria2ClientSerialization.Options);
+            var result = Serializer.Deserialize<SystemMulticallRequest>(json);
 
             result.Should().NotBeNull();
 

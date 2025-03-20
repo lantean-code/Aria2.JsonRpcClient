@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Aria2.JsonRpcClient.Models;
 using FluentAssertions;
 
@@ -12,7 +11,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         [InlineData("adaptive", UriSelectorOptions.Adaptive)]
         public void GIVEN_Input_WHEN_Deserializing_THEN_ShouldReturnExpected(string input, UriSelectorOptions expected)
         {
-            JsonSerializer.Deserialize<UriSelectorOptions>($"\"{input}\"", Aria2ClientSerialization.Options).Should().Be(expected);
+            Serializer.Deserialize<UriSelectorOptions>($"\"{input}\"").Should().Be(expected);
         }
     }
 }

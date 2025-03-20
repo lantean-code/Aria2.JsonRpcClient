@@ -14,7 +14,7 @@ namespace Aria2.JsonRpcClient
     /// </summary>
     internal class WebSocketConnectionManager : IRequestHandler, INotificationHandler, IDisposable
     {
-        private ClientWebSocket _webSocket;
+        private readonly IClientWebSocket _webSocket;
         private CancellationTokenSource _cts = new();
 
         private readonly Uri _uri;
@@ -47,11 +47,12 @@ namespace Aria2.JsonRpcClient
         /// <summary>
         /// Initializes a new instance of the <see cref="WebSocketConnectionManager"/> class.
         /// </summary>
+        /// <param name="clientWebSocket"></param>
         /// <param name="clientOptions"></param>
         /// /// <param name="policyRegistry"></param>
-        public WebSocketConnectionManager(IOptions<Aria2ClientOptions> clientOptions, IReadOnlyPolicyRegistry<string> policyRegistry)
+        public WebSocketConnectionManager(IClientWebSocket clientWebSocket, IOptions<Aria2ClientOptions> clientOptions, IReadOnlyPolicyRegistry<string> policyRegistry)
         {
-            _webSocket = new ClientWebSocket();
+            _webSocket = clientWebSocket;
             clientOptions.Value.WebSocketOptions?.Invoke(_webSocket.Options);
             _uri = new Uri($"ws://{clientOptions.Value.Host}:{clientOptions.Value.Port}/jsonrpc");
             _secret = clientOptions.Value.Secret;
@@ -63,41 +64,16 @@ namespace Aria2.JsonRpcClient
         public async Task<JsonRpcResponse<TResponse>> SendRequest<TResponse>(JsonRpcRequest request)
         {
             var rawResponse = await SendWebSocketRequestAsync(request);
-            JsonRpcResponse<TResponse>? response;
-#if NET8_0_OR_GREATER
-            var typeInfo = Aria2ClientSerializationContext.Default.GetTypeInfo(typeof(JsonRpcResponse<TResponse>));
-            if (typeInfo is null)
-            {
-                response = rawResponse.Deserialize<JsonRpcResponse<TResponse>>(Aria2ClientSerialization.Options);
-            }
-            else
-            {
-                response = (JsonRpcResponse<TResponse>?)rawResponse.Deserialize(typeInfo);
-            }
-#else
-            response = rawResponse.Deserialize<JsonRpcResponse<TResponse>>(Aria2ClientSerialization.Options);
-#endif
-            if (response is null)
-            {
-                throw new Exception("Invalid JSON-RPC response.");
-            }
-            return response;
+
+            return Serializer.Deserialize<JsonRpcResponse<TResponse>>(rawResponse);
         }
 
         /// <inheritdoc />
         public async Task<JsonRpcResponse> SendRequest(JsonRpcRequest request)
         {
             var rawResponse = await SendWebSocketRequestAsync(request);
-#if NET8_0_OR_GREATER
-            var response = rawResponse.Deserialize(Aria2ClientSerializationContext.Default.JsonRpcResponse);
-#else
-            var response = rawResponse.Deserialize<JsonRpcResponse>(Aria2ClientSerialization.Options);
-#endif
-            if (response is null)
-            {
-                throw new Exception("Invalid JSON-RPC response.");
-            }
-            return response;
+
+            return Serializer.Deserialize<JsonRpcResponse>(rawResponse);
         }
 
         /// <summary>
@@ -118,11 +94,7 @@ namespace Aria2.JsonRpcClient
 
             request.EnsureSecret(_secret);
 
-#if NET8_0_OR_GREATER
-            var jsonRequest = JsonSerializer.Serialize(request, Aria2ClientSerializationContext.Default.JsonRpcRequest);
-#else
-            var jsonRequest = JsonSerializer.Serialize(request, Aria2ClientSerialization.Options);
-#endif
+            var jsonRequest = Serializer.Serialize(request);
             var requestBytes = Encoding.UTF8.GetBytes(jsonRequest);
             await _webSocket.SendAsync(
                 new ArraySegment<byte>(requestBytes),
@@ -165,8 +137,7 @@ namespace Aria2.JsonRpcClient
                         _cts.Dispose();
                         _cts = new CancellationTokenSource();
 
-                        _webSocket.Dispose();
-                        _webSocket = new ClientWebSocket();
+                        _webSocket.Refresh();
                     }
 
                     await _webSocket.ConnectAsync(_uri, _cts.Token);
@@ -244,11 +215,7 @@ namespace Aria2.JsonRpcClient
 
         private void HandleNotification(JsonElement root)
         {
-#if NET8_0_OR_GREATER
-            var response = root.Deserialize(Aria2ClientSerializationContext.Default.JsonRpcNotification);
-#else
-            var response = root.Deserialize<JsonRpcNotification>(Aria2ClientSerialization.Options);
-#endif
+            var response = Serializer.Deserialize<JsonRpcNotification>(root);
             if (response is null || response.Parameters.Count == 0)
             {
                 return;

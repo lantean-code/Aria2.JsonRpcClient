@@ -36,6 +36,7 @@ namespace Aria2.JsonRpcClient
     [JsonSerializable(typeof(JsonRpcRequest))]
     [JsonSerializable(typeof(JsonRpcResponse))]
     [JsonSerializable(typeof(JsonRpcError))]
+    [JsonSerializable(typeof(JsonRpcParameters))]
 
     [JsonSerializable(typeof(Requests.AddMetalink), GenerationMode = JsonSourceGenerationMode.Serialization)]
     [JsonSerializable(typeof(Requests.AddTorrent), GenerationMode = JsonSourceGenerationMode.Serialization)]
@@ -74,7 +75,7 @@ namespace Aria2.JsonRpcClient
     [JsonSerializable(typeof(Requests.Unpause), GenerationMode = JsonSourceGenerationMode.Serialization)]
     [JsonSerializable(typeof(Requests.UnpauseAll), GenerationMode = JsonSourceGenerationMode.Serialization)]
 
-    [JsonSerializable(typeof(Models.Aria2DownloadOptions), GenerationMode = JsonSourceGenerationMode.Serialization)]
+    [JsonSerializable(typeof(Models.Aria2DownloadOptions))]
 
     [JsonSerializable(typeof(Models.Aria2Bittorrent))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2Bittorrent>))]
@@ -101,6 +102,12 @@ namespace Aria2.JsonRpcClient
     [JsonSerializable(typeof(Models.Aria2Version))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2Version>))]
 
+    [JsonSerializable(typeof(JsonRpcResponse<string>))]
+
+    [JsonSerializable(typeof(Models.SystemMulticallRequest))]
+
+    [JsonSerializable(typeof(GidWrapper))]
+    [JsonSerializable(typeof(Models.Size))]
     internal partial class Aria2ClientSerializationContext : JsonSerializerContext
     {
 

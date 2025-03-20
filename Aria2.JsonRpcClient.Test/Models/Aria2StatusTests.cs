@@ -11,7 +11,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<Aria2Status>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<Aria2Status>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -21,7 +21,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "{\"gid\":\"gid123\",\"status\":\"active\",\"totalLength\":\"100000\",\"completedLength\":\"50000\",\"uploadLength\":\"10000\",\"bitfield\":\"ff00\",\"downloadSpeed\":\"1024\",\"uploadSpeed\":\"512\",\"infoHash\":\"infohash123\",\"numSeeders\":\"8\",\"seeder\":\"true\",\"pieceLength\":\"4096\",\"numPieces\":\"25\",\"connections\":\"4\",\"errorCode\":\"0\",\"errorMessage\":\"No error\",\"followedBy\":[\"gid456\"],\"following\":\"gid789\",\"belongsTo\":\"gid101\",\"dir\":\"/downloads\",\"files\":[{\"index\":\"1\",\"path\":\"file.txt\",\"length\":\"123\",\"completedLength\":\"123\",\"selected\":\"true\",\"uris\":[{\"uri\":\"http://example.com/file\",\"status\":\"used\"}]}],\"bittorrent\":null,\"verifiedLength\":\"60000\",\"verifyIntegrityPending\":\"false\"}";
 
-            var result = JsonSerializer.Deserialize<Aria2Status>(json, Aria2ClientSerialization.Options);
+            var result = Serializer.Deserialize<Aria2Status>(json);
 
             result.Should().NotBeNull();
 

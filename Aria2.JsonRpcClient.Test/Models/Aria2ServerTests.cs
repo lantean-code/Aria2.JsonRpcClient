@@ -11,7 +11,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<Aria2Server>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<Aria2Server>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -21,7 +21,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         {
             var json = "{\"index\":\"1\",\"servers\":[{\"uri\":\"http://server.example.com/original\",\"currentUri\":\"http://server.example.com/current\",\"downloadSpeed\":\"2048\"}]}";
 
-            var result = JsonSerializer.Deserialize<Aria2Server>(json, Aria2ClientSerialization.Options);
+            var result = Serializer.Deserialize<Aria2Server>(json);
 
             result.Should().NotBeNull();
 

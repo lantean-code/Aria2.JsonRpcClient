@@ -10,7 +10,7 @@ namespace Aria2.JsonRpcClient.Test
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<JsonRpcNotification>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<JsonRpcNotification>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -18,9 +18,9 @@ namespace Aria2.JsonRpcClient.Test
         [Fact]
         public void GIVEN_ValidJson_WHEN_Deserializing_THEN_ShouldReturnCorrectProperties()
         {
-            var json = "{\"jsonrpc\":\"2.0\",\"method\":\"notifyMethod\",\"params\":[{\"Gid\":\"gid123\"}]}";
+            var json = "{\"jsonrpc\":\"2.0\",\"method\":\"notifyMethod\",\"params\":[{\"gid\":\"gid123\"}]}";
 
-            var notification = JsonSerializer.Deserialize<JsonRpcNotification>(json, Aria2ClientSerialization.Options);
+            var notification = Serializer.Deserialize<JsonRpcNotification>(json);
 
             notification.Should().NotBeNull();
             notification.JsonRpc.Should().Be("2.0");

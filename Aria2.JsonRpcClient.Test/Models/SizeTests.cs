@@ -39,7 +39,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         [Fact]
         public void GIVEN_StringWithMegabytesUpperCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
         {
-            bool success = Size.TryParse("1M", out var size);
+            var success = Size.TryParse("1M", out var size);
 
             success.Should().BeTrue();
             size.Value.Should().Be(1);
@@ -49,7 +49,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         [Fact]
         public void GIVEN_StringWithMegabytesLowerCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
         {
-            bool success = Size.TryParse("1.234m", out var size);
+            var success = Size.TryParse("1.234m", out var size);
 
             success.Should().BeTrue();
             size.Value.Should().BeApproximately(1.234, 0.001);
@@ -59,7 +59,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         [Fact]
         public void GIVEN_StringWithKilobytesUpperCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
         {
-            bool success = Size.TryParse("50K", out var size);
+            var success = Size.TryParse("50K", out var size);
 
             success.Should().BeTrue();
             size.Value.Should().Be(50);
@@ -69,7 +69,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         [Fact]
         public void GIVEN_StringWithKilobytesLowerCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
         {
-            bool success = Size.TryParse("75k", out var size);
+            var success = Size.TryParse("75k", out var size);
 
             success.Should().BeTrue();
             size.Value.Should().Be(75);
@@ -79,7 +79,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         [Fact]
         public void GIVEN_StringWithInvalidUnit_WHEN_TryParseCalled_THEN_ReturnsFalse()
         {
-            bool success = Size.TryParse("1G", out var size);
+            var success = Size.TryParse("1G", out var size);
 
             success.Should().BeFalse();
         }
@@ -87,7 +87,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         [Fact]
         public void GIVEN_StringWithInvalidNumeric_WHEN_TryParseCalled_THEN_ReturnsFalse()
         {
-            bool success = Size.TryParse("abcM", out var size);
+            var success = Size.TryParse("abcM", out var size);
 
             success.Should().BeFalse();
         }

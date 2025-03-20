@@ -12,7 +12,7 @@ namespace Aria2.JsonRpcClient.Test.Models
             // Arrange
             var json = "InvalidJson";
             // Act
-            Action act = () => JsonSerializer.Deserialize<Aria2Uri>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<Aria2Uri>(json);
             // Assert
             act.Should().Throw<JsonException>();
         }
@@ -23,7 +23,7 @@ namespace Aria2.JsonRpcClient.Test.Models
             // Arrange
             var json = "{\"uri\":\"http://example.com/file\",\"status\":\"used\"}";
             // Act
-            var result = JsonSerializer.Deserialize<Aria2Uri>(json, Aria2ClientSerialization.Options);
+            var result = Serializer.Deserialize<Aria2Uri>(json);
             // Assert
             result.Should().NotBeNull();
             result.Uri.Should().Be("http://example.com/file");

@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Aria2.JsonRpcClient.Models;
 using FluentAssertions;
 
@@ -11,7 +10,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         [InlineData("tunnel", ProxyMethodOptions.Tunnel)]
         public void GIVEN_Input_WHEN_Deserializing_THEN_ShouldReturnExpected(string input, ProxyMethodOptions expected)
         {
-            JsonSerializer.Deserialize<ProxyMethodOptions>($"\"{input}\"", Aria2ClientSerialization.Options).Should().Be(expected);
+            Serializer.Deserialize<ProxyMethodOptions>($"\"{input}\"").Should().Be(expected);
         }
     }
 }

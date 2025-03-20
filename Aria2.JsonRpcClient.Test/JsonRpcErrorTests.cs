@@ -10,7 +10,7 @@ namespace Aria2.JsonRpcClient.Test
         {
             var json = "InvalidJson";
 
-            Action act = () => JsonSerializer.Deserialize<JsonRpcError>(json, Aria2ClientSerialization.Options);
+            Action act = () => Serializer.Deserialize<JsonRpcError>(json);
 
             act.Should().Throw<JsonException>();
         }
@@ -20,7 +20,7 @@ namespace Aria2.JsonRpcClient.Test
         {
             var json = "{\"code\":-32600,\"message\":\"Invalid Request\",\"customKey\":\"customValue\"}";
 
-            var error = JsonSerializer.Deserialize<JsonRpcError>(json, Aria2ClientSerialization.Options);
+            var error = Serializer.Deserialize<JsonRpcError>(json);
 
             error.Should().NotBeNull();
             error.Code.Should().Be(-32600);

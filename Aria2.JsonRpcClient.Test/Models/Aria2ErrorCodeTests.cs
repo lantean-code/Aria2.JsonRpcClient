@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Aria2.JsonRpcClient.Models;
 using FluentAssertions;
 
@@ -42,7 +41,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         [InlineData("32", Aria2ErrorCode.ChecksumValidationFailed)]
         public void GIVEN_InputAsString_WHEN_Deserializing_THEN_ReturnsExpected(string input, Aria2ErrorCode expected)
         {
-            JsonSerializer.Deserialize<Aria2ErrorCode>($"\"{input}\"", Aria2ClientSerialization.Options).Should().Be(expected);
+            Serializer.Deserialize<Aria2ErrorCode>($"\"{input}\"").Should().Be(expected);
         }
 
         [Theory]
@@ -81,7 +80,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         [InlineData(32, Aria2ErrorCode.ChecksumValidationFailed)]
         public void GIVEN_InputAsInt_WHEN_Deserializing_THEN_ReturnsExpected(int input, Aria2ErrorCode expected)
         {
-            JsonSerializer.Deserialize<Aria2ErrorCode>(input, Aria2ClientSerialization.Options).Should().Be(expected);
+            Serializer.Deserialize<Aria2ErrorCode>(input).Should().Be(expected);
         }
     }
 }
