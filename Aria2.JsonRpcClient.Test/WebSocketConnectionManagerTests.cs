@@ -364,9 +364,11 @@ namespace Aria2.JsonRpcClient.Test
             webSocketMock.Setup(ws => ws.ReceiveAsync(It.IsAny<ArraySegment<byte>>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(closeResult);
 
+            var tcs = new TaskCompletionSource<bool>();
+
             webSocketMock.Setup(ws => ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask)
-                .Verifiable();
+                .Callback(() => tcs.TrySetResult(true));
 
             var manager = CreateManager(webSocketMock);
 
@@ -375,7 +377,10 @@ namespace Aria2.JsonRpcClient.Test
             var sendTask = manager.SendRequest<string>(request);
 
             // Allow time for the receive loop to process the close message.
-            await Task.Delay(1000);
+            var completedTask = await Task.WhenAny(tcs.Task, Task.Delay(2000));
+#pragma warning disable xUnit1031 // Do not use blocking task operations in test method
+            Assert.True(completedTask == tcs.Task && tcs.Task.Result, "CloseAsync was not called within the timeout.");
+#pragma warning restore xUnit1031 // Do not use blocking task operations in test method
 
             manager.Dispose();
 
