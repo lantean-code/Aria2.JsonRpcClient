@@ -18,7 +18,7 @@ namespace Aria2.JsonRpcClient.Test.Client
         [Fact]
         public async Task GIVEN_ValidParameters_WHEN_ChangeOption_THEN_ShouldPassChangeOptionRequestToHandler()
         {
-            var options = new Aria2DownloadOptions();
+            var options = new Aria2Options();
             var response = new JsonRpcResponse { Error = null, Id = "Id", JsonRpc = "JsonRpc" };
             var gid = "Gid1";
 

@@ -324,7 +324,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="options">The options to change.</param>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.changeOption"/>
-        Task ChangeOption(string gid, Aria2DownloadOptions options, string? id = null);
+        Task ChangeOption(string gid, Aria2Options options, string? id = null);
 
         /// <summary>
         /// Returns the global options as a struct.
@@ -333,7 +333,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.getGlobalOption"/>
         /// <returns>A dictionary of global options.</returns>
-        Task<IReadOnlyDictionary<string, string?>> GetGlobalOption(string? id = null);
+        Task<Aria2GlobalOptions> GetGlobalOption(string? id = null);
 
         /// <summary>
         /// Changes the global options dynamically.
@@ -343,7 +343,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="options">The global options to change.</param>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.changeGlobalOption"/>
-        Task ChangeGlobalOption(Aria2DownloadOptions options, string? id = null);
+        Task ChangeGlobalOption(Aria2GlobalOptions options, string? id = null);
 
         #endregion Option Methods
 

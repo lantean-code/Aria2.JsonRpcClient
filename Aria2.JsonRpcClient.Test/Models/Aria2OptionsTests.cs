@@ -17,6 +17,46 @@ namespace Aria2.JsonRpcClient.Test.Models
         }
 
         [Fact]
+        public void GIVEN_AllNonNullOptions_WHEN_Serializing_ShouldConvertAllToCorrectValues()
+        {
+            var options = new Aria2Options
+            {
+                NoWantDigestHeader = false,
+                SaveNotFound = true,
+            };
+
+            var json = Serializer.Serialize(options);
+            var expected = "{\"no-want-digest-header\":\"false\",\"save-not-found\":\"true\"}";
+            json.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public void GIVEN_SomeNullOptions_WHEN_Serializing_ShouldConvertAllToCorrectValues()
+        {
+            var options = new Aria2Options
+            {
+                NoWantDigestHeader = false,
+            };
+
+            var json = Serializer.Serialize(options);
+            var expected = "{\"no-want-digest-header\":\"false\"}";
+            json.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
+        public void GIVEN_AllNullOptions_WHEN_Serializing_ShouldConvertAllToCorrectValues()
+        {
+            var options = new Aria2Options
+            {
+                // All properties remain null.
+            };
+
+            var json = Serializer.Serialize(options);
+            var expected = "{}";
+            json.Should().BeEquivalentTo(expected);
+        }
+
+        [Fact]
         public void GIVEN_ValidJson_WHEN_Deserializing_THEN_ShouldReturnObject()
         {
             var json = "{\"option1\":\"value1\",\"option2\":\"value2\"}";

@@ -225,21 +225,21 @@ namespace Aria2.JsonRpcClient
         }
 
         /// <inheritdoc/>
-        public Task ChangeOption(string gid, Aria2DownloadOptions options, string? id = null)
+        public Task ChangeOption(string gid, Aria2Options options, string? id = null)
         {
             var request = new ChangeOption(gid, options, id);
             return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyDictionary<string, string?>> GetGlobalOption(string? id = null)
+        public Task<Aria2GlobalOptions> GetGlobalOption(string? id = null)
         {
             var request = new GetGlobalOption(id);
-            return ExecuteRequest<IReadOnlyDictionary<string, string?>>(request);
+            return ExecuteRequest<Aria2GlobalOptions>(request);
         }
 
         /// <inheritdoc/>
-        public Task ChangeGlobalOption(Aria2DownloadOptions options, string? id = null)
+        public Task ChangeGlobalOption(Aria2GlobalOptions options, string? id = null)
         {
             var request = new ChangeGlobalOption(options, id);
             return ExecuteRequest(request);

@@ -9,7 +9,7 @@ namespace Aria2.JsonRpcClient.Test.Requests
         [Fact]
         public void GIVEN_WithOptions_WHEN_Constructing_THEN_ShouldCreateJsonRequestWithCorrectName()
         {
-            var options = new Aria2DownloadOptions { Dir = "MyDir" };
+            var options = new Aria2GlobalOptions { Dir = "MyDir" };
             var target = new ChangeGlobalOption(options);
 
             target.Method.Should().Be("aria2.changeGlobalOption");
@@ -20,7 +20,7 @@ namespace Aria2.JsonRpcClient.Test.Requests
         [Fact]
         public void GIVEN_WithOptionsAndId_WHEN_Constructing_THEN_CreateValidRequestWithParametersAtCorrectPositions()
         {
-            var options = new Aria2DownloadOptions { Dir = "MyDir" };
+            var options = new Aria2GlobalOptions { Dir = "MyDir" };
             var target = new ChangeGlobalOption(options, id: "testId");
 
             target.Method.Should().Be("aria2.changeGlobalOption");

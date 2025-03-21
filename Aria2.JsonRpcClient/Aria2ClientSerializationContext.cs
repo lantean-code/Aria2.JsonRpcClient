@@ -78,6 +78,8 @@ namespace Aria2.JsonRpcClient
     [JsonSerializable(typeof(Requests.UnpauseAll), GenerationMode = JsonSourceGenerationMode.Serialization)]
 
     [JsonSerializable(typeof(Models.Aria2DownloadOptions))]
+    [JsonSerializable(typeof(Models.Aria2Options))]
+    [JsonSerializable(typeof(Models.Aria2GlobalOptions))]
 
     [JsonSerializable(typeof(Models.Aria2Bittorrent))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2Bittorrent>))]

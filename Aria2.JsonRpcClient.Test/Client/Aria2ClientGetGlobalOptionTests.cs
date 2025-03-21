@@ -1,3 +1,4 @@
+using Aria2.JsonRpcClient.Models;
 using Aria2.JsonRpcClient.Requests;
 using FluentAssertions;
 using Moq;
@@ -18,11 +19,11 @@ namespace Aria2.JsonRpcClient.Test.Client
         [Fact]
         public async Task GIVEN_NoId_WHEN_GetGlobalOption_THEN_ShouldPassGetGlobalOptionRequestToHandler()
         {
-            var expected = new Dictionary<string, string?> { { "key", "value" } };
-            var response = new JsonRpcResponse<IReadOnlyDictionary<string, string?>> { Result = expected, Error = null, Id = "Id", JsonRpc = "JsonRpc" };
+            var expected = new Aria2GlobalOptions { AllProxy = "AllProxy" };
+            var response = new JsonRpcResponse<Aria2GlobalOptions> { Result = expected, Error = null, Id = "Id", JsonRpc = "JsonRpc" };
 
             Mock.Get(_requestHandler)
-                .Setup(x => x.SendRequest<IReadOnlyDictionary<string, string?>>(It.IsAny<JsonRpcRequest>()))
+                .Setup(x => x.SendRequest<Aria2GlobalOptions>(It.IsAny<JsonRpcRequest>()))
                 .ReturnsAsync(response);
 
             var result = await _target.GetGlobalOption();
@@ -30,7 +31,7 @@ namespace Aria2.JsonRpcClient.Test.Client
             result.Should().BeEquivalentTo(expected);
 
             Mock.Get(_requestHandler)
-                .Verify(x => x.SendRequest<IReadOnlyDictionary<string, string?>>(It.Is<GetGlobalOption>(r => r != null)), Times.Once());
+                .Verify(x => x.SendRequest<Aria2GlobalOptions>(It.Is<GetGlobalOption>(r => r != null)), Times.Once());
         }
     }
 }

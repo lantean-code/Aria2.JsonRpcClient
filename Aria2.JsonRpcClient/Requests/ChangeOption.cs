@@ -8,7 +8,7 @@ namespace Aria2.JsonRpcClient.Requests
     public sealed record ChangeOption : JsonRpcRequest
     {
         /// <inheritdoc cref="IAria2Client.ChangeOption"/>
-        public ChangeOption(string gid, Aria2DownloadOptions options, string? id = null) : base("aria2.changeOption", [gid, options], id)
+        public ChangeOption(string gid, Aria2Options options, string? id = null) : base("aria2.changeOption", [gid, options], id)
         {
         }
     }
