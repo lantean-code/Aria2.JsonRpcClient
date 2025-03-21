@@ -33,6 +33,7 @@ namespace Aria2.JsonRpcClient
             _options.Converters.Add(new NumberOrStringToLongConverter());
             _options.Converters.Add(new NumberOrStringToDoubleConverter());
             _options.Converters.Add(new SizeConverter());
+            _options.Converters.Add(new JsonRpcParametersConverter());
         }
 
         internal static JsonSerializerOptions Options => _options;

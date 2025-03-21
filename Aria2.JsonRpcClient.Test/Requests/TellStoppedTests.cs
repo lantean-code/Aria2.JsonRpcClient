@@ -30,5 +30,23 @@ namespace Aria2.JsonRpcClient.Test.Requests
             target.Parameters[2].Should().BeEquivalentTo(keys);
             target.Id.Should().Be("testId");
         }
+
+        [Fact]
+        public void GIVEN_WithOffsetNumAndKeysSelector_WHEN_Constructing_THEN_ShouldCreateJsonRequestWithCorrectParametersAndId()
+        {
+            var keys = new[] { "dir", "following" };
+            var target = new TellStopped(5, 15, s => new
+            {
+                s.Dir,
+                s.Following
+            }, "testId");
+
+            target.Method.Should().Be("aria2.tellStopped");
+            target.Parameters.Should().HaveCount(3);
+            target.Parameters[0].Should().Be(5);
+            target.Parameters[1].Should().Be(15);
+            target.Parameters[2].Should().BeEquivalentTo(keys);
+            target.Id.Should().Be("testId");
+        }
     }
 }

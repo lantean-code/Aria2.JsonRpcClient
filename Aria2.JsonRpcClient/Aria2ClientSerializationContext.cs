@@ -30,7 +30,8 @@ namespace Aria2.JsonRpcClient
         typeof(NumberOrStringToIntConverter),
         typeof(NumberOrStringToLongConverter),
         typeof(NumberOrStringToDoubleConverter),
-        typeof(SizeConverter)
+        typeof(SizeConverter),
+        typeof(JsonRpcParametersConverter),
     })]
     [JsonSerializable(typeof(JsonRpcNotification))]
     [JsonSerializable(typeof(JsonRpcRequest))]

@@ -22,14 +22,7 @@ namespace Aria2.JsonRpcClient
         public static implicit operator JsonRpcParameters(object?[] values)
         {
             var parameters = new JsonRpcParameters();
-            foreach (var value in values)
-            {
-                if (value is null)
-                {
-                    continue;
-                }
-                parameters.Add(value);
-            }
+            parameters.AddRange(values);
             return parameters;
         }
 

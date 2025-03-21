@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Aria2.JsonRpcClient.Models;
 
 namespace Aria2.JsonRpcClient.Requests
@@ -7,8 +8,13 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record TellStatus : JsonRpcRequest<Aria2Status>
     {
-        /// <inheritdoc cref="IAria2Client.TellStatus"/>
+        /// <inheritdoc cref="IAria2Client.TellStatus(string, string[], string?)"/>
         public TellStatus(string gid, string[]? keys = null, string? id = null) : base("aria2.tellStatus", [gid, keys], id)
+        {
+        }
+
+        /// <inheritdoc cref="IAria2Client.TellStatus(string, Expression{Func{Aria2Status, object}}, string?)"/>
+        public TellStatus(string gid, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null) : this(gid, Aria2StatuskeysSelector.Select(keysSelector), id)
         {
         }
     }

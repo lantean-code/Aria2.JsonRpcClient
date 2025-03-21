@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Aria2.JsonRpcClient.Models;
 
 namespace Aria2.JsonRpcClient
@@ -149,6 +150,18 @@ namespace Aria2.JsonRpcClient
         Task<Aria2Status> TellStatus(string gid, string[]? keys = null, string? id = null);
 
         /// <summary>
+        /// Returns the status of the download denoted by <paramref name="gid"/>.
+        /// The returned object includes various properties describing the download's progress, speed, and other details.
+        /// If <paramref name="keysSelector"/> is specified, only those keys are returned.
+        /// </summary>
+        /// <param name="gid">The GID of the download.</param>
+        /// <param name="keysSelector">An optional array of keys to filter the response.</param>
+        /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
+        /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellStatus"/>
+        /// <returns>An <see cref="Aria2Status"/> object describing the download's status.</returns>
+        Task<Aria2Status> TellStatus(string gid, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null);
+
+        /// <summary>
         /// Returns an array of URI objects used by the download denoted by <paramref name="gid"/>.
         /// Each URI object contains the URI and its status.
         /// </summary>
@@ -199,6 +212,16 @@ namespace Aria2.JsonRpcClient
         Task<IReadOnlyList<Aria2Status>> TellActive(string[]? keys = null, string? id = null);
 
         /// <summary>
+        /// Returns a list of active downloads.
+        /// Each download's status is represented as an <see cref="Aria2Status"/> object.
+        /// </summary>
+        /// <param name="keysSelector">Optional keys to filter the status objects.</param>
+        /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
+        /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellActive"/>
+        /// <returns>A read-only list of active downloads.</returns>
+        Task<IReadOnlyList<Aria2Status>> TellActive(Expression<Func<Aria2Status, object?>> keysSelector, string? id = null);
+
+        /// <summary>
         /// Returns a list of waiting downloads.
         /// <paramref name="offset"/> specifies the starting index (can be negative) and <paramref name="num"/> specifies the maximum number to return.
         /// </summary>
@@ -211,6 +234,18 @@ namespace Aria2.JsonRpcClient
         Task<IReadOnlyList<Aria2Status>> TellWaiting(int offset, int num, string[]? keys = null, string? id = null);
 
         /// <summary>
+        /// Returns a list of waiting downloads.
+        /// <paramref name="offset"/> specifies the starting index (can be negative) and <paramref name="num"/> specifies the maximum number to return.
+        /// </summary>
+        /// <param name="offset">The starting index in the waiting queue.</param>
+        /// <param name="num">The maximum number of downloads to return.</param>
+        /// <param name="keysSelector">Optional keys to filter the status objects.</param>
+        /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
+        /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellWaiting"/>
+        /// <returns>A read-only list of waiting downloads.</returns>
+        Task<IReadOnlyList<Aria2Status>> TellWaiting(int offset, int num, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null);
+
+        /// <summary>
         /// Returns a list of stopped downloads.
         /// <paramref name="offset"/> specifies the starting index (can be negative) and <paramref name="num"/> specifies the maximum number to return.
         /// </summary>
@@ -221,6 +256,18 @@ namespace Aria2.JsonRpcClient
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellStopped"/>
         /// <returns>A read-only list of stopped downloads.</returns>
         Task<IReadOnlyList<Aria2Status>> TellStopped(int offset, int num, string[]? keys = null, string? id = null);
+
+        /// <summary>
+        /// Returns a list of stopped downloads.
+        /// <paramref name="offset"/> specifies the starting index (can be negative) and <paramref name="num"/> specifies the maximum number to return.
+        /// </summary>
+        /// <param name="offset">The starting index in the stopped queue.</param>
+        /// <param name="num">The maximum number of downloads to return.</param>
+        /// <param name="keysSelector">Optional keys to filter the status objects.</param>
+        /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
+        /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellStopped"/>
+        /// <returns>A read-only list of stopped downloads.</returns>
+        Task<IReadOnlyList<Aria2Status>> TellStopped(int offset, int num, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null);
 
         #endregion Download Status & Information Methods
 

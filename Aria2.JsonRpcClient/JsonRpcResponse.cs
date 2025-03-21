@@ -14,8 +14,10 @@ namespace Aria2.JsonRpcClient
         [JsonPropertyName("id")]
         public required string Id { get; init; }
 
+#if DEBUG
         [JsonExtensionData]
         public IDictionary<string, JsonElement> ExtensionData { get; set; } = new Dictionary<string, JsonElement>();
+#endif
     }
 
     internal record JsonRpcResponse<T> : JsonRpcResponse

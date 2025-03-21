@@ -77,5 +77,38 @@ namespace Aria2.JsonRpcClient.Test.Models
             result.VerifiedLength.Should().Be(60000);
             result.VerifyIntegrityPending.Should().BeFalse();
         }
+
+        [Theory]
+        [InlineData(nameof(Aria2Status.Keys.Gid), Aria2Status.Keys.Gid)]
+        [InlineData(nameof(Aria2Status.Keys.Status), Aria2Status.Keys.Status)]
+        [InlineData(nameof(Aria2Status.Keys.TotalLength), Aria2Status.Keys.TotalLength)]
+        [InlineData(nameof(Aria2Status.Keys.CompletedLength), Aria2Status.Keys.CompletedLength)]
+        [InlineData(nameof(Aria2Status.Keys.UploadLength), Aria2Status.Keys.UploadLength)]
+        [InlineData(nameof(Aria2Status.Keys.Bitfield), Aria2Status.Keys.Bitfield)]
+        [InlineData(nameof(Aria2Status.Keys.DownloadSpeed), Aria2Status.Keys.DownloadSpeed)]
+        [InlineData(nameof(Aria2Status.Keys.UploadSpeed), Aria2Status.Keys.UploadSpeed)]
+        [InlineData(nameof(Aria2Status.Keys.InfoHash), Aria2Status.Keys.InfoHash)]
+        [InlineData(nameof(Aria2Status.Keys.NumSeeders), Aria2Status.Keys.NumSeeders)]
+        [InlineData(nameof(Aria2Status.Keys.Seeder), Aria2Status.Keys.Seeder)]
+        [InlineData(nameof(Aria2Status.Keys.PieceLength), Aria2Status.Keys.PieceLength)]
+        [InlineData(nameof(Aria2Status.Keys.NumPieces), Aria2Status.Keys.NumPieces)]
+        [InlineData(nameof(Aria2Status.Keys.Connections), Aria2Status.Keys.Connections)]
+        [InlineData(nameof(Aria2Status.Keys.ErrorCode), Aria2Status.Keys.ErrorCode)]
+        [InlineData(nameof(Aria2Status.Keys.ErrorMessage), Aria2Status.Keys.ErrorMessage)]
+        [InlineData(nameof(Aria2Status.Keys.FollowedBy), Aria2Status.Keys.FollowedBy)]
+        [InlineData(nameof(Aria2Status.Keys.Following), Aria2Status.Keys.Following)]
+        [InlineData(nameof(Aria2Status.Keys.BelongsTo), Aria2Status.Keys.BelongsTo)]
+        [InlineData(nameof(Aria2Status.Keys.Dir), Aria2Status.Keys.Dir)]
+        [InlineData(nameof(Aria2Status.Keys.Files), Aria2Status.Keys.Files)]
+        [InlineData(nameof(Aria2Status.Keys.Bittorrent), Aria2Status.Keys.Bittorrent)]
+        [InlineData(nameof(Aria2Status.Keys.VerifiedLength), Aria2Status.Keys.VerifiedLength)]
+        [InlineData(nameof(Aria2Status.Keys.VerifyIntegrityPending), Aria2Status.Keys.VerifyIntegrityPending)]
+        public void GIVEN_InputPropertyName_WHEN_Matching_THEN_ShouldReturnCorrespondingKey(string name, string key)
+        {
+            var result = Aria2Status.Keys.Match(name);
+
+            result.Should().NotBeNull();
+            result.Should().Be(key);
+        }
     }
 }

@@ -5,27 +5,28 @@ namespace Aria2.JsonRpcClient.Test
     public class JsonRpcParametersTests
     {
         [Fact]
-        public void GIVEN_ArrayWithOnlyNulls_WHEN_ImplicitConversionFromObjectArray_THEN_ReturnsEmptyParameters()
+        public void GIVEN_ArrayWithOnlyNulls_WHEN_ImplicitConversionFromObjectArray_THEN_ReturnsNullParameters()
         {
             object?[] values = { null, null };
 
             JsonRpcParameters parameters = values;
 
             parameters.Should().NotBeNull();
-            parameters.Count.Should().Be(0);
+            parameters.Count.Should().Be(2);
         }
 
         [Fact]
-        public void GIVEN_ArrayWithMixedValues_WHEN_ImplicitConversionFromObjectArray_THEN_ReturnsParametersWithoutNulls()
+        public void GIVEN_ArrayWithMixedValues_WHEN_ImplicitConversionFromObjectArray_THEN_ReturnsParametersWithNulls()
         {
             object?[] values = { "hello", null, 42 };
 
             JsonRpcParameters parameters = values;
 
             parameters.Should().NotBeNull();
-            parameters.Count.Should().Be(2);
+            parameters.Count.Should().Be(3);
             parameters[0].Should().Be("hello");
-            parameters[1].Should().Be(42);
+            parameters[1].Should().BeNull();
+            parameters[2].Should().Be(42);
         }
 
         [Fact]

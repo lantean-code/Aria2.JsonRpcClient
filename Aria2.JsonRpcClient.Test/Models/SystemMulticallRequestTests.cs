@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Aria2.JsonRpcClient.Models;
 using FluentAssertions;
 
@@ -7,36 +6,45 @@ namespace Aria2.JsonRpcClient.Test.Models
     public class SystemMulticallRequestTests
     {
         [Fact]
-        public void GIVEN_InvalidJson_WHEN_Deserializing_THEN_ShouldThrowJsonException()
+        public void GIVEN_NoNullOptions_WHEN_Serializing_ShouldConvertAllToCorrectValues()
         {
-            var json = "InvalidJson";
+            var request = new SystemMulticallRequest
+            {
+                MethodName = "system.methodName",
+                Parameters = ["param1", "42"]
+            };
 
-            Action act = () => Serializer.Deserialize<SystemMulticallRequest>(json);
+            var json = Serializer.Serialize(request);
 
-            act.Should().Throw<JsonException>();
+            json.Should().Be("{\"methodName\":\"system.methodName\",\"params\":[\"param1\",\"42\"]}");
         }
 
         [Fact]
-        public void GIVEN_ValidJson_WHEN_Deserializing_THEN_ShouldReturnObject()
+        public void GIVEN_MiddleNullOptions_WHEN_Serializing_ShouldConvertAllToCorrectValues()
         {
-            var json = "{\"methodName\":\"system.methodName\",\"params\":[\"param1\",\"42\"]}";
+            var request = new SystemMulticallRequest
+            {
+                MethodName = "system.methodName",
+                Parameters = ["param1", null, "42"]
+            };
 
-            var result = Serializer.Deserialize<SystemMulticallRequest>(json);
+            var json = Serializer.Serialize(request);
 
-            result.Should().NotBeNull();
+            json.Should().Be("{\"methodName\":\"system.methodName\",\"params\":[\"param1\",null,\"42\"]}");
+        }
 
-            result.MethodName.Should().Be("system.methodName");
+        [Fact]
+        public void GIVEN_TrailingNullOptions_WHEN_Serializing_ShouldConvertAllToCorrectValues()
+        {
+            var request = new SystemMulticallRequest
+            {
+                MethodName = "system.methodName",
+                Parameters = ["param1", "42", null]
+            };
 
-            result.Parameters.Should().NotBeNull();
-            result.Parameters.Count.Should().Be(2);
+            var json = Serializer.Serialize(request);
 
-            var param0 = result.Parameters[0] as JsonElement?;
-            param0.Should().NotBeNull();
-            param0.Value.GetString().Should().Be("param1");
-
-            var param1 = result.Parameters[1] as JsonElement?;
-            param1.Should().NotBeNull();
-            param1.Value.GetString().Should().Be("42");
+            json.Should().Be("{\"methodName\":\"system.methodName\",\"params\":[\"param1\",\"42\"]}");
         }
     }
 }

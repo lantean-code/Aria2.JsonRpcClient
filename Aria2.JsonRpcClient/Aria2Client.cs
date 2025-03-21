@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Text.Json;
 using Aria2.JsonRpcClient.Models;
 using Aria2.JsonRpcClient.Requests;
@@ -119,6 +120,12 @@ namespace Aria2.JsonRpcClient
             return ExecuteRequest<Aria2Status>(request);
         }
 
+        public Task<Aria2Status> TellStatus(string gid, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null)
+        {
+            var request = new TellStatus(gid, keysSelector, id);
+            return ExecuteRequest<Aria2Status>(request);
+        }
+
         /// <inheritdoc/>
         public Task<IReadOnlyList<Aria2Uri>> GetUris(string gid, string? id = null)
         {
@@ -155,9 +162,22 @@ namespace Aria2.JsonRpcClient
         }
 
         /// <inheritdoc/>
+        public Task<IReadOnlyList<Aria2Status>> TellActive(Expression<Func<Aria2Status, object?>> keysSelector, string? id = null)
+        {
+            var request = new TellActive(keysSelector, id);
+            return ExecuteRequest<IReadOnlyList<Aria2Status>>(request);
+        }
+
+        /// <inheritdoc/>
         public Task<IReadOnlyList<Aria2Status>> TellWaiting(int offset, int num, string[]? keys = null, string? id = null)
         {
             var request = new TellWaiting(offset, num, keys, id);
+            return ExecuteRequest<IReadOnlyList<Aria2Status>>(request);
+        }
+
+        public Task<IReadOnlyList<Aria2Status>> TellWaiting(int offset, int num, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null)
+        {
+            var request = new TellWaiting(offset, num, keysSelector, id);
             return ExecuteRequest<IReadOnlyList<Aria2Status>>(request);
         }
 
@@ -165,6 +185,13 @@ namespace Aria2.JsonRpcClient
         public Task<IReadOnlyList<Aria2Status>> TellStopped(int offset, int num, string[]? keys = null, string? id = null)
         {
             var request = new TellStopped(offset, num, keys, id);
+            return ExecuteRequest<IReadOnlyList<Aria2Status>>(request);
+        }
+
+        /// <inheritdoc/>
+        public Task<IReadOnlyList<Aria2Status>> TellStopped(int offset, int num, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null)
+        {
+            var request = new TellStopped(offset, num, keysSelector, id);
             return ExecuteRequest<IReadOnlyList<Aria2Status>>(request);
         }
 
