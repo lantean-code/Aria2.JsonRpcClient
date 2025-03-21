@@ -110,5 +110,13 @@ namespace Aria2.JsonRpcClient.Test.Models
             result.Should().NotBeNull();
             result.Should().Be(key);
         }
+
+        [Fact]
+        public void GIVEN_IncorrectPropertyName_WHEN_Matching_THEN_ShouldThrowInvalidOperationException()
+        {
+            var act = () => Aria2Status.Keys.Match("notvalid");
+
+            act.Should().Throw<InvalidOperationException>();
+        }
     }
 }

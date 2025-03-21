@@ -6,12 +6,12 @@ namespace Aria2.JsonRpcClient.Models
     /// Represents the options of a download as a dictionary.
     /// Any options not mapped to a specific property are captured here.
     /// </summary>
-    public record Aria2Options
+    public record Aria2Options : Aria2DownloadOptions
     {
         /// <summary>
-        /// Gets a dictionary of option key-value pairs.
+        /// Gets a dictionary of option additional key-value pairs.
         /// </summary>
         [JsonExtensionData]
-        public IDictionary<string, object>? Options { get; set; }
+        public IDictionary<string, object>? AdditionalOptions { get; set; }
     }
 }

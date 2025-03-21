@@ -37,6 +37,36 @@ namespace Aria2.JsonRpcClient.Test.Models
         }
 
         [Fact]
+        public void GIVEN_StringWithNoUnit_WHEN_TryParseCalled_THEN_ReturnsValidSize()
+        {
+            var success = Size.TryParse("1", out var size);
+
+            success.Should().BeTrue();
+            size.Value.Should().Be(1);
+            size.SizeType.Should().Be(SizeType.Bytes);
+        }
+
+        [Fact]
+        public void GIVEN_StringWithBytesUpperCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
+        {
+            var success = Size.TryParse("1B", out var size);
+
+            success.Should().BeTrue();
+            size.Value.Should().Be(1);
+            size.SizeType.Should().Be(SizeType.Bytes);
+        }
+
+        [Fact]
+        public void GIVEN_StringWithBytesLowerCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
+        {
+            var success = Size.TryParse("1b", out var size);
+
+            success.Should().BeTrue();
+            size.Value.Should().Be(1);
+            size.SizeType.Should().Be(SizeType.Bytes);
+        }
+
+        [Fact]
         public void GIVEN_StringWithMegabytesUpperCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
         {
             var success = Size.TryParse("1M", out var size);

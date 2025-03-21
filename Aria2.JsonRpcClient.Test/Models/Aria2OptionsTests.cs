@@ -25,10 +25,10 @@ namespace Aria2.JsonRpcClient.Test.Models
 
             result.Should().NotBeNull();
 
-            result.Options.Should().NotBeNull();
-            result.Options.Should().HaveCount(2);
-            ((JsonElement)result.Options["option1"]).GetString().Should().Be("value1");
-            ((JsonElement)result.Options["option2"]).GetString().Should().Be("value2");
+            result.AdditionalOptions.Should().NotBeNull();
+            result.AdditionalOptions.Should().HaveCount(2);
+            ((JsonElement)result.AdditionalOptions["option1"]).GetString().Should().Be("value1");
+            ((JsonElement)result.AdditionalOptions["option2"]).GetString().Should().Be("value2");
         }
     }
 }

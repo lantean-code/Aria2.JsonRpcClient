@@ -48,6 +48,7 @@ namespace Aria2.JsonRpcClient.Models
         {
             return sizeType switch
             {
+                SizeType.Bytes => "",
                 SizeType.Megabytes => "M",
                 SizeType.Kilobytes => "K",
                 _ => throw new ArgumentOutOfRangeException(nameof(sizeType), sizeType, null),
@@ -67,7 +68,13 @@ namespace Aria2.JsonRpcClient.Models
 
             var unit = s[^1];
 
-            if (unit != 'M' && unit != 'K' && unit != 'm' && unit != 'k')
+            if (char.IsDigit(unit))
+            {
+                unit = 'B';
+                s += unit;
+            }
+
+            if (unit != 'B' && unit != 'M' && unit != 'K' && unit != 'b' && unit != 'm' && unit != 'k')
             {
                 result = default;
                 return false;
@@ -75,6 +82,8 @@ namespace Aria2.JsonRpcClient.Models
 
             var sizeType = unit switch
             {
+                'B' => SizeType.Bytes,
+                'b' => SizeType.Bytes,
                 'M' => SizeType.Megabytes,
                 'm' => SizeType.Megabytes,
                 'K' => SizeType.Kilobytes,

@@ -335,17 +335,19 @@ namespace Aria2.JsonRpcClient
                 {
                     if (response is not JsonElement element)
                     {
-                        continue;
-                    }
-
-                    // a valid response will be an array with an item at 0
-                    if (element.ValueKind == JsonValueKind.Array)
-                    {
-                        value = Serializer.Deserialize(element.EnumerateArray().FirstOrDefault(), method.ReturnType);
+                        value = new JsonRpcError { Message = "Response was not JsonElement", Code = -1 };
                     }
                     else
                     {
-                        value = Serializer.Deserialize<JsonRpcError>(element);
+                        // a valid response will be an array with an item at 0
+                        if (element.ValueKind == JsonValueKind.Array)
+                        {
+                            value = Serializer.Deserialize(element.EnumerateArray().FirstOrDefault(), method.ReturnType);
+                        }
+                        else
+                        {
+                            value = Serializer.Deserialize<JsonRpcError>(element);
+                        }
                     }
                 }
                 responses.Add(value);

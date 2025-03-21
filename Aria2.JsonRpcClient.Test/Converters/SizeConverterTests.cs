@@ -33,14 +33,25 @@ namespace Aria2.JsonRpcClient.Test.Converters
         }
 
         [Fact]
-        public void GIVEN_ValidSizeStringWithMegabytes_WHEN_Read_THEN_ShouldReturnSizeWithMegabytes()
+        public void GIVEN_ValidSizeStringWithBytes_WHEN_Read_THEN_ShouldReturnSizeWithBytes()
         {
-            var json = "\"1M\"";
+            var json = "\"100B\"";
 
             var result = InvokeRead(json);
 
-            result.Value.Should().Be(1);
-            result.SizeType.Should().Be(SizeType.Megabytes);
+            result.Value.Should().Be(100);
+            result.SizeType.Should().Be(SizeType.Bytes);
+        }
+
+        [Fact]
+        public void GIVEN_ValidSizeStringWithNoUnits_WHEN_Read_THEN_ShouldReturnSizeWithBytes()
+        {
+            var json = "\"100\"";
+
+            var result = InvokeRead(json);
+
+            result.Value.Should().Be(100);
+            result.SizeType.Should().Be(SizeType.Bytes);
         }
 
         [Fact]
@@ -52,6 +63,17 @@ namespace Aria2.JsonRpcClient.Test.Converters
 
             result.Value.Should().Be(100);
             result.SizeType.Should().Be(SizeType.Kilobytes);
+        }
+
+        [Fact]
+        public void GIVEN_ValidSizeStringWithMegabytes_WHEN_Read_THEN_ShouldReturnSizeWithMegabytes()
+        {
+            var json = "\"1M\"";
+
+            var result = InvokeRead(json);
+
+            result.Value.Should().Be(1);
+            result.SizeType.Should().Be(SizeType.Megabytes);
         }
 
         [Fact]

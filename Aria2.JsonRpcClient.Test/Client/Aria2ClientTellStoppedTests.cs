@@ -35,5 +35,25 @@ namespace Aria2.JsonRpcClient.Test.Client
             Mock.Get(_requestHandler)
                 .Verify(x => x.SendRequest<IReadOnlyList<Aria2Status>>(It.Is<TellStopped>(r => r != null)), Times.Once());
         }
+
+        [Fact]
+        public async Task GIVEN_ValidOffsetAndNumAndKeysSelector_WHEN_TellStopped_THEN_ShouldPassTellStoppedRequestToHandler()
+        {
+            var expected = new List<Aria2Status> { new Aria2Status() };
+            var response = new JsonRpcResponse<IReadOnlyList<Aria2Status>> { Result = expected.AsReadOnly(), Error = null, Id = "Id", JsonRpc = "JsonRpc" };
+            var offset = 0;
+            var num = 1;
+
+            Mock.Get(_requestHandler)
+                .Setup(x => x.SendRequest<IReadOnlyList<Aria2Status>>(It.IsAny<JsonRpcRequest>()))
+                .ReturnsAsync(response);
+
+            var result = await _target.TellStopped(offset, num, s => new { s.Gid });
+
+            result.Should().BeEquivalentTo(expected);
+
+            Mock.Get(_requestHandler)
+                .Verify(x => x.SendRequest<IReadOnlyList<Aria2Status>>(It.Is<TellStopped>(r => r != null)), Times.Once());
+        }
     }
 }

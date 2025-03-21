@@ -114,5 +114,59 @@ namespace Aria2.JsonRpcClient.Test.Client
             Mock.Get(_requestHandler)
                 .Verify(x => x.SendRequest<IReadOnlyList<object>>(It.Is<MultiCall>(r => r != null)), Times.Once());
         }
+
+        [Fact]
+        public async Task GIVEN_RequestWithNonJsonResponse_WHEN_SystemMulticall_THEN_ShouldPassMultiCallRequestToHandler()
+        {
+            var jsonResponse = new JsonRpcResponse<IReadOnlyList<object>>
+            {
+                Result = new List<object>
+                {
+                    ""
+                }.AsReadOnly(),
+                Error = null,
+                Id = "Id",
+                JsonRpc = "JsonRpc"
+            };
+            var methods = new JsonRpcRequest[] { new TellActive() };
+
+            Mock.Get(_requestHandler)
+                .Setup(x => x.SendRequest<IReadOnlyList<object>>(It.IsAny<JsonRpcRequest>()))
+                .ReturnsAsync(jsonResponse);
+
+            var result = await _target.SystemMulticall(methods);
+
+            result[0].Should().BeOfType<JsonRpcError>();
+
+            Mock.Get(_requestHandler)
+                .Verify(x => x.SendRequest<IReadOnlyList<object>>(It.Is<MultiCall>(r => r != null)), Times.Once());
+        }
+
+        [Fact]
+        public async Task GIVEN_RequestWithErrorResponse_WHEN_SystemMulticall_THEN_ShouldPassMultiCallRequestToHandler()
+        {
+            var jsonResponse = new JsonRpcResponse<IReadOnlyList<object>>
+            {
+                Result = new List<object>
+                {
+                    JsonDocument.Parse("{\"code\":-32600,\"message\":\"Invalid Request\",\"customKey\":\"customValue\"}").RootElement,
+                }.AsReadOnly(),
+                Error = null,
+                Id = "Id",
+                JsonRpc = "JsonRpc"
+            };
+            var methods = new JsonRpcRequest[] { new TellActive() };
+
+            Mock.Get(_requestHandler)
+                .Setup(x => x.SendRequest<IReadOnlyList<object>>(It.IsAny<JsonRpcRequest>()))
+                .ReturnsAsync(jsonResponse);
+
+            var result = await _target.SystemMulticall(methods);
+
+            result[0].Should().BeOfType<JsonRpcError>();
+
+            Mock.Get(_requestHandler)
+                .Verify(x => x.SendRequest<IReadOnlyList<object>>(It.Is<MultiCall>(r => r != null)), Times.Once());
+        }
     }
 }

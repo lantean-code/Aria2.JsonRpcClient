@@ -34,5 +34,24 @@ namespace Aria2.JsonRpcClient.Test.Client
             Mock.Get(_requestHandler)
                 .Verify(x => x.SendRequest<Aria2Status>(It.Is<TellStatus>(r => r != null)), Times.Once());
         }
+
+        [Fact]
+        public async Task GIVEN_ValidGidWithKeysSelector_WHEN_TellStatus_THEN_ShouldPassTellStatusRequestToHandler()
+        {
+            var expected = new Aria2Status();
+            var response = new JsonRpcResponse<Aria2Status> { Result = expected, Error = null, Id = "Id", JsonRpc = "JsonRpc" };
+            var gid = "Gid1";
+
+            Mock.Get(_requestHandler)
+                .Setup(x => x.SendRequest<Aria2Status>(It.IsAny<JsonRpcRequest>()))
+                .ReturnsAsync(response);
+
+            var result = await _target.TellStatus(gid, s => new { s.Gid });
+
+            result.Should().BeSameAs(expected);
+
+            Mock.Get(_requestHandler)
+                .Verify(x => x.SendRequest<Aria2Status>(It.Is<TellStatus>(r => r != null)), Times.Once());
+        }
     }
 }
