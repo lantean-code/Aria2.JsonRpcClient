@@ -63,7 +63,7 @@ namespace Aria2.JsonRpcClient.Test.Converters
         {
             var json = "\"notabool\"";
 
-            Action act = () => { var _ = InvokeRead(json); };
+            Action act = () => InvokeRead(json);
 
             act.Should().Throw<JsonException>()
                .WithMessage("Invalid token type for long, expects*");
@@ -74,7 +74,7 @@ namespace Aria2.JsonRpcClient.Test.Converters
         {
             var json = "123";
 
-            Action act = () => { var _ = InvokeRead(json); };
+            Action act = () => InvokeRead(json);
 
             act.Should().Throw<JsonException>()
                .WithMessage("Invalid token type for long, expects*");

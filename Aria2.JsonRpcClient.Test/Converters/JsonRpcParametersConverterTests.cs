@@ -23,7 +23,7 @@ namespace Aria2.JsonRpcClient.Test.Converters
         {
             var json = "{}";
 
-            Action act = () => { var _ = InvokeRead(json); };
+            Action act = () => InvokeRead(json);
 
             act.Should().Throw<NotImplementedException>();
         }

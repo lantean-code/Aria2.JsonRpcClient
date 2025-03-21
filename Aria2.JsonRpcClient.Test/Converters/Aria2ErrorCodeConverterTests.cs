@@ -44,7 +44,7 @@ namespace Aria2.JsonRpcClient.Test.Converters
         {
             var json = "true";
 
-            Action act = () => { var _ = InvokeRead(json); };
+            Action act = () => InvokeRead(json);
 
             act.Should().Throw<JsonException>()
                .WithMessage("Invalid token type for Aria2ErrorCode, expects Number or String but found*");

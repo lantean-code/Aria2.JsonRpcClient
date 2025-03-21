@@ -81,7 +81,7 @@ namespace Aria2.JsonRpcClient.Test.Converters
         {
             var json = "\"1G\"";
 
-            Action act = () => { var _ = InvokeRead(json); };
+            Action act = () => InvokeRead(json);
 
             act.Should().Throw<JsonException>()
                .WithMessage("Invalid size value.");

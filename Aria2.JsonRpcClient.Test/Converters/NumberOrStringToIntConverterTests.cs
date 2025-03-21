@@ -43,7 +43,7 @@ namespace Aria2.JsonRpcClient.Test.Converters
         {
             var json = "\"abc\"";
 
-            Action act = () => { var _ = InvokeRead(json); };
+            Action act = () => InvokeRead(json);
 
             act.Should().Throw<JsonException>()
                .WithMessage("Invalid token type for int, expects*");
@@ -54,7 +54,7 @@ namespace Aria2.JsonRpcClient.Test.Converters
         {
             var json = "true";
 
-            Action act = () => { var _ = InvokeRead(json); };
+            Action act = () => InvokeRead(json);
 
             act.Should().Throw<JsonException>()
                .WithMessage("Invalid token type for int, expects*");

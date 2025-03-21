@@ -12,12 +12,7 @@ namespace Aria2.JsonRpcClient.Test
             // Use reflection to get the underlying delegate of the event.
             var field = typeof(NoOpNotificationHandler)
                 .GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            if (field?.GetValue(handler) is not Delegate dlg)
-            {
-                throw new InvalidOperationException("Failed to get the event delegate.");
-            }
-
-            return dlg;
+            return (field?.GetValue(handler) as Delegate)!;
         }
 
         [Fact]
