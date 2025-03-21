@@ -114,6 +114,7 @@ namespace Aria2.JsonRpcClient
     [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyList<object>>))]
     [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyList<int>>))]
     [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyDictionary<string, string?>>))]
+    [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyList<string[]>>))]
 
     [JsonSerializable(typeof(Models.SystemMulticallRequest))]
     [JsonSerializable(typeof(Models.SystemMulticallRequest[]))]

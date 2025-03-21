@@ -20,7 +20,7 @@ namespace Aria2.JsonRpcClient.Test.Models
         [Fact]
         public void GIVEN_ValidJson_WHEN_Deserializing_THEN_ShouldReturnObject()
         {
-            var json = "{ \"announceList\": [\"test\"], \"comment\": \"comment\", \"creationDate\": \"946684800\", \"mode\": \"single\", \"info\": null }";
+            var json = "{ \"announceList\": [[\"test\"]], \"comment\": \"comment\", \"creationDate\": \"946684800\", \"mode\": \"single\", \"info\": null }";
 
             var result = Serializer.Deserialize<Aria2Bittorrent>(json);
 
@@ -28,7 +28,7 @@ namespace Aria2.JsonRpcClient.Test.Models
 
             result.AnnounceList.Should().NotBeNull();
             result.AnnounceList.Should().HaveCount(1);
-            result.AnnounceList[0].Should().Be("test");
+            result.AnnounceList[0][0].Should().Be("test");
 
             result.Comment.Should().Be("comment");
             result.CreationDate.Should().Be(946684800);

@@ -11,7 +11,7 @@ namespace Aria2.JsonRpcClient.Models
         /// List of lists of announce URIs. If the torrent contains announce and no announce-list, announce is converted to the announce-list format.
         /// </summary>
         [JsonPropertyName("announceList")]
-        public IReadOnlyList<string>? AnnounceList { get; init; }
+        public IReadOnlyList<string[]>? AnnounceList { get; init; }
 
         /// <summary>
         /// The comment of the torrent. comment.utf-8 is used if available.
