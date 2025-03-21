@@ -1,4 +1,5 @@
 #if NET8_0_OR_GREATER
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Aria2.JsonRpcClient.Converters;
 namespace Aria2.JsonRpcClient
@@ -82,30 +83,40 @@ namespace Aria2.JsonRpcClient
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2Bittorrent>))]
     [JsonSerializable(typeof(Models.Aria2File))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2File>))]
+    [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyList<Models.Aria2File>>))]
     [JsonSerializable(typeof(Models.Aria2GlobalStat))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2GlobalStat>))]
     [JsonSerializable(typeof(Models.Aria2Options))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2Options>))]
     [JsonSerializable(typeof(Models.Aria2Peer))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2Peer>))]
+    [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyList<Models.Aria2Peer>>))]
     [JsonSerializable(typeof(Models.Aria2Server))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2Server>))]
+    [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyList<Models.Aria2Server>>))]
     [JsonSerializable(typeof(Models.Aria2ServerDetail))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2ServerDetail>))]
     [JsonSerializable(typeof(Models.Aria2SessionInfo))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2SessionInfo>))]
     [JsonSerializable(typeof(Models.Aria2Status))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2Status>))]
+    [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyList<Models.Aria2Status>>))]
     [JsonSerializable(typeof(Models.Aria2TorrentInfo))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2TorrentInfo>))]
     [JsonSerializable(typeof(Models.Aria2Uri))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2Uri>))]
+    [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyList<Models.Aria2Uri>>))]
     [JsonSerializable(typeof(Models.Aria2Version))]
     [JsonSerializable(typeof(JsonRpcResponse<Models.Aria2Version>))]
 
     [JsonSerializable(typeof(JsonRpcResponse<string>))]
+    [JsonSerializable(typeof(JsonRpcResponse<int>))]
+    [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyList<object>>))]
+    [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyList<int>>))]
+    [JsonSerializable(typeof(JsonRpcResponse<IReadOnlyDictionary<string, string?>>))]
 
     [JsonSerializable(typeof(Models.SystemMulticallRequest))]
+    [JsonSerializable(typeof(Models.SystemMulticallRequest[]))]
 
     [JsonSerializable(typeof(GidWrapper))]
     [JsonSerializable(typeof(Models.Size))]

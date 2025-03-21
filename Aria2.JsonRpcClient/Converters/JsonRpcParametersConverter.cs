@@ -28,6 +28,20 @@ namespace Aria2.JsonRpcClient.Converters
                 }
                 else
                 {
+                    // this ensures that positional parameters can be written as the correct type without affecting objects
+                    switch (item)
+                    {
+                        case int intValue:
+                            writer.WriteNumberValue(intValue);
+                            continue;
+                        case long longValue:
+                            writer.WriteNumberValue(longValue);
+                            continue;
+                        case bool boolValue:
+                            writer.WriteBooleanValue(boolValue);
+                            continue;
+                    }
+
                     var itemType = item.GetType();
 #if NET8_0_OR_GREATER
                     var typeInfo = Aria2ClientSerializationContext.Default.GetTypeInfo(itemType);

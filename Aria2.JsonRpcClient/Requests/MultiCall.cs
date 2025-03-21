@@ -6,7 +6,7 @@ namespace Aria2.JsonRpcClient.Requests
     /// <summary>
     /// Represents a request to execute multiple requests in a single call.
     /// </summary>
-    public sealed record MultiCall : JsonRpcRequest<IReadOnlyList<JsonElement[]>>
+    public sealed record MultiCall : JsonRpcRequest<IReadOnlyList<object>>
     {
         /// <inheritdoc cref="IAria2Client.SystemMulticall(JsonRpcRequest[], string?)"/>/>
         public MultiCall(JsonRpcRequest[] requests, string? id = null) : base("system.multicall", [requests.Select(MapRequest).ToArray()], id)

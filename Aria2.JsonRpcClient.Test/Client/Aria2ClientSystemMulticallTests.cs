@@ -31,21 +31,13 @@ namespace Aria2.JsonRpcClient.Test.Client
         }
 
         [Fact]
-        public void TST()
-        {
-            var doc = JsonDocument.Parse("[ { \"value\": \"val\" } ]");
-            var el = doc.RootElement.EnumerateArray().First();
-            var x = el.Deserialize<CustomObject>();
-        }
-
-        [Fact]
         public async Task GIVEN_RequestWithTypeResponseWithNoTypeInfo_WHEN_SystemMulticall_THEN_ShouldPassMultiCallRequestToHandler()
         {
-            var jsonResponse = new JsonRpcResponse<IReadOnlyList<JsonElement[]>>
+            var jsonResponse = new JsonRpcResponse<IReadOnlyList<object>>
             {
-                Result = new List<JsonElement[]>
+                Result = new List<object>
                 {
-                    new JsonElement[] { JsonDocument.Parse("{ \"value\": \"val\" }").RootElement }
+                    JsonDocument.Parse("[{ \"value\": \"val\" }]").RootElement
                 }.AsReadOnly(),
                 Error = null,
                 Id = "Id",
@@ -54,7 +46,7 @@ namespace Aria2.JsonRpcClient.Test.Client
             var methods = new JsonRpcRequest[] { new CustomJsonRequest() };
 
             Mock.Get(_requestHandler)
-                .Setup(x => x.SendRequest<IReadOnlyList<JsonElement[]>>(It.IsAny<JsonRpcRequest>()))
+                .Setup(x => x.SendRequest<IReadOnlyList<object>>(It.IsAny<JsonRpcRequest>()))
                 .ReturnsAsync(jsonResponse);
 
             var result = await _target.SystemMulticall(methods);
@@ -64,18 +56,18 @@ namespace Aria2.JsonRpcClient.Test.Client
             customObject.Value.Should().Be("val");
 
             Mock.Get(_requestHandler)
-                .Verify(x => x.SendRequest<IReadOnlyList<JsonElement[]>>(It.Is<MultiCall>(r => r != null)), Times.Once());
+                .Verify(x => x.SendRequest<IReadOnlyList<object>>(It.Is<MultiCall>(r => r != null)), Times.Once());
         }
 
         [Fact]
         public async Task GIVEN_RequestWithTypeResponse_WHEN_SystemMulticall_THEN_ShouldPassMultiCallRequestToHandler()
         {
             var expected = new List<object?> { new object[] { "result" } };
-            var jsonResponse = new JsonRpcResponse<IReadOnlyList<JsonElement[]>>
+            var jsonResponse = new JsonRpcResponse<IReadOnlyList<object>>
             {
-                Result = new List<JsonElement[]>
+                Result = new List<object>
                 {
-                    new JsonElement[] { JsonDocument.Parse("[\"result\"]").RootElement }
+                    JsonDocument.Parse("[[\"result\"]]").RootElement
                 }.AsReadOnly(),
                 Error = null,
                 Id = "Id",
@@ -84,7 +76,7 @@ namespace Aria2.JsonRpcClient.Test.Client
             var methods = new JsonRpcRequest[] { new ListMethods() };
 
             Mock.Get(_requestHandler)
-                .Setup(x => x.SendRequest<IReadOnlyList<JsonElement[]>>(It.IsAny<JsonRpcRequest>()))
+                .Setup(x => x.SendRequest<IReadOnlyList<object>>(It.IsAny<JsonRpcRequest>()))
                 .ReturnsAsync(jsonResponse);
 
             var result = await _target.SystemMulticall(methods);
@@ -92,18 +84,18 @@ namespace Aria2.JsonRpcClient.Test.Client
             result.Should().BeEquivalentTo(expected);
 
             Mock.Get(_requestHandler)
-                .Verify(x => x.SendRequest<IReadOnlyList<JsonElement[]>>(It.Is<MultiCall>(r => r != null)), Times.Once());
+                .Verify(x => x.SendRequest<IReadOnlyList<object>>(It.Is<MultiCall>(r => r != null)), Times.Once());
         }
 
         [Fact]
         public async Task GIVEN_RequestWithVoidResponse_WHEN_SystemMulticall_THEN_ShouldPassMultiCallRequestToHandler()
         {
             var expected = new List<object?> { null };
-            var jsonResponse = new JsonRpcResponse<IReadOnlyList<JsonElement[]>>
+            var jsonResponse = new JsonRpcResponse<IReadOnlyList<object>>
             {
-                Result = new List<JsonElement[]>
+                Result = new List<object>
                 {
-                    new JsonElement[] {  }
+                    new JsonElement {  }
                 }.AsReadOnly(),
                 Error = null,
                 Id = "Id",
@@ -112,7 +104,7 @@ namespace Aria2.JsonRpcClient.Test.Client
             var methods = new JsonRpcRequest[] { new PauseAll() };
 
             Mock.Get(_requestHandler)
-                .Setup(x => x.SendRequest<IReadOnlyList<JsonElement[]>>(It.IsAny<JsonRpcRequest>()))
+                .Setup(x => x.SendRequest<IReadOnlyList<object>>(It.IsAny<JsonRpcRequest>()))
                 .ReturnsAsync(jsonResponse);
 
             var result = await _target.SystemMulticall(methods);
@@ -120,7 +112,7 @@ namespace Aria2.JsonRpcClient.Test.Client
             result.Should().BeEquivalentTo(expected);
 
             Mock.Get(_requestHandler)
-                .Verify(x => x.SendRequest<IReadOnlyList<JsonElement[]>>(It.Is<MultiCall>(r => r != null)), Times.Once());
+                .Verify(x => x.SendRequest<IReadOnlyList<object>>(It.Is<MultiCall>(r => r != null)), Times.Once());
         }
     }
 }

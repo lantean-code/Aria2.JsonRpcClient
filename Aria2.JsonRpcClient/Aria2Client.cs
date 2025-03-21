@@ -319,7 +319,7 @@ namespace Aria2.JsonRpcClient
         public async Task<IReadOnlyList<object?>> SystemMulticall(JsonRpcRequest[] methods, string? id = null)
         {
             var request = new MultiCall(methods);
-            var results = await ExecuteRequest<IReadOnlyList<JsonElement[]>>(request);
+            var results = await ExecuteRequest<IReadOnlyList<object>>(request);
 
             var responses = new List<object?>();
             for (var i = 0; i < methods.Length; i++)
@@ -327,13 +327,26 @@ namespace Aria2.JsonRpcClient
                 var method = methods[i];
                 var response = results[i];
                 object? value;
-                if (response.Length == 0 || method.ReturnType == typeof(void))
+                if (method.ReturnType == typeof(void))
                 {
                     value = null;
                 }
                 else
                 {
-                    value = Serializer.Deserialize(response[0], method.ReturnType);
+                    if (response is not JsonElement element)
+                    {
+                        continue;
+                    }
+
+                    // a valid response will be an array with an item at 0
+                    if (element.ValueKind == JsonValueKind.Array)
+                    {
+                        value = Serializer.Deserialize(element.EnumerateArray().FirstOrDefault(), method.ReturnType);
+                    }
+                    else
+                    {
+                        value = Serializer.Deserialize<JsonRpcError>(element);
+                    }
                 }
                 responses.Add(value);
             }
