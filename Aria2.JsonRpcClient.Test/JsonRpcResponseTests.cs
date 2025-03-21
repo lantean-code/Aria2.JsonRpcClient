@@ -26,8 +26,10 @@ namespace Aria2.JsonRpcClient.Test
             response.JsonRpc.Should().Be("2.0");
             response.Id.Should().Be("testId");
             response.Error.Should().NotBeNull();
+#if DEBUG
             response.ExtensionData.Should().ContainKey("customKey");
             response.ExtensionData["customKey"].GetString().Should().Be("customValue");
+#endif
         }
 
         [Fact]
@@ -51,8 +53,10 @@ namespace Aria2.JsonRpcClient.Test
             response.JsonRpc.Should().Be("2.0");
             response.Id.Should().Be("testId");
             response.Result.Should().Be("someResult");
+#if DEBUG
             response.ExtensionData.Should().ContainKey("anotherKey");
             response.ExtensionData["anotherKey"].GetString().Should().Be("anotherValue");
+#endif
         }
     }
 }

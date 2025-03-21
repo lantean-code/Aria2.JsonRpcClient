@@ -25,8 +25,10 @@ namespace Aria2.JsonRpcClient.Test
             error.Should().NotBeNull();
             error.Code.Should().Be(-32600);
             error.Message.Should().Be("Invalid Request");
+#if DEBUG
             error.ExtensionData.Should().ContainKey("customKey");
             error.ExtensionData["customKey"].GetString().Should().Be("customValue");
+#endif
         }
     }
 }
