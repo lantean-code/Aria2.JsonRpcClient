@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net.WebSockets;
 
-namespace Aria2.JsonRpcClient
+namespace Aria2.JsonRpcClient.Services
 {
     [ExcludeFromCodeCoverage]
     internal class ClientWebSocketWrapper : IClientWebSocket

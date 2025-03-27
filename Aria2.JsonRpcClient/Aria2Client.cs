@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using System.Text.Json;
 using Aria2.JsonRpcClient.Models;
 using Aria2.JsonRpcClient.Requests;
+using Aria2.JsonRpcClient.Services;
 
 namespace Aria2.JsonRpcClient
 {

@@ -6,74 +6,35 @@ using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Registry;
 
-namespace Aria2.JsonRpcClient
+namespace Aria2.JsonRpcClient.Services
 {
-    /// <summary>
-    /// An implementation of <see cref="IRequestHandler"/> that sends JSON‑RPC requests to aria2 using WebSockets.
-    /// This implementation maintains a persistent WebSocket connection and matches responses to requests by the "id" field.
-    /// </summary>
-    internal class WebSocketConnectionManager : IRequestHandler, INotificationHandler, IDisposable
+    internal class ClientWebSocketManager : IDisposable, IClientWebSocketManager
     {
         private readonly IClientWebSocket _webSocket;
         private CancellationTokenSource _cts = new();
 
         private readonly Uri _uri;
-        private readonly string _secret;
-        private readonly ConcurrentDictionary<string, TaskCompletionSource<JsonElement>> _pendingRequests = new();
         private readonly SemaphoreSlim _connectionLock = new(1, 1);
         private Task? _receiveTask;
         private bool _disposedValue;
 
         private readonly IAsyncPolicy _retryPolicy;
 
-        /// <inheritdoc />
-        public event Action<string>? OnDownloadStarted;
+        public event Action<JsonElement>? OnMessageReceived;
 
-        /// <inheritdoc />
-        public event Action<string>? OnDownloadPaused;
-
-        /// <inheritdoc />
-        public event Action<string>? OnDownloadStopped;
-
-        /// <inheritdoc />
-        public event Action<string>? OnDownloadComplete;
-
-        /// <inheritdoc />
-        public event Action<string>? OnDownloadError;
-
-        /// <inheritdoc />
-        public event Action<string>? OnBtDownloadComplete;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WebSocketConnectionManager"/> class.
+        /// <summary>a
+        /// Initializes a new instance of the <see cref="ClientWebSocketManager"/> class.
         /// </summary>
         /// <param name="clientWebSocket"></param>
         /// <param name="clientOptions"></param>
         /// /// <param name="policyRegistry"></param>
-        public WebSocketConnectionManager(IClientWebSocket clientWebSocket, IOptions<Aria2ClientOptions> clientOptions, IReadOnlyPolicyRegistry<string> policyRegistry)
+        public ClientWebSocketManager(IClientWebSocket clientWebSocket, IOptions<Aria2ClientOptions> clientOptions, IReadOnlyPolicyRegistry<string> policyRegistry)
         {
             _webSocket = clientWebSocket;
             clientOptions.Value.WebSocketOptions?.Invoke(_webSocket.Options);
             _uri = new Uri($"ws://{clientOptions.Value.Host}:{clientOptions.Value.Port}/jsonrpc");
-            _secret = clientOptions.Value.Secret;
 
             _retryPolicy = policyRegistry.Get<IAsyncPolicy>("WebSocketPolicy");
-        }
-
-        /// <inheritdoc />
-        public async Task<JsonRpcResponse<TResponse>> SendRequest<TResponse>(JsonRpcRequest request)
-        {
-            var rawResponse = await SendWebSocketRequestAsync(request);
-
-            return Serializer.Deserialize<JsonRpcResponse<TResponse>>(rawResponse);
-        }
-
-        /// <inheritdoc />
-        public async Task<JsonRpcResponse> SendRequest(JsonRpcRequest request)
-        {
-            var rawResponse = await SendWebSocketRequestAsync(request);
-
-            return Serializer.Deserialize<JsonRpcResponse>(rawResponse);
         }
 
         /// <summary>
@@ -82,27 +43,18 @@ namespace Aria2.JsonRpcClient
         /// </summary>
         /// <param name="request">The JSON‑RPC request to be sent.</param>
         /// <returns>The parsed JSON response as a JsonElement.</returns>
-        private async Task<JsonElement> SendWebSocketRequestAsync(JsonRpcRequest request)
+        public async Task SendWebSocketRequestAsync<T>(T request)
         {
             await EnsureConnectedAsync();
 
-            var tcs = new TaskCompletionSource<JsonElement>(TaskCreationOptions.RunContinuationsAsynchronously);
-            if (!_pendingRequests.TryAdd(request.Id, tcs))
-            {
-                throw new InvalidOperationException("A request with the same ID is already pending.");
-            }
-
-            request.EnsureSecret(_secret);
-
             var jsonRequest = Serializer.Serialize(request);
             var requestBytes = Encoding.UTF8.GetBytes(jsonRequest);
+
             await _webSocket.SendAsync(
                 new ArraySegment<byte>(requestBytes),
                 WebSocketMessageType.Text,
                 true,
                 CancellationToken.None);
-
-            return await tcs.Task;
         }
 
         /// <summary>
@@ -133,7 +85,11 @@ namespace Aria2.JsonRpcClient
                     // cancel and recreate the CTS and the ClientWebSocket instance.
                     if (_webSocket.State == WebSocketState.Aborted || _webSocket.State == WebSocketState.Closed)
                     {
+#if NET8_0_OR_GREATER
+                        await _cts.CancelAsync();
+#else
                         _cts.Cancel();
+#endif
                         _cts.Dispose();
                         _cts = new CancellationTokenSource();
 
@@ -184,65 +140,11 @@ namespace Aria2.JsonRpcClient
                     // Clone the root element so it can outlive the JsonDocument.
                     var root = document.RootElement.Clone();
 
-                    if (root.TryGetProperty("id", out var idElement))
-                    {
-                        var id = idElement.GetString();
-                        if (id is not null && _pendingRequests.TryRemove(id, out var tcs))
-                        {
-                            tcs.SetResult(root);
-                        }
-                    }
-                    else
-                    {
-                        HandleNotification(root);
-                    }
+                    OnMessageReceived?.Invoke(root);
                 }
-                catch (OperationCanceledException)
+                catch
                 {
-                    break;
                 }
-                catch (Exception ex)
-                {
-                    foreach (var kvp in _pendingRequests)
-                    {
-                        kvp.Value.TrySetException(ex);
-                    }
-                    _pendingRequests.Clear();
-                    break;
-                }
-            }
-        }
-
-        private void HandleNotification(JsonElement root)
-        {
-            var response = Serializer.Deserialize<JsonRpcNotification>(root);
-            if (response is null || response.Parameters.Count == 0)
-            {
-                return;
-            }
-
-            var gid = response.Parameters[0].Gid;
-
-            switch (response.Method)
-            {
-                case "aria2.onDownloadStart":
-                    OnDownloadStarted?.Invoke(gid);
-                    break;
-                case "aria2.onDownloadPause":
-                    OnDownloadPaused?.Invoke(gid);
-                    break;
-                case "aria2.onDownloadStop":
-                    OnDownloadStopped?.Invoke(gid);
-                    break;
-                case "aria2.onDownloadComplete":
-                    OnDownloadComplete?.Invoke(gid);
-                    break;
-                case "aria2.onDownloadError":
-                    OnDownloadError?.Invoke(gid);
-                    break;
-                case "aria2.onBtDownloadComplete":
-                    OnBtDownloadComplete?.Invoke(gid);
-                    break;
             }
         }
 

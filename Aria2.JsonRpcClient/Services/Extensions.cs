@@ -1,6 +1,6 @@
 using Aria2.JsonRpcClient.Models;
 
-namespace Aria2.JsonRpcClient
+namespace Aria2.JsonRpcClient.Services
 {
     internal static class Extensions
     {

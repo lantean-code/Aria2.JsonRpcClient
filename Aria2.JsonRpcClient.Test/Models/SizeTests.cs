@@ -36,99 +36,7 @@ namespace Aria2.JsonRpcClient.Test.Models
             act.Should().Throw<ArgumentOutOfRangeException>();
         }
 
-        [Fact]
-        public void GIVEN_StringWithNoUnit_WHEN_TryParseCalled_THEN_ReturnsValidSize()
-        {
-            var success = Size.TryParse("1", out var size);
-
-            success.Should().BeTrue();
-            size.Value.Should().Be(1);
-            size.SizeType.Should().Be(SizeType.Bytes);
-        }
-
-        [Fact]
-        public void GIVEN_StringWithBytesUpperCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
-        {
-            var success = Size.TryParse("1B", out var size);
-
-            success.Should().BeTrue();
-            size.Value.Should().Be(1);
-            size.SizeType.Should().Be(SizeType.Bytes);
-        }
-
-        [Fact]
-        public void GIVEN_StringWithBytesLowerCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
-        {
-            var success = Size.TryParse("1b", out var size);
-
-            success.Should().BeTrue();
-            size.Value.Should().Be(1);
-            size.SizeType.Should().Be(SizeType.Bytes);
-        }
-
-        [Fact]
-        public void GIVEN_StringWithMegabytesUpperCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
-        {
-            var success = Size.TryParse("1M", out var size);
-
-            success.Should().BeTrue();
-            size.Value.Should().Be(1);
-            size.SizeType.Should().Be(SizeType.Megabytes);
-        }
-
-        [Fact]
-        public void GIVEN_StringWithMegabytesLowerCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
-        {
-            var success = Size.TryParse("1.234m", out var size);
-
-            success.Should().BeTrue();
-            size.Value.Should().BeApproximately(1.234, 0.001);
-            size.SizeType.Should().Be(SizeType.Megabytes);
-        }
-
-        [Fact]
-        public void GIVEN_StringWithKilobytesUpperCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
-        {
-            var success = Size.TryParse("50K", out var size);
-
-            success.Should().BeTrue();
-            size.Value.Should().Be(50);
-            size.SizeType.Should().Be(SizeType.Kilobytes);
-        }
-
-        [Fact]
-        public void GIVEN_StringWithKilobytesLowerCase_WHEN_TryParseCalled_THEN_ReturnsValidSize()
-        {
-            var success = Size.TryParse("75k", out var size);
-
-            success.Should().BeTrue();
-            size.Value.Should().Be(75);
-            size.SizeType.Should().Be(SizeType.Kilobytes);
-        }
-
-        [Fact]
-        public void GIVEN_StringWithInvalidUnit_WHEN_TryParseCalled_THEN_ReturnsFalse()
-        {
-            var success = Size.TryParse("1G", out var size);
-
-            success.Should().BeFalse();
-        }
-
-        [Fact]
-        public void GIVEN_StringWithInvalidNumeric_WHEN_TryParseCalled_THEN_ReturnsFalse()
-        {
-            var success = Size.TryParse("abcM", out var size);
-
-            success.Should().BeFalse();
-        }
-
-        [Fact]
-        public void GIVEN_EmptyString_WHEN_TryParseCalled_THEN_ThrowsIndexOutOfRangeException()
-        {
-            Action act = () => Size.TryParse("", out var size);
-
-            act.Should().Throw<IndexOutOfRangeException>();
-        }
+       
 
         [Fact]
         public void GIVEN_SizeInstance_WHEN_SettingProperties_THEN_GettersReturnSameValues()
@@ -152,6 +60,35 @@ namespace Aria2.JsonRpcClient.Test.Models
             size.Value = 3.14159;
             size.SizeType = SizeType.Megabytes;
             size.ToString().Should().Be("3.14M");
+        }
+
+        [Theory]
+        [InlineData("10", SizeType.Bytes, 10)]
+        [InlineData("20B", SizeType.Bytes, 20)]
+        [InlineData("30b", SizeType.Bytes, 30)]
+        [InlineData("40K", SizeType.Kilobytes, 40)]
+        [InlineData("50k", SizeType.Kilobytes, 50)]
+        [InlineData("60M", SizeType.Megabytes, 60)]
+        [InlineData("70m", SizeType.Megabytes, 70)]
+        [InlineData("71.4m", SizeType.Megabytes, 71.4)]
+        public void GIVEN_InputString_WHEN_ParsingValue_THEN_ShouldParseAsSizeTypeWithCorrectValue(string inputValue, SizeType expectedSizeType, double expectedValue)
+        {
+            var result = Size.TryParse(inputValue, out var size);
+
+            result.Should().BeTrue();
+            size.SizeType.Should().Be(expectedSizeType);
+            size.Value.Should().Be(expectedValue);
+        }
+
+        [Theory]
+        [InlineData("1G")]
+        [InlineData("abcM")]
+        [InlineData("")]
+        public void GIVEN_InputString_WHEN_ParsingValue_THEN_ShouldFailToParse(string inputValue)
+        {
+            var success = Size.TryParse(inputValue, out var size);
+
+            success.Should().BeFalse();
         }
     }
 }

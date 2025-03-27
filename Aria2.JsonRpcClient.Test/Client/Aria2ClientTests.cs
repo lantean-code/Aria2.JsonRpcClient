@@ -1,3 +1,4 @@
+using Aria2.JsonRpcClient.Services;
 using FluentAssertions;
 using Moq;
 

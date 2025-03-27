@@ -1,7 +1,8 @@
 using Aria2.JsonRpcClient.Models;
+using Aria2.JsonRpcClient.Services;
 using FluentAssertions;
 
-namespace Aria2.JsonRpcClient.Test
+namespace Aria2.JsonRpcClient.Test.Services
 {
     public class ExtensionsTests
     {

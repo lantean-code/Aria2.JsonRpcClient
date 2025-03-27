@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace Aria2.JsonRpcClient.Models
@@ -84,6 +85,34 @@ namespace Aria2.JsonRpcClient.Models
             /// <inheritdoc cref="Aria2Status.VerifyIntegrityPending"/>
             public const string VerifyIntegrityPending = "verifyIntegrityPending";
 
+            private static readonly Dictionary<string, string> _lookup = new()
+            {
+                { nameof(Gid) , Gid },
+                { nameof(Status) , Status },
+                { nameof(TotalLength) , TotalLength },
+                { nameof(CompletedLength) , CompletedLength },
+                { nameof(UploadLength) , UploadLength },
+                { nameof(Bitfield) , Bitfield },
+                { nameof(DownloadSpeed) , DownloadSpeed },
+                { nameof(UploadSpeed) , UploadSpeed },
+                { nameof(InfoHash) , InfoHash },
+                { nameof(NumSeeders) , NumSeeders },
+                { nameof(Seeder) , Seeder },
+                { nameof(PieceLength) , PieceLength },
+                { nameof(NumPieces) , NumPieces },
+                { nameof(Connections) , Connections },
+                { nameof(ErrorCode) , ErrorCode },
+                { nameof(ErrorMessage) , ErrorMessage },
+                { nameof(FollowedBy) , FollowedBy },
+                { nameof(Following) , Following },
+                { nameof(BelongsTo) , BelongsTo },
+                { nameof(Dir) , Dir },
+                { nameof(Files) , Files },
+                { nameof(Bittorrent) , Bittorrent },
+                { nameof(VerifiedLength) , VerifiedLength },
+                { nameof(VerifyIntegrityPending) , VerifyIntegrityPending },
+            };
+
             /// <summary>
             /// Matches the name of the Property to the key value.
             /// </summary>
@@ -92,34 +121,40 @@ namespace Aria2.JsonRpcClient.Models
             /// <exception cref="InvalidOperationException"></exception>
             public static string Match(string name)
             {
-                return name switch
+                if (!_lookup.TryGetValue(name, out var value))
                 {
-                    nameof(Gid) => Gid,
-                    nameof(Status) => Status,
-                    nameof(TotalLength) => TotalLength,
-                    nameof(CompletedLength) => CompletedLength,
-                    nameof(UploadLength) => UploadLength,
-                    nameof(Bitfield) => Bitfield,
-                    nameof(DownloadSpeed) => DownloadSpeed,
-                    nameof(UploadSpeed) => UploadSpeed,
-                    nameof(InfoHash) => InfoHash,
-                    nameof(NumSeeders) => NumSeeders,
-                    nameof(Seeder) => Seeder,
-                    nameof(PieceLength) => PieceLength,
-                    nameof(NumPieces) => NumPieces,
-                    nameof(Connections) => Connections,
-                    nameof(ErrorCode) => ErrorCode,
-                    nameof(ErrorMessage) => ErrorMessage,
-                    nameof(FollowedBy) => FollowedBy,
-                    nameof(Following) => Following,
-                    nameof(BelongsTo) => BelongsTo,
-                    nameof(Dir) => Dir,
-                    nameof(Files) => Files,
-                    nameof(Bittorrent) => Bittorrent,
-                    nameof(VerifiedLength) => VerifiedLength,
-                    nameof(VerifyIntegrityPending) => VerifyIntegrityPending,
-                    _ => throw new InvalidOperationException($"Unmatched name '{name}'."),
-                };
+                    throw new InvalidOperationException($"Unmatched name '{name}'.");
+                }
+
+                return value;
+                //return name switch
+                //{
+                //    nameof(Gid) => Gid,
+                //    nameof(Status) => Status,
+                //    nameof(TotalLength) => TotalLength,
+                //    nameof(CompletedLength) => CompletedLength,
+                //    nameof(UploadLength) => UploadLength,
+                //    nameof(Bitfield) => Bitfield,
+                //    nameof(DownloadSpeed) => DownloadSpeed,
+                //    nameof(UploadSpeed) => UploadSpeed,
+                //    nameof(InfoHash) => InfoHash,
+                //    nameof(NumSeeders) => NumSeeders,
+                //    nameof(Seeder) => Seeder,
+                //    nameof(PieceLength) => PieceLength,
+                //    nameof(NumPieces) => NumPieces,
+                //    nameof(Connections) => Connections,
+                //    nameof(ErrorCode) => ErrorCode,
+                //    nameof(ErrorMessage) => ErrorMessage,
+                //    nameof(FollowedBy) => FollowedBy,
+                //    nameof(Following) => Following,
+                //    nameof(BelongsTo) => BelongsTo,
+                //    nameof(Dir) => Dir,
+                //    nameof(Files) => Files,
+                //    nameof(Bittorrent) => Bittorrent,
+                //    nameof(VerifiedLength) => VerifiedLength,
+                //    nameof(VerifyIntegrityPending) => VerifyIntegrityPending,
+                //    _ => throw new InvalidOperationException($"Unmatched name '{name}'."),
+                //};
             }
         }
 

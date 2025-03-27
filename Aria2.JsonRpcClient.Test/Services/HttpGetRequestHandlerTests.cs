@@ -6,10 +6,11 @@ using System.Net.Http;
 
 using System.Text;
 using Aria2.JsonRpcClient.Requests;
+using Aria2.JsonRpcClient.Services;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 
-namespace Aria2.JsonRpcClient.Test
+namespace Aria2.JsonRpcClient.Test.Services
 {
     public class HttpGetRequestHandlerTests
     {

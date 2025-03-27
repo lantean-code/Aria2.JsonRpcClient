@@ -1,4 +1,4 @@
-namespace Aria2.JsonRpcClient
+namespace Aria2.JsonRpcClient.Services
 {
     internal class NoOpNotificationHandler : INotificationHandler
     {

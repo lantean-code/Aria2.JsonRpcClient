@@ -2,7 +2,7 @@ using System.Net;
 using System.Text;
 using Microsoft.Extensions.Options;
 
-namespace Aria2.JsonRpcClient
+namespace Aria2.JsonRpcClient.Services
 {
     /// <summary>
     /// An implementation of <see cref="IRequestHandler"/> that sends JSON‑RPC requests to aria2 using HTTP GET.

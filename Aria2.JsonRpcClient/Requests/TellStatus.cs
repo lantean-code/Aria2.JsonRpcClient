@@ -14,7 +14,7 @@ namespace Aria2.JsonRpcClient.Requests
         }
 
         /// <inheritdoc cref="IAria2Client.TellStatus(string, Expression{Func{Aria2Status, object}}, string?)"/>
-        public TellStatus(string gid, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null) : this(gid, Aria2StatuskeysSelector.Select(keysSelector), id)
+        public TellStatus(string gid, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null) : this(gid, Aria2StatusKeysSelector.Select(keysSelector), id)
         {
         }
     }

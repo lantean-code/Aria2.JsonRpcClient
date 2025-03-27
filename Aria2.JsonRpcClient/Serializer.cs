@@ -12,9 +12,6 @@ namespace Aria2.JsonRpcClient
             var typeInfo = Aria2ClientSerializationContext.Default.GetTypeInfo(typeof(T));
             if (typeInfo is null)
             {
-#if UNITTEST
-                throw new Exception($"TypeInfo is null for {typeof(T)}. Possible missing [JsonSerializable] on Aria2ClientSerializationContext.");
-#endif
                 obj = JsonSerializer.Deserialize<T>(value, Aria2ClientSerialization.Options);
             }
             else
@@ -26,7 +23,7 @@ namespace Aria2.JsonRpcClient
 #endif
             if (obj is null)
             {
-                throw new Exception("Invalid JSON-RPC response.");
+                throw new InvalidOperationException("Invalid JSON-RPC response.");
             }
 
             return obj;
@@ -39,9 +36,6 @@ namespace Aria2.JsonRpcClient
             var typeInfo = Aria2ClientSerializationContext.Default.GetTypeInfo(typeof(T));
             if (typeInfo is null)
             {
-#if UNITTEST
-                throw new Exception($"TypeInfo is null for {typeof(T)}. Possible missing [JsonSerializable] on Aria2ClientSerializationContext.");
-#endif
                 obj = JsonSerializer.Deserialize<T>(value, Aria2ClientSerialization.Options);
             }
             else
@@ -53,7 +47,7 @@ namespace Aria2.JsonRpcClient
 #endif
             if (obj is null)
             {
-                throw new Exception("Invalid JSON-RPC response.");
+                throw new InvalidOperationException("Invalid JSON-RPC response.");
             }
 
             return obj;
@@ -66,9 +60,6 @@ namespace Aria2.JsonRpcClient
             var typeInfo = Aria2ClientSerializationContext.Default.GetTypeInfo(typeof(T));
             if (typeInfo is null)
             {
-#if UNITTEST
-                throw new Exception($"TypeInfo is null for {typeof(T)}. Possible missing [JsonSerializable] on Aria2ClientSerializationContext.");
-#endif
                 obj = value.Deserialize<T>(Aria2ClientSerialization.Options);
             }
             else
@@ -80,7 +71,7 @@ namespace Aria2.JsonRpcClient
 #endif
             if (obj is null)
             {
-                throw new Exception("Invalid JSON-RPC response.");
+                throw new InvalidOperationException("Invalid JSON-RPC response.");
             }
 
             return obj;
@@ -93,9 +84,6 @@ namespace Aria2.JsonRpcClient
             var typeInfo = Aria2ClientSerializationContext.Default.GetTypeInfo(returnType);
             if (typeInfo is null)
             {
-#if UNITTEST
-                throw new Exception($"TypeInfo is null for {typeof(T)}. Possible missing [JsonSerializable] on Aria2ClientSerializationContext.");
-#endif
                 obj = jsonElement.Deserialize(returnType, Aria2ClientSerialization.Options);
             }
             else
@@ -107,7 +95,7 @@ namespace Aria2.JsonRpcClient
 #endif
             if (obj is null)
             {
-                throw new Exception("Invalid JSON-RPC response.");
+                throw new InvalidOperationException("Invalid JSON-RPC response.");
             }
 
             return obj;
@@ -119,9 +107,6 @@ namespace Aria2.JsonRpcClient
             var typeInfo = Aria2ClientSerializationContext.Default.GetTypeInfo(typeof(T));
             if (typeInfo is null)
             {
-#if UNITTEST
-                throw new Exception($"TypeInfo is null for {typeof(T)}. Possible missing [JsonSerializable] on Aria2ClientSerializationContext.");
-#endif
                 return JsonSerializer.Serialize(value, Aria2ClientSerialization.Options);
             }
             else

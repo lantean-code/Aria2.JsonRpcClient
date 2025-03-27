@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Aria2.JsonRpcClient.Converters;
 using FluentAssertions;
 
@@ -96,6 +97,26 @@ namespace Aria2.JsonRpcClient.Test.Converters
             var json = Encoding.UTF8.GetString(stream.ToArray());
 
             json.Should().Be("[\"param1\",true,\"1.0\"]");
+        }
+
+        private record Custom
+        {
+            [JsonPropertyName("id")]
+            public required string Id { get; init; }
+        }
+
+        [Fact]
+        public void GIVEN_CustomParameterNotInSerializationContext_WHEN_Write_THEN_ShouldWriteStringValue()
+        {
+            JsonRpcParameters value = [new Custom { Id = "test" }];
+            using var stream = new MemoryStream();
+            using var writer = new Utf8JsonWriter(stream);
+
+            _converter.Write(writer, value, Options);
+            writer.Flush();
+            var json = Encoding.UTF8.GetString(stream.ToArray());
+
+            json.Should().Be("[{\"id\":\"test\"}]");
         }
     }
 }

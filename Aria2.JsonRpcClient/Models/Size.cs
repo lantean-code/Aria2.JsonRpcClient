@@ -55,6 +55,26 @@ namespace Aria2.JsonRpcClient.Models
             };
         }
 
+        private static readonly Dictionary<char, SizeType> _sizeTypeMapping = new()
+        {
+            { 'B', SizeType.Bytes },
+            { 'b', SizeType.Bytes },
+            { 'K', SizeType.Kilobytes },
+            { 'k', SizeType.Kilobytes },
+            { 'M', SizeType.Megabytes },
+            { 'm', SizeType.Megabytes },
+        };
+
+        private static readonly HashSet<char> _validUnitChars = new()
+        {
+            { 'B' },
+            { 'b' },
+            { 'K' },
+            { 'k' },
+            { 'M' },
+            { 'm' },
+        };
+
         /// <summary>
         /// Tries to parse a size value from a string.
         /// </summary>
@@ -66,6 +86,12 @@ namespace Aria2.JsonRpcClient.Models
         {
             s = s.Trim();
 
+            if (string.IsNullOrEmpty(s))
+            {
+                result = default;
+                return false;
+            }
+
             var unit = s[^1];
 
             if (char.IsDigit(unit))
@@ -74,22 +100,11 @@ namespace Aria2.JsonRpcClient.Models
                 s += unit;
             }
 
-            if (unit != 'B' && unit != 'M' && unit != 'K' && unit != 'b' && unit != 'm' && unit != 'k')
+            if (!_validUnitChars.Contains(unit))
             {
                 result = default;
                 return false;
             }
-
-            var sizeType = unit switch
-            {
-                'B' => SizeType.Bytes,
-                'b' => SizeType.Bytes,
-                'M' => SizeType.Megabytes,
-                'm' => SizeType.Megabytes,
-                'K' => SizeType.Kilobytes,
-                'k' => SizeType.Kilobytes,
-                _ => throw new ArgumentOutOfRangeException(nameof(s), unit, null),
-            };
 
             if (!double.TryParse(s[..^1], out var sizeValue))
             {
@@ -100,7 +115,7 @@ namespace Aria2.JsonRpcClient.Models
             result = new Size
             {
                 Value = sizeValue,
-                SizeType = sizeType,
+                SizeType = _sizeTypeMapping[unit],
             };
 
             return true;

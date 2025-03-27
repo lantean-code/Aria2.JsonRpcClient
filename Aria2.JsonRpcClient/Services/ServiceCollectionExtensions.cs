@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Registry;
 
-namespace Aria2.JsonRpcClient
+namespace Aria2.JsonRpcClient.Services
 {
     /// <summary>
     /// Extension methods for configuring the <see cref="IServiceCollection"/> for the <see cref="Aria2Client"/>.
