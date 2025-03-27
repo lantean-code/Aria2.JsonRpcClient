@@ -33,7 +33,7 @@ jobs:
       - name: Determine Version
         id: gitversion
         run: |
-          VERSION=$(dotnet gitversion /output json /showvariable FullSemVer)
+          VERSION=$(dotnet gitversion /output json /showvariable SemVer)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
         shell: bash
 
