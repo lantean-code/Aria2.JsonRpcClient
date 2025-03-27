@@ -23,7 +23,7 @@ This library supports **.NET Standard 2.0**, **.NET 8.0**, and **.NET 9.0**.
   Includes models for download options, status, global statistics, and more, reflecting the full capabilities of aria2's JSON‑RPC interface.
 
 - **Uses System.Text.Json:**  
-  For .NET 8.0 and above, source generators are use to improve performance. NET Standard 2.0 falls back to reflection based type discovery.
+  For .NET 8.0 and above, source generators are used to improve performance. NET Standard 2.0 falls back to reflection based type discovery.
 
 ## Installation
 
@@ -160,9 +160,9 @@ public class DownloadService
     public async Task GetSystemStatusAsync()
     {
         var multi = await _aria2Client.SystemMulticall(new GetGlobalOption(), new GetGlobalStat(), new GetVersion());
-        var globalOptions = multi[0] as IReadOnlyDictionary<string, string?>;
-        var stats = multi[1] as Aria2GlobalStat;
-        var version = multi[2] as Aria2Version;
+        var globalOptions = GetGlobalOption.GetResult(multi[0]); // Aria2GlobalOptions
+        var stats = GetGlobalStat.GetResult(multi[1]); // Aria2GlobalStat
+        var version = GetVersion.GetResult(multi[2]); // Aria2Version
     }
 }
 ```
