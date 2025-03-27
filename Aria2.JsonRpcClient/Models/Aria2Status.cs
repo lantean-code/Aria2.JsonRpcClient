@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace Aria2.JsonRpcClient.Models
@@ -127,34 +126,6 @@ namespace Aria2.JsonRpcClient.Models
                 }
 
                 return value;
-                //return name switch
-                //{
-                //    nameof(Gid) => Gid,
-                //    nameof(Status) => Status,
-                //    nameof(TotalLength) => TotalLength,
-                //    nameof(CompletedLength) => CompletedLength,
-                //    nameof(UploadLength) => UploadLength,
-                //    nameof(Bitfield) => Bitfield,
-                //    nameof(DownloadSpeed) => DownloadSpeed,
-                //    nameof(UploadSpeed) => UploadSpeed,
-                //    nameof(InfoHash) => InfoHash,
-                //    nameof(NumSeeders) => NumSeeders,
-                //    nameof(Seeder) => Seeder,
-                //    nameof(PieceLength) => PieceLength,
-                //    nameof(NumPieces) => NumPieces,
-                //    nameof(Connections) => Connections,
-                //    nameof(ErrorCode) => ErrorCode,
-                //    nameof(ErrorMessage) => ErrorMessage,
-                //    nameof(FollowedBy) => FollowedBy,
-                //    nameof(Following) => Following,
-                //    nameof(BelongsTo) => BelongsTo,
-                //    nameof(Dir) => Dir,
-                //    nameof(Files) => Files,
-                //    nameof(Bittorrent) => Bittorrent,
-                //    nameof(VerifiedLength) => VerifiedLength,
-                //    nameof(VerifyIntegrityPending) => VerifyIntegrityPending,
-                //    _ => throw new InvalidOperationException($"Unmatched name '{name}'."),
-                //};
             }
         }
 

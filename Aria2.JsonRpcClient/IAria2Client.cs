@@ -460,10 +460,18 @@ namespace Aria2.JsonRpcClient
 
         #region Execute Request Methods
 
-        /// <inheritdoc/>
-        Task<T> ExecuteRequest<T>(JsonRpcRequest request);
+        /// <summary>
+        /// Executes the a request with a return type of <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the response expected from the request.</typeparam>
+        /// <param name="request"></param>
+        /// <returns>The result of the request.</returns>
+        Task<T> ExecuteRequest<T>(JsonRpcRequest<T> request);
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Executes a reqeuse with a void return type.
+        /// </summary>
+        /// <param name="request"></param>
         Task ExecuteRequest(JsonRpcRequest request);
 
         #endregion Execute Request Methods

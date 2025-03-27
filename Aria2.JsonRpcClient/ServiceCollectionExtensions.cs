@@ -1,10 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
+using Aria2.JsonRpcClient.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Registry;
 
-namespace Aria2.JsonRpcClient.Services
+namespace Aria2.JsonRpcClient
 {
     /// <summary>
     /// Extension methods for configuring the <see cref="IServiceCollection"/> for the <see cref="Aria2Client"/>.
@@ -28,6 +29,7 @@ namespace Aria2.JsonRpcClient.Services
             services.AddHttpClient();
 
             services.AddSingleton<IClientWebSocket, ClientWebSocketWrapper>();
+            services.AddSingleton<IClientWebSocketManager, ClientWebSocketManager>();
             services.AddSingleton<WebSocketConnectionManager>();
             services.AddSingleton<HttpGetRequestHandler>();
 
@@ -65,7 +67,6 @@ namespace Aria2.JsonRpcClient.Services
                 options.Policies["HttpGetPolicy"] = Policy.NoOpAsync();
             });
 
-            // Register the PolicyRegistry itself.
             services.AddSingleton<IReadOnlyPolicyRegistry<string>>(sp =>
             {
                 var options = sp.GetRequiredService<IOptions<PolicyRegistryOptions>>().Value;

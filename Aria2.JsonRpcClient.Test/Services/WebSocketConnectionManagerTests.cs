@@ -1,14 +1,9 @@
-using System.Net.WebSockets;
-using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using Aria2.JsonRpcClient.Requests;
 using Aria2.JsonRpcClient.Services;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
-using Polly;
-using Polly.Registry;
 
 namespace Aria2.JsonRpcClient.Test.Services
 {

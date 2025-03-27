@@ -16,7 +16,6 @@ namespace Aria2.JsonRpcClient.Services
         private readonly ConcurrentDictionary<string, TaskCompletionSource<JsonElement>> _pendingRequests = new();
         private bool _disposedValue;
 
-
         /// <inheritdoc />
         public event Action<string>? OnDownloadStarted;
 

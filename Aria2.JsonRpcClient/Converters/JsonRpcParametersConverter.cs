@@ -51,7 +51,7 @@ namespace Aria2.JsonRpcClient.Converters
                     }
                     else
                     {
-                        JsonSerializer.Serialize(writer, value[i], typeInfo);
+                        JsonSerializer.Serialize(writer, item, typeInfo);
                     }
 #else
                     JsonSerializer.Serialize(writer, item, itemType, options);

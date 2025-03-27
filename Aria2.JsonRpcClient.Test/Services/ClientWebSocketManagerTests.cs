@@ -284,6 +284,5 @@ namespace Aria2.JsonRpcClient.Test.Services
 
             manager.Dispose();
         }
-
     }
 }

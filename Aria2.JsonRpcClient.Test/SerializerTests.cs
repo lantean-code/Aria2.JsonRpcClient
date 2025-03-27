@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using FluentAssertions;
 
 namespace Aria2.JsonRpcClient.Test
@@ -63,9 +58,6 @@ namespace Aria2.JsonRpcClient.Test
             obj.Should().NotBeNull();
             obj.Id.Should().Be("test");
         }
-
-        //-----------------------
-
 
         [Fact]
         public void GIVEN_GetTypeInfoReturnsNull_WHEN_DeserializingStringToNullCustom_THEN_ShouldThrowException()

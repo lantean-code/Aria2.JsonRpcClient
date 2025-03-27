@@ -1,5 +1,4 @@
 #if NET8_0_OR_GREATER
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using Aria2.JsonRpcClient.Converters;
 namespace Aria2.JsonRpcClient

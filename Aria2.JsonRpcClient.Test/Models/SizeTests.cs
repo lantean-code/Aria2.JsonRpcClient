@@ -36,8 +36,6 @@ namespace Aria2.JsonRpcClient.Test.Models
             act.Should().Throw<ArgumentOutOfRangeException>();
         }
 
-       
-
         [Fact]
         public void GIVEN_SizeInstance_WHEN_SettingProperties_THEN_GettersReturnSameValues()
         {
