@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - develop
+      - 'release/**'
   pull_request:
     branches:
       - '**'
@@ -50,12 +51,12 @@ jobs:
         run: dotnet test --no-build --configuration Release --framework net9.0
 
       - name: Pack NuGet Package
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/release/')
         run: |
           dotnet pack --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ env.VERSION }}
 
       - name: Push NuGet Package
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/release/')
         run: |
           dotnet nuget push ./artifacts/Aria2.JsonRpcClient.${{ env.VERSION }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
