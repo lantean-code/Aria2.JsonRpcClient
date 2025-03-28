@@ -286,7 +286,7 @@ The client is configured via the `Aria2ClientOptions` class, which includes:
   Use the provided extension methods `AddWebSocketRetryPolicy` and `AddHttpGetRetryPolicy` to register custom Polly retry policies for resilient communication.
 
 - **Extensibility:**  
-  Add new requests by inheriting the `JsonRpcRequest` record and calling `ExecuteRequest<T>` or `ExecuteRequest` on the client.`
+  Add new requests by inheriting the `JsonRpcRequest` record and calling `ExecuteRequest<T>` or `ExecuteRequest` on the client.
 
 For more details, refer to the inline XML documentation in the source code.
 
