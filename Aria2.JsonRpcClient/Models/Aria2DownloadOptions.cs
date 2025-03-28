@@ -87,7 +87,7 @@ namespace Aria2.JsonRpcClient.Models
         /// Allow hook command invocation after hash check (see <see cref="CheckIntegrity"/> option)
         /// in BitTorrent download.
         /// By default, when hash check succeeds, the command given by
-        /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-on-bt-download-complete"/>
+        /// <see href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-on-bt-download-complete">on-bt-download-complete</see>
         /// is executed.
         /// To disable this action, give 'false' to this option.
         /// Default: 'true'

@@ -62,5 +62,16 @@
     
   </ItemGroup>
 
+  <!--<UsingTask
+    TaskName="GenerateMarkdownDocumentationTask"
+    AssemblyFile="..\DocGenOutput\netstandard2.0\DocGen.dll" />
+
+  <Target Name="GenerateDocs" AfterTargets="Build">
+    --><!-- $(MSBuildProjectFullPath) represents the full path to the csproj file being built --><!--
+    <LoadProjectDocumentationTask
+        ProjectFile="$(MSBuildProjectFullPath)"
+        OutputFile="docs\$(MSBuildProjectName).md" />
+  </Target>-->
+
 </Project>
 

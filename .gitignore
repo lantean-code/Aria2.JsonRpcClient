@@ -294,3 +294,5 @@ appsettings.Local.Secure.json
 
 #Ignore tokenprovider.json files generated when running locally
 tokenprovider.json
+/DocGenOutput/netstandard2.0
+/ProjectDocumentationGeneratorRunner/docs
