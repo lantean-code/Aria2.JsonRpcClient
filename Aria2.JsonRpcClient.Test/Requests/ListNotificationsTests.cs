@@ -8,7 +8,7 @@ namespace Aria2.JsonRpcClient.Test.Requests
         [Fact]
         public void GIVEN_WithoutId_WHEN_Constructing_THEN_ShouldCreateJsonRequestWithCorrectNameAndEmptyParameters()
         {
-            var target = new ListNotifications();
+            var target = new SystemListNotifications();
 
             target.Method.Should().Be("system.listNotifications");
             target.Parameters.Should().BeEquivalentTo(JsonRpcParameters.Empty);
@@ -17,7 +17,7 @@ namespace Aria2.JsonRpcClient.Test.Requests
         [Fact]
         public void GIVEN_WithId_WHEN_Constructing_THEN_ShouldCreateJsonRequestWithCorrectNameAndEmptyParametersAndId()
         {
-            var target = new ListNotifications("testId");
+            var target = new SystemListNotifications("testId");
 
             target.Method.Should().Be("system.listNotifications");
             target.Parameters.Should().BeEquivalentTo(JsonRpcParameters.Empty);

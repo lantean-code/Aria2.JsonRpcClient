@@ -73,7 +73,7 @@ namespace Aria2.JsonRpcClient.Test.Client
                 Id = "Id",
                 JsonRpc = "JsonRpc"
             };
-            var methods = new JsonRpcRequest[] { new ListMethods() };
+            var methods = new JsonRpcRequest[] { new SystemListMethods() };
 
             Mock.Get(_requestHandler)
                 .Setup(x => x.SendRequest<IReadOnlyList<JsonElement>>(It.IsAny<JsonRpcRequest>()))
@@ -81,7 +81,7 @@ namespace Aria2.JsonRpcClient.Test.Client
 
             var result = await _target.SystemMulticall(methods);
 
-            var res = ListMethods.GetResult(result[0]);
+            var res = SystemListMethods.GetResult(result[0]);
             res.Should().NotBeNull();
             res.Should().HaveCount(1);
             res[0].Should().Be("result");

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace Aria2.JsonRpcClient
 {
     /// <summary>
-    /// Represents a JSON-RPC request.
+    /// An abstract Json RPC request. Inherit from this to add addtional aria2 requests.
     /// </summary>
     public abstract record JsonRpcRequest
     {
@@ -46,14 +46,14 @@ namespace Aria2.JsonRpcClient
         public string Id { get; }
 
         /// <summary>
-        /// The type of the return value.
+        /// The type of the return value. This will always be <code>typeof(void)</code>.
         /// </summary>
         [JsonIgnore]
         public virtual Type ReturnType { get; } = typeof(void);
     }
 
     /// <summary>
-    /// Represents a JSON-RPC request with a return type.
+    /// An abstract Json RPC request with a return type. Inherit from this to add addtional aria2 requests.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract record JsonRpcRequest<T> : JsonRpcRequest
@@ -69,13 +69,13 @@ namespace Aria2.JsonRpcClient
         }
 
         /// <summary>
-        /// The type of the return value.
+        /// The type of the return value. This is always a <typeparamref name="T"/>.
         /// </summary>
         [JsonIgnore]
         public override Type ReturnType { get; } = typeof(T);
 
         /// <summary>
-        /// A helper method to cast the response of a <see cref="Requests.MultiCall"/> to the correct type.
+        /// A helper method to cast the response of a <see cref="IAria2Client.SystemMulticall(JsonRpcRequest[])"/> to the correct type.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -91,7 +91,7 @@ namespace Aria2.JsonRpcClient
         }
 
         /// <summary>
-        /// Helper method to determine if the response of a <see cref="Requests.MultiCall"/> is an error.
+        /// Helper method to determine if the response of a <see cref="IAria2Client.SystemMulticall(JsonRpcRequest[])"/> is an error.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="jsonRpcError"></param>

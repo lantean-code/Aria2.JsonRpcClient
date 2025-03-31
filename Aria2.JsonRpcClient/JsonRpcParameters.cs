@@ -6,11 +6,11 @@ namespace Aria2.JsonRpcClient
     public class JsonRpcParameters : List<object?>
     {
         /// <summary>
-        /// Adds a value to the collection if it is not null.
+        /// Adds a value to the collection.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
-        public void Add<T>(T value)
+        public void Add<T>(T? value)
         {
             base.Add(value);
         }
@@ -53,7 +53,7 @@ namespace Aria2.JsonRpcClient
         }
 
         /// <summary>
-        /// Creates an empty <see cref="JsonRpcParameters"/> instance.
+        /// A static empty <see cref="JsonRpcParameters"/> instance.
         /// </summary>
         public static JsonRpcParameters Empty => [];
     }

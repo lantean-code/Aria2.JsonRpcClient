@@ -33,7 +33,7 @@ namespace Aria2.JsonRpcClient
         public string Secret { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the options for the <see cref="ClientWebSocket"/>.
+        /// Gets or sets the options for the Web Socket.
         /// </summary>
         public Action<ClientWebSocketOptions>? WebSocketOptions { get; set; }
     }

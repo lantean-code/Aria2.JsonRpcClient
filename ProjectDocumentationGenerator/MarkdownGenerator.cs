@@ -1,33 +1,379 @@
 using System;
-using System.IO;
-using System.Linq;
+using System.Security.Claims;
 using System.Text;
-using System.Collections.Generic;
 using ProjectDocumentationGenerator.Models;
 
-namespace ProjectDocumentationGenerator.Markdown
+namespace ProjectDocumentationGenerator
 {
     public class MarkdownGenerator
     {
-        public string OutputDirectory { get; }
-        private readonly ISet<string> _modelTypeNames;
+        private readonly Dictionary<string, string> _modelTypeNames;
+        private readonly TemplateEngine _templateEngine;
 
         /// <summary>
         /// Creates a new MarkdownGenerator.
         /// modelTypeNames should contain the simple names of types (e.g. "Aria2DownloadOptions")
         /// for which a link should be generated.
+        /// A TemplateEngine is provided that already includes default variables.
         /// </summary>
-        public MarkdownGenerator(string outputDirectory, ISet<string> modelTypeNames)
+        public MarkdownGenerator(string outputDirectory, Dictionary<string, string> modelTypeNames, TemplateEngine templateEngine)
         {
             OutputDirectory = outputDirectory;
             _modelTypeNames = modelTypeNames;
+            _templateEngine = templateEngine;
             Directory.CreateDirectory(OutputDirectory);
+        }
+
+        public string OutputDirectory { get; }
+
+        /// <summary>
+        /// Generates a Markdown file for the client interface.
+        /// </summary>
+        public void GenerateClientMarkdown(ClientDocumentation clientDoc)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"# {clientDoc.InterfaceName} Interface");
+            sb.AppendLine();
+            sb.AppendLine("## Overview");
+            sb.AppendLine();
+            sb.AppendLine(RenderFragments(clientDoc.Documentation.SummaryFragments));
+            if (!string.IsNullOrWhiteSpace(clientDoc.Documentation.SeeAlso))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"> [{clientDoc.Documentation.SeeAlso}]({clientDoc.Documentation.SeeAlso})");
+            }
+            sb.AppendLine();
+            sb.AppendLine("---");
+            sb.AppendLine();
+            RenderMethods(clientDoc.Methods, sb);
+            var content = sb.ToString();
+            // Apply the header and footer via the template engine.
+            var fullContent = _templateEngine.ApplyTemplate(content);
+            var filePath = Path.Combine(OutputDirectory, "client.md");
+            File.WriteAllText(filePath, fullContent);
+        }
+
+        /// <summary>
+        /// Generates Markdown files for each model (records and enums) and an index page listing them.
+        /// Each model page includes a "<- Models Index" link immediately before the Overview header.
+        /// Separate tables for models and enums are generated in the index.
+        /// </summary>
+        public void GenerateModelsMarkdown(ModelsDocumentation modelsDoc)
+        {
+            var recordIndexEntries = new List<(string ModelLink, string Summary)>();
+            var enumIndexEntries = new List<(string ModelLink, string Summary)>();
+
+            // Process record models.
+            foreach (var record in modelsDoc.Records)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"# {record.Name} Model {(record.IsAbstract ? "`abstract`" : "")}");
+                sb.AppendLine();
+                sb.AppendLine("---");
+                sb.AppendLine();
+
+                RenderRecord(record, sb, "model_");
+
+                sb.AppendLine("[<- Models](model_index.md)");
+                var fileName = $"model_{record.Name}.md";
+                var pageContent = sb.ToString();
+                var fullPage = _templateEngine.ApplyTemplate(pageContent);
+                File.WriteAllText(Path.Combine(OutputDirectory, fileName), fullPage);
+
+                var shortSummary = record.SummaryFragments.OfType<TextFragment>().FirstOrDefault()?.Text ?? "";
+                recordIndexEntries.Add(($"[{record.Name}]({fileName})", shortSummary));
+            }
+
+            // Process enum models.
+            foreach (var en in modelsDoc.Enums)
+            {
+                var sb = new StringBuilder();
+                RenderEnum(en, sb);
+                var fileName = $"model_{en.Name}.md";
+                var pageContent = sb.ToString();
+                var fullPage = _templateEngine.ApplyTemplate(pageContent);
+                File.WriteAllText(Path.Combine(OutputDirectory, fileName), fullPage);
+
+                var shortSummary = en.SummaryFragments.OfType<TextFragment>().FirstOrDefault()?.Text ?? "";
+                enumIndexEntries.Add(($"[{en.Name}]({fileName})", shortSummary));
+            }
+
+            // Generate the models index page with separate tables for records and enums.
+            var indexSb = new StringBuilder();
+            indexSb.AppendLine("# Models");
+            indexSb.AppendLine();
+
+            // Table for record models.
+            indexSb.AppendLine("## Models");
+            indexSb.AppendLine();
+            indexSb.AppendLine("| Model Type | Summary |");
+            indexSb.AppendLine("|------------|---------|");
+            foreach (var entry in recordIndexEntries.OrderBy(e => e.ModelLink))
+            {
+                indexSb.AppendLine($"| {entry.ModelLink} | {entry.Summary} |");
+            }
+            indexSb.AppendLine();
+
+            // Table for enum models.
+            indexSb.AppendLine("## Enums");
+            indexSb.AppendLine();
+            indexSb.AppendLine("| Enum Type | Summary |");
+            indexSb.AppendLine("|-----------|---------|");
+            foreach (var entry in enumIndexEntries.OrderBy(e => e.ModelLink))
+            {
+                indexSb.AppendLine($"| {entry.ModelLink} | {entry.Summary} |");
+            }
+            var indexContent = indexSb.ToString();
+            var fullIndex = _templateEngine.ApplyTemplate(indexContent);
+            File.WriteAllText(Path.Combine(OutputDirectory, "model_index.md"), fullIndex);
+        }
+
+        private void RenderEnum(EnumDocumentation en, StringBuilder sb)
+        {
+            sb.AppendLine($"# {en.Name} Enum");
+            sb.AppendLine();
+            sb.AppendLine("## Overview");
+            sb.AppendLine();
+            var summaryText = RenderFragments(en.SummaryFragments);
+            sb.AppendLine(summaryText);
+            sb.AppendLine();
+            sb.AppendLine("---");
+            sb.AppendLine();
+            sb.AppendLine("## Members");
+            foreach (var member in en.Members)
+            {
+                var memberSummary = RenderFragments(member.SummaryFragments);
+                sb.AppendLine($"#### `{member.Name}`");
+                sb.AppendLine(memberSummary);
+                if (!string.IsNullOrWhiteSpace(member.JsonValue))
+                {
+                    sb.AppendLine($"> JSON value: `{member.JsonValue}`");
+                }
+            }
+            sb.AppendLine();
+        }
+
+        /// <summary>
+        /// Generates Markdown files for each record and an index page listing them.
+        /// Each record page includes a "<- Records Index" link immediately before the Overview header.
+        /// Separate tables for models and enums are generated in the index.
+        /// </summary>
+        public void GenerateOthersMarkdown(OthersDocumentation othersDoc, string indexPath)
+        {
+            var recordIndexEntries = new List<(string ModelLink, string Summary)>();
+
+            // Process record models.
+            foreach (var record in othersDoc.Records)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"# {record.Name}{RenderTypeParameter(record.TypeParameters)}{(record.IsAbstract ? " `abstract`" : "")}");
+                sb.AppendLine();
+                sb.AppendLine("---");
+                sb.AppendLine();
+
+                RenderRecord(record, sb);
+
+                var recordName = $"{record.Name}{string.Join("", record.TypeParameters ?? [])}";
+                var fileName = $"{recordName}.md";
+                var pageContent = sb.ToString();
+                var fullPage = _templateEngine.ApplyTemplate(pageContent);
+                File.WriteAllText(Path.Combine(OutputDirectory, fileName), fullPage);
+
+                var shortSummary = record.SummaryFragments.OfType<TextFragment>().FirstOrDefault()?.Text ?? "";
+                recordIndexEntries.Add(($"[{recordName}]({fileName})", shortSummary));
+            }
+
+            foreach (var @class in othersDoc.Classes)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"# {@class.Name}{RenderTypeParameter(@class.TypeParameters)}{(@class.IsAbstract ? " `abstract`" : "")}");
+                sb.AppendLine();
+                sb.AppendLine("---");
+                sb.AppendLine();
+
+                RenderClass(@class, sb);
+
+                var className = $"{@class.Name}{string.Join("", @class.TypeParameters ?? [])}";
+                var fileName = $"{className}.md";
+                var pageContent = sb.ToString();
+                var fullPage = _templateEngine.ApplyTemplate(pageContent);
+                File.WriteAllText(Path.Combine(OutputDirectory, fileName), fullPage);
+
+                var shortSummary = @class.SummaryFragments.OfType<TextFragment>().FirstOrDefault()?.Text ?? "";
+                recordIndexEntries.Add(($"[{className}]({fileName})", shortSummary));
+            }
+
+            foreach (var @enum in othersDoc.Enums)
+            {
+                var sb = new StringBuilder();
+                RenderEnum(@enum, sb);
+                var fileName = $"{@enum.Name}.md";
+                var pageContent = sb.ToString();
+                var fullPage = _templateEngine.ApplyTemplate(pageContent);
+                File.WriteAllText(Path.Combine(OutputDirectory, fileName), fullPage);
+
+                var shortSummary = @enum.SummaryFragments.OfType<TextFragment>().FirstOrDefault()?.Text ?? "";
+                recordIndexEntries.Add(($"[{@enum.Name}]({fileName})", shortSummary));
+            }
+
+            // Generate the models index page with separate tables for records and enums.
+            var indexSb = new StringBuilder(File.ReadAllText(indexPath));
+            indexSb.AppendLine("# Others");
+            indexSb.AppendLine();
+
+            // Table for record models.
+            indexSb.AppendLine("## Others");
+            indexSb.AppendLine();
+            indexSb.AppendLine("| Type | Summary |");
+            indexSb.AppendLine("|------------|---------|");
+            foreach (var entry in recordIndexEntries.OrderBy(e => e.ModelLink))
+            {
+                indexSb.AppendLine($"| {entry.ModelLink} | {entry.Summary} |");
+            }
+            indexSb.AppendLine();
+
+            var indexContent = indexSb.ToString();
+            var fullIndex = _templateEngine.ApplyTemplate(indexContent);
+            File.WriteAllText(Path.Combine(OutputDirectory, "index.md"), fullIndex);
+        }
+
+        /// <summary>
+        /// Generates Markdown files for each request record and an index page listing them.
+        /// Each request page includes a "<- Requests Index" link immediately before the Overview header.
+        /// </summary>
+        public void GenerateRequestsMarkdown(IEnumerable<RequestDetails> requests)
+        {
+            var indexEntries = new List<(string RequestLink, string Summary)>();
+
+            foreach (var request in requests)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"# {request.Name}");
+                sb.AppendLine();
+                sb.AppendLine("## Overview");
+                sb.AppendLine();
+                sb.AppendLine(RenderFragments(request.Documentation.SummaryFragments, null, "request_"));
+                if (!string.IsNullOrWhiteSpace(request.Documentation.SeeAlso))
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"> [{request.Documentation.SeeAlso}]({request.Documentation.SeeAlso})");
+                }
+                sb.AppendLine();
+                sb.AppendLine("---");
+                sb.AppendLine();
+
+                RenderConstructors(request.Constructors, sb);
+
+                var fileName = $"request_{request.Name}.md";
+                var pageContent = sb.ToString();
+                var fullPage = _templateEngine.ApplyTemplate(pageContent);
+                File.WriteAllText(Path.Combine(OutputDirectory, fileName), fullPage);
+
+                var shortSummary = request.Documentation.SummaryFragments.OfType<TextFragment>().FirstOrDefault()?.Text ?? "";
+                indexEntries.Add(($"[{request.Name}]({fileName})", shortSummary));
+            }
+
+            // Generate the requests index page as a Markdown table.
+            var indexSb = new StringBuilder();
+            indexSb.AppendLine("# Requests");
+            indexSb.AppendLine();
+            indexSb.AppendLine("The following requests are available:");
+            indexSb.AppendLine();
+            indexSb.AppendLine("| Request | Summary |");
+            indexSb.AppendLine("|---------|---------|");
+            foreach (var entry in indexEntries.OrderBy(e => e.RequestLink))
+            {
+                indexSb.AppendLine($"| {entry.RequestLink} | {entry.Summary} |");
+            }
+            var indexContent = indexSb.ToString();
+            var fullIndex = _templateEngine.ApplyTemplate(indexContent);
+            File.WriteAllText(Path.Combine(OutputDirectory, "request_index.md"), fullIndex);
+        }
+
+        private static string RenderTypeParameter(List<string>? typeParameters)
+        {
+            if (typeParameters is null || typeParameters.Count == 0)
+            {
+                return "";
+            }
+
+            var x = string.Join(",", typeParameters);
+
+            return $"\\<{x}\\>";
+        }
+
+        private static string LinkifySignature(string signature)
+        {
+            var result = new StringBuilder(signature.Length);
+            foreach (var c in signature)
+            {
+                if (char.IsLetterOrDigit(c))
+                {
+                    result.Append(c);
+                }
+                else
+                {
+                    result.Append('_');
+                }
+            }
+            return result.ToString();
+        }
+
+        private void RenderConstructors(List<ConstructorDetails> constructors, StringBuilder sb)
+        {
+            if (constructors.Count == 0)
+            {
+                return;
+            }
+            sb.AppendLine("## Constructors");
+            foreach (var constructor in constructors)
+            {
+                sb.AppendLine($"#### `{constructor.Signature}`");
+                sb.AppendLine();
+                sb.AppendLine(RenderFragments(constructor.Documentation.SummaryFragments, constructor.Documentation.Parameters.Select(p => LinkifySignature(constructor.Signature) + p.Name)));
+                if (!string.IsNullOrWhiteSpace(constructor.Documentation.SeeAlso))
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"> [{constructor.Documentation.SeeAlso}]({constructor.Documentation.SeeAlso})");
+                }
+                if (constructor.Documentation.Parameters.Count != 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine("**Parameters:**");
+                    foreach (var param in constructor.Documentation.Parameters)
+                    {
+                        RenderBookmark(LinkifySignature(constructor.Signature) + param.Name, sb);
+                        var renderedType = RenderParameterType(param.Type);
+                        var optionalInfo = param.IsOptional ? $" (optional, default: {param.DefaultValue})" : "";
+                        sb.AppendLine($"- `{param.Name}` ({renderedType}{optionalInfo}): {RenderFragments(param.DocumentationFragments)}");
+                    }
+                }
+                if (constructor.Documentation.ReturnsFragments.Count != 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine("**Returns:**");
+                    sb.AppendLine();
+                    sb.AppendLine(RenderFragments(constructor.Documentation.ReturnsFragments, null, "model_"));
+                }
+                if (constructor.Documentation.Exception is not null)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine("**Throws:**");
+                    sb.AppendLine();
+                    sb.AppendLine(RenderParameterType(constructor.Documentation.Exception.Type));
+                    sb.AppendLine(RenderFragments(constructor.Documentation.Exception.Description));
+                }
+                sb.AppendLine();
+                sb.AppendLine("---");
+                sb.AppendLine();
+            }
+            sb.AppendLine();
         }
 
         /// <summary>
         /// Converts a list of DocumentationFragment objects into a Markdown string.
-        /// If currentPropertyNames is provided, any cref or paramref fragment that matches one of those names
-        /// is rendered as a bookmark link.
+        /// Optionally uses current property names for local cref/paramref bookmark links,
+        /// and an optional modelLinkPrefix for type links.
         /// </summary>
         private string RenderFragments(
             IEnumerable<DocumentationFragment> fragments,
@@ -47,26 +393,35 @@ namespace ProjectDocumentationGenerator.Markdown
                         sb.Append(tf.Text);
                         break;
                     case CrefFragment cf:
-                        // Clean the cref value by removing nullable markers.
-                        string crefValue = cf.Cref.Replace("?", "").Trim();
-                        if (propNames != null && propNames.Contains(cf.DisplayText))
+                        var crefValue = cf.Cref.Replace("?", "").Trim();
+                        if (crefValue.StartsWith("IAria2Client"))
                         {
-                            // Render as a bookmark link for a local property.
-                            sb.Append($"[{cf.DisplayText}](#{cf.DisplayText})");
+                            sb.Append($"[{cf.DisplayText}](client.md)");
                         }
                         else
                         {
-                            // Assume it's a type reference.
-                            var parts = crefValue.Split('.');
-                            string simpleName = parts.Last().Trim();
-                            string prefix = modelLinkPrefix ?? "";
-                            sb.Append($"[{cf.DisplayText}]({prefix}{simpleName}.md)");
+                            if (propNames != null && propNames.Contains(cf.DisplayText))
+                            {
+                                sb.Append($"[{cf.DisplayText}](#{cf.DisplayText})");
+                            }
+                            else
+                            {
+                                var parts = crefValue.Split('.');
+                                var simpleName = parts.Last().Trim();
+                                var prefix = modelLinkPrefix ?? "";
+                                sb.Append($"[{cf.DisplayText}]({prefix}{simpleName}.md)");
+                            }
                         }
                         break;
                     case ParamRefFragment prf:
                         if (propNames != null && propNames.Contains(prf.ParameterName))
                         {
                             sb.Append($"[{prf.ParameterName}](#{prf.ParameterName})");
+                        }
+                        else if (propNames != null && propNames.Any(i => i.EndsWith(prf.ParameterName)))
+                        {
+                            var linkName = propNames.First(p => p.EndsWith(prf.ParameterName));
+                            sb.Append($"[{prf.ParameterName}](#{linkName})");
                         }
                         else
                         {
@@ -78,270 +433,257 @@ namespace ProjectDocumentationGenerator.Markdown
                         break;
                 }
             }
-            // Split the concatenated string by newlines and trim leading whitespace from each line.
-            var lines = sb.ToString().Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)
-                            .Select(line => line.TrimStart());
+            // Trim leading whitespace on each line.
+            var lines = sb.ToString()
+                          .Split(new[] { "\r\n", "\n" }, StringSplitOptions.None)
+                          .Select(line => line.TrimStart());
             return string.Join(Environment.NewLine, lines);
         }
 
-
-        /// <summary>
-        /// Renders a parameter type string.
-        /// If the type is in our model set, it is rendered as a Markdown link using the provided modelLinkPrefix.
-        /// The type string is cleaned by removing namespaces and nullable markers.
-        /// </summary>
-        private string RenderParameterType(string type, string? modelLinkPrefix = null)
+        private void RenderMethods(List<MethodDocumentation> methods, StringBuilder sb)
         {
-            string cleanType = type.Replace("?", "").Trim();
-            var parts = cleanType.Split('.');
-            string simpleType = parts.Last();
-            if (_modelTypeNames.Contains(simpleType))
+            if (methods.Count == 0)
             {
-                string prefix = modelLinkPrefix ?? "";
-                return $"[{simpleType}]({prefix}{simpleType}.md)";
+                return;
             }
-            return simpleType;
+            sb.AppendLine("## Methods");
+            foreach (var method in methods.Where(m => !m.Documentation.IsStatic))
+            {
+                RenderMethod(method, sb);
+            }
+            foreach (var method in methods.Where(m => m.Documentation.IsStatic))
+            {
+                RenderMethod(method, sb);
+            }
+            sb.AppendLine();
+        }
+
+        private static void RenderBookmark(string id, StringBuilder sb)
+        {
+            sb.AppendLine($"<a id=\"{id}\"></a>");
+        }
+
+        private void RenderMethod(MethodDocumentation method, StringBuilder sb)
+        {
+            RenderBookmark(method.SimpleSignature, sb);
+            sb.AppendLine($"### {method.Name}");
+            sb.AppendLine();
+            sb.AppendLine(RenderFragments(method.Documentation.SummaryFragments, method.Documentation.Parameters.Select(p => LinkifySignature(method.Signature + p.Name))));
+            sb.AppendLine();
+            if (!string.IsNullOrWhiteSpace(method.Documentation.SeeAlso))
+            {
+                sb.AppendLine($"> [{method.Documentation.SeeAlso}]({method.Documentation.SeeAlso})");
+                sb.AppendLine();
+            }
+            if (method.Documentation.IsStatic)
+            {
+                sb.AppendLine($"**Signature:** `static` `{method.Signature}`");
+            }
+            else
+            {
+                sb.AppendLine($"**Signature:** `{method.Signature}`");
+            }
+            sb.AppendLine();
+            if (method.Documentation.Parameters.Count != 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine("**Parameters:**");
+                foreach (var param in method.Documentation.Parameters)
+                {
+                    RenderBookmark(LinkifySignature(method.Signature + param.Name), sb);
+                    var renderedType = RenderParameterType(param.Type);
+                    var optionalInfo = param.IsOptional ? $" (optional, default: {param.DefaultValue})" : "";
+                    sb.AppendLine($"- `{param.Name}` ({renderedType}{optionalInfo}): {RenderFragments(param.DocumentationFragments)}");
+                }
+            }
+            if (method.Documentation.ReturnsFragments.Count != 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine("**Returns:**");
+                sb.AppendLine();
+                sb.AppendLine(RenderFragments(method.Documentation.ReturnsFragments, null, "model_"));
+            }
+            if (method.Documentation.Exception is not null)
+            {
+                sb.AppendLine();
+                sb.AppendLine("**Throws:**");
+                sb.AppendLine();
+                sb.AppendLine(RenderParameterType(method.Documentation.Exception.Type));
+                sb.AppendLine(RenderFragments(method.Documentation.Exception.Description));
+            }
+            sb.AppendLine();
+            sb.AppendLine("---");
+            sb.AppendLine();
         }
 
         /// <summary>
-        /// Generates a Markdown file for the client interface.
+        /// Renders a parameter type string. If the type is in our model set,
+        /// it is rendered as a Markdown link using the provided modelLinkPrefix.
         /// </summary>
-        public void GenerateClientMarkdown(ClientDocumentation clientDoc)
+        private string RenderParameterType(string type)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine($"# Interface: {clientDoc.InterfaceName}");
-            sb.AppendLine();
-            sb.AppendLine("## Overview");
-            sb.AppendLine();
-            sb.AppendLine(RenderFragments(clientDoc.Documentation.SummaryFragments));
-            if (!string.IsNullOrWhiteSpace(clientDoc.Documentation.SeeAlso))
+            if (type.StartsWith("System."))
             {
-                sb.AppendLine();
-                sb.AppendLine($"**See Also:** {clientDoc.Documentation.SeeAlso}");
+                return $"`{type}`";
+            }
+            var cleanType = type.Replace("?", "").Trim();
+            var parts = cleanType.Split('.');
+            var simpleType = parts.Last();
+            if (_modelTypeNames.TryGetValue(simpleType, out var prefix))
+            {
+                return $"[`{simpleType}`]({prefix}{simpleType}.md)";
+            }
+            return $"`{simpleType}`";
+        }
+
+        private void RenderProperties(List<PropertyDocumentation> properties, StringBuilder sb, string? prefix = null)
+        {
+            if (properties.Count == 0)
+            {
+                return;
+            }
+            sb.AppendLine("## Properties");
+            var propertyNames = properties.Select(p => p.Name);
+            foreach (var prop in properties.Where(p => !p.IsStatic))
+            {
+                RenderProperty(prop, propertyNames, sb, prefix);
+            }
+
+            foreach (var prop in properties.Where(p => p.IsStatic))
+            {
+                RenderProperty(prop, propertyNames, sb, prefix);
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("---");
+            sb.AppendLine();
+        }
+
+        private void RenderProperty(PropertyDocumentation property, IEnumerable<string> propertyNames, StringBuilder sb, string? prefix = null)
+        {
+            sb.AppendLine($"<a id=\"{property.Name}\"></a>");
+
+            var renderedType = RenderParameterType(property.Type);
+            sb.AppendLine($"#### {renderedType} {property.Name} {(property.IsStatic ? "[static]" : "")}");
+            sb.AppendLine();
+            var propSummary = RenderFragments(property.SummaryFragments, propertyNames, prefix);
+            if (string.IsNullOrEmpty(propSummary))
+            {
+                sb.AppendLine($"> [{property.SeeAlso}]({property.SeeAlso})  ");
+            }
+            else
+            {
+                sb.AppendLine(propSummary);
+                if (!string.IsNullOrEmpty(property.SeeAlso))
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"> [{property.SeeAlso}]({property.SeeAlso})  ");
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(property.JsonPropertyName))
+            {
+                sb.AppendLine($"> JSON key: `{property.JsonPropertyName}`");
             }
             sb.AppendLine();
-            sb.AppendLine("## Methods");
-            foreach (var method in clientDoc.Methods)
+        }
+
+        private void RenderRecord(RecordDetails record, StringBuilder sb, string? prefix = null)
+        {
+            sb.AppendLine("## Overview");
+            sb.AppendLine();
+            var summaryText = RenderFragments(record.SummaryFragments, record.Properties.Select(p => p.Name), prefix);
+            sb.AppendLine(summaryText);
+            if (!string.IsNullOrWhiteSpace(record.SeeAlso))
             {
-                sb.AppendLine($"### {method.Name}");
                 sb.AppendLine();
-                sb.AppendLine($"**Signature:** `{method.Signature}`");
+                sb.AppendLine($"> [{record.SeeAlso}]({record.SeeAlso})");
+            }
+            if (!string.IsNullOrWhiteSpace(record.BaseRecordName))
+            {
+                var simpleBaseName = record.BaseRecordName!.Split('.').Last().Trim();
                 sb.AppendLine();
+                sb.AppendLine($"**Inherits from:** [{simpleBaseName}]({prefix}{simpleBaseName}.md)");
+            }
+            sb.AppendLine();
+            sb.AppendLine("---");
+            sb.AppendLine();
+
+            RenderConstructors(record.Constructors, sb);
+
+            RenderMethods(record.Methods, sb);
+
+            RenderProperties(record.Properties, sb, prefix);
+        }
+
+        private void RenderClass(ClassDetails @class, StringBuilder sb)
+        {
+            sb.AppendLine("## Overview");
+            sb.AppendLine();
+            var summaryText = RenderFragments(@class.SummaryFragments, @class.Properties.Select(p => p.Name));
+            sb.AppendLine(summaryText);
+            if (!string.IsNullOrWhiteSpace(@class.SeeAlso))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"> [{@class.SeeAlso}]({@class.SeeAlso})");
+            }
+            if (!string.IsNullOrWhiteSpace(@class.BaseRecordName))
+            {
+                var simpleBaseName = @class.BaseRecordName!.Split('.').Last().Trim();
+                sb.AppendLine();
+                sb.AppendLine($"**Inherits from:** [{simpleBaseName}]({simpleBaseName}.md)");
+            }
+            sb.AppendLine();
+            sb.AppendLine("---");
+            sb.AppendLine();
+
+            RenderConstructors(@class.Constructors, sb);
+
+            RenderMethods(@class.Methods, sb);
+
+            RenderProperties(@class.Properties, sb);
+
+            RenderConversionOperators(@class.ConversionOperators, sb);
+        }
+
+        private void RenderConversionOperators(List<MethodDocumentation> operators, StringBuilder sb)
+        {
+            if (operators.Count == 0)
+            {
+                return;
+            }
+            sb.AppendLine("## Conversion Operators");
+            foreach (var @operator in operators)
+            {
                 sb.AppendLine("**Documentation:**");
                 sb.AppendLine();
-                sb.AppendLine(RenderFragments(method.Documentation.SummaryFragments));
-                if (method.Documentation.Parameters.Any())
+                sb.AppendLine(RenderFragments(@operator.Documentation.SummaryFragments));
+                if (@operator.Documentation.Parameters.Count != 0)
                 {
                     sb.AppendLine();
                     sb.AppendLine("**Parameters:**");
-                    foreach (var param in method.Documentation.Parameters)
+                    foreach (var param in @operator.Documentation.Parameters)
                     {
-                        string renderedType = RenderParameterType(param.Type, "models/");
-                        string optionalInfo = param.IsOptional ? $" (optional, default: {param.DefaultValue})" : "";
+                        var renderedType = RenderParameterType(param.Type);
+                        var optionalInfo = param.IsOptional ? $" (optional, default: {param.DefaultValue})" : "";
                         sb.AppendLine($"- `{param.Name}` ({renderedType}{optionalInfo}): {RenderFragments(param.DocumentationFragments)}");
                     }
                 }
-                if (method.Documentation.ReturnsFragments.Any())
+                if (@operator.Documentation.ReturnsFragments.Count != 0)
                 {
                     sb.AppendLine();
                     sb.AppendLine("**Returns:**");
                     sb.AppendLine();
-                    sb.AppendLine(RenderFragments(method.Documentation.ReturnsFragments, null, "models/"));
+                    sb.AppendLine(RenderFragments(@operator.Documentation.ReturnsFragments, null, "models/"));
                 }
-                // Optionally include SeeAlso section if present.
-                if (!string.IsNullOrWhiteSpace(method.Documentation.SeeAlso))
+                if (!string.IsNullOrWhiteSpace(@operator.Documentation.SeeAlso))
                 {
                     sb.AppendLine();
-                    sb.AppendLine($"**See Also:** {method.Documentation.SeeAlso}");
+                    sb.AppendLine($"> [{@operator.Documentation.SeeAlso}]({@operator.Documentation.SeeAlso})");
                 }
-                sb.AppendLine();
-                sb.AppendLine("---");
-                sb.AppendLine();
             }
-            var filePath = Path.Combine(OutputDirectory, "client.md");
-            File.WriteAllText(filePath, sb.ToString());
-        }
-
-        /// <summary>
-        /// Generates Markdown files for each request record and an index file listing them.
-        /// In request files (in docs/requests/), model links are generated with prefix "../models/".
-        /// Also appends a "Back to Requests Index" link at the bottom of each request file.
-        /// </summary>
-        public void GenerateRequestsMarkdown(IEnumerable<RequestDetails> requests)
-        {
-            string requestsDir = Path.Combine(OutputDirectory, "requests");
-            Directory.CreateDirectory(requestsDir);
-            var indexEntries = new List<string>();
-
-            foreach (var request in requests)
-            {
-                var sb = new StringBuilder();
-                sb.AppendLine($"# Request: {request.Name}");
-                sb.AppendLine();
-                sb.AppendLine("## Overview");
-                sb.AppendLine();
-                sb.AppendLine(RenderFragments(request.Documentation.SummaryFragments));
-                if (!string.IsNullOrWhiteSpace(request.Documentation.SeeAlso))
-                {
-                    sb.AppendLine();
-                    sb.AppendLine($"**See Also:** {request.Documentation.SeeAlso}");
-                }
-                sb.AppendLine();
-                sb.AppendLine("## Constructors");
-                foreach (var ctor in request.Constructors)
-                {
-                    sb.AppendLine($"### {ctor.Signature}");
-                    sb.AppendLine();
-                    sb.AppendLine("**Documentation:**");
-                    sb.AppendLine();
-                    sb.AppendLine(RenderFragments(ctor.Documentation.SummaryFragments));
-                    if (ctor.Documentation.Parameters.Any())
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine("**Parameters:**");
-                        foreach (var param in ctor.Documentation.Parameters)
-                        {
-                            string renderedType = RenderParameterType(param.Type, "../models/");
-                            string optionalInfo = param.IsOptional ? $" (optional, default: {param.DefaultValue})" : "";
-                            sb.AppendLine($"- `{param.Name}` ({renderedType}{optionalInfo}): {RenderFragments(param.DocumentationFragments)}");
-                        }
-                    }
-                    if (ctor.Documentation.ReturnsFragments.Any())
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine("**Returns:**");
-                        sb.AppendLine();
-                        sb.AppendLine(RenderFragments(ctor.Documentation.ReturnsFragments));
-                    }
-                    if (!string.IsNullOrWhiteSpace(ctor.Documentation.SeeAlso))
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine($"**See Also:** {ctor.Documentation.SeeAlso}");
-                    }
-                    sb.AppendLine();
-                    sb.AppendLine("---");
-                    sb.AppendLine();
-                }
-                // Append back-to-index link.
-                sb.AppendLine();
-                sb.AppendLine("[Back to Requests Index](index.md)");
-                string fileName = $"{request.Name}.md";
-                File.WriteAllText(Path.Combine(requestsDir, fileName), sb.ToString());
-
-                string shortSummary = RenderFragments(request.Documentation.SummaryFragments)
-                                      .Split('\n').FirstOrDefault()?.Trim() ?? "";
-                indexEntries.Add($"- [{request.Name}]({fileName}): {shortSummary}");
-            }
-
-            var indexSb = new StringBuilder();
-            indexSb.AppendLine("# Requests");
-            indexSb.AppendLine();
-            indexSb.AppendLine("The following requests are available:");
-            indexSb.AppendLine();
-            foreach (var entry in indexEntries.OrderBy(e => e))
-            {
-                indexSb.AppendLine(entry);
-            }
-            // Optionally, add a link to the overall documentation if needed.
-            File.WriteAllText(Path.Combine(requestsDir, "index.md"), indexSb.ToString());
-        }
-
-        /// <summary>
-        /// Generates Markdown files for each model (records and enums) and an index file listing them.
-        /// For record models, property types are rendered as links (with no prefix) since they are in the same folder.
-        /// Each property is preceded by an anchor tag so that local cref references work as bookmark links.
-        /// Also appends a "Back to Models Index" link at the bottom of each model file.
-        /// </summary>
-        public void GenerateModelsMarkdown(ModelsDocumentation modelsDoc)
-        {
-            string modelsDir = Path.Combine(OutputDirectory, "models");
-            Directory.CreateDirectory(modelsDir);
-            var indexEntries = new List<string>();
-
-            // Process record models.
-            foreach (var record in modelsDoc.Records)
-            {
-                var sb = new StringBuilder();
-                sb.AppendLine($"# Model: {record.Name}");
-                sb.AppendLine();
-                sb.AppendLine("## Overview");
-                sb.AppendLine();
-                string summaryText = RenderFragments(record.SummaryFragments, record.Properties.Select(p => p.Name));
-                sb.AppendLine(summaryText);
-                if (!string.IsNullOrWhiteSpace(record.SeeAlso))
-                {
-                    sb.AppendLine();
-                    sb.AppendLine($"**See Also:** {record.SeeAlso}");
-                }
-                if (!string.IsNullOrWhiteSpace(record.BaseRecordName))
-                {
-                    // Extract the simple name from the base record name.
-                    var simpleBaseName = record.BaseRecordName.Split('.').Last().Trim();
-                    sb.AppendLine();
-                    sb.AppendLine($"**Inherits from:** [{simpleBaseName}]({simpleBaseName}.md)");
-                }
-                sb.AppendLine();
-                sb.AppendLine("## Properties");
-                foreach (var prop in record.Properties)
-                {
-                    sb.AppendLine($"<a id=\"{prop.Name}\"></a>");
-                    string propSummary = RenderFragments(prop.SummaryFragments, record.Properties.Select(p => p.Name));
-                    string renderedType = RenderParameterType(prop.Type);
-                    sb.AppendLine($"- **{prop.Name}** (`{renderedType}`): {propSummary}");
-                    if (!string.IsNullOrWhiteSpace(prop.JsonPropertyName))
-                    {
-                        sb.AppendLine($"  - JSON Name: `{prop.JsonPropertyName}`");
-                    }
-                }
-                // Append back-to-index link.
-                sb.AppendLine();
-                sb.AppendLine("[Back to Models Index](index.md)");
-                string fileName = $"{record.Name}.md";
-                File.WriteAllText(Path.Combine(modelsDir, fileName), sb.ToString());
-
-                string shortSummary = summaryText.Split('\n').FirstOrDefault()?.Trim() ?? "";
-                indexEntries.Add($"- [Record: {record.Name}]({fileName}): {shortSummary}");
-            }
-
-            // Process enum models.
-            foreach (var en in modelsDoc.Enums)
-            {
-                var sb = new StringBuilder();
-                sb.AppendLine($"# Enum: {en.Name}");
-                sb.AppendLine();
-                string summaryText = RenderFragments(en.SummaryFragments);
-                sb.AppendLine(summaryText);
-                sb.AppendLine();
-                sb.AppendLine("## Members");
-                foreach (var member in en.Members)
-                {
-                    string memberSummary = RenderFragments(member.SummaryFragments);
-                    sb.AppendLine($"- **{member.Name}**: {memberSummary}");
-                    if (!string.IsNullOrWhiteSpace(member.JsonValue))
-                    {
-                        sb.AppendLine($"  - JSON Value: `{member.JsonValue}`");
-                    }
-                }
-                // Append back-to-index link.
-                sb.AppendLine();
-                sb.AppendLine("[Back to Models Index](index.md)");
-                string fileName = $"{en.Name}.md";
-                File.WriteAllText(Path.Combine(modelsDir, fileName), sb.ToString());
-
-                string shortSummary = summaryText.Split('\n').FirstOrDefault()?.Trim() ?? "";
-                indexEntries.Add($"- [Enum: {en.Name}]({fileName}): {shortSummary}");
-            }
-
-            var indexSb = new StringBuilder();
-            indexSb.AppendLine("# Models");
-            indexSb.AppendLine();
-            indexSb.AppendLine("The following models are available:");
-            indexSb.AppendLine();
-            foreach (var entry in indexEntries.OrderBy(e => e))
-            {
-                indexSb.AppendLine(entry);
-            }
-            File.WriteAllText(Path.Combine(modelsDir, "index.md"), indexSb.ToString());
+            sb.AppendLine();
+            sb.AppendLine("---");
+            sb.AppendLine();
         }
     }
 }

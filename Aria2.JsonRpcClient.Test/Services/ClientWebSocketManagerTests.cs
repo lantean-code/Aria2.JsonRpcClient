@@ -239,7 +239,7 @@ namespace Aria2.JsonRpcClient.Test.Services
             var bytes1 = Encoding.UTF8.GetBytes(part1);
             var bytes2 = Encoding.UTF8.GetBytes(part2);
 
-            int callCount = 0;
+            var callCount = 0;
             var webSocketMock = new Mock<IClientWebSocket>();
             webSocketMock.Setup(ws => ws.State).Returns(WebSocketState.Open);
             webSocketMock.Setup(ws => ws.SendAsync(It.IsAny<ArraySegment<byte>>(),

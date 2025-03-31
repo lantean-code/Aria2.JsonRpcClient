@@ -25,5 +25,7 @@ namespace ProjectDocumentationGenerator.Models
         /// The value of the <c>&lt;seealso&gt;</c> element (if present).
         /// </summary>
         public string SeeAlso { get; set; } = "";
+
+        public ExceptionDocumentation? Exception { get; set; }
     }
 }

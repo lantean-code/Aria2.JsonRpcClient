@@ -1,30 +1,21 @@
 using Microsoft.CodeAnalysis.MSBuild;
-using ProjectDocumentationGenerator.Markdown;
 using ProjectDocumentationGenerator.Parsers;
 
 namespace ProjectDocumentationGenerator
 {
     public class Generator
     {
-        /// <summary>
-        /// Loads the project from <paramref name="projectFile"/> and writes out documentation to <paramref name="outputDirectory"/>.
-        /// </summary>
-        public async Task GenerateDocumentation(string projectFile, string outputDirectory)
+        public static async Task GenerateDocumentation(string projectFile, string outputDirectory, string targetFramework)
         {
-            // Ensure MSBuild is properly located (required for dotnet build CLI)
-            //if (!MSBuildLocator.IsRegistered)
-            //{
-            //    MSBuildLocator.RegisterDefaults();
-            //}
+            var projectFolder = Path.GetDirectoryName(projectFile)!;
 
             var globalProperties = new Dictionary<string, string>
             {
-                { "TargetFramework", "net8.0" }  // Force net6.0 target
+                { "TargetFramework", targetFramework }
             };
 
             using (var workspace = MSBuildWorkspace.Create(globalProperties))
             {
-                // Load the project asynchronously (blocking here for simplicity)
                 var project = await workspace.OpenProjectAsync(projectFile);
 
                 var compilation = await project.GetCompilationAsync();
@@ -33,20 +24,47 @@ namespace ProjectDocumentationGenerator
                     throw new InvalidOperationException("No compilation");
                 }
 
-                var rp = new RequestParser();
-                var mp = new ModelParser();
-                var cp = new ClientParser();
-                var clientData = await cp.ParseClientInterfaceAsync(project, compilation);
-                var requestData = await rp.ParseRequestsAsync(project, compilation, clientData);
-                var modelData = await mp.ParseModelsAsync(project, compilation);
-                
+                var clientData = await ClientParser.ParseClientInterfaceAsync(project, compilation);
+                var requestData = await RequestParser.ParseRequestsAsync(project, compilation, clientData);
+                var modelData = await ModelParser.ParseModelsAsync(project, compilation);
+                var othersData = await OthersParser.ParseOthersAsync(project, compilation);
 
-                var modelTypeNames = new HashSet<string>(modelData.Records.Select(r => r.Name).Concat(modelData.Enums.Select(e => e.Name)));
+                Dictionary<string, string> models = new Dictionary<string, string>();
+                foreach (var model in modelData.Records)
+                {
+                    models[model.Name] = "model_";
+                }
+                foreach (var @enum in modelData.Enums)
+                {
+                    models[@enum.Name] = "model_";
+                }
+                foreach (var record in othersData.Records)
+                {
+                    models[record.Name] = "";
+                }
+                foreach (var @class in othersData.Classes)
+                {
+                    models[@class.Name] = "";
+                }
+                foreach (var @enum in othersData.Enums)
+                {
+                    models[@enum.Name] = "";
+                }
 
-                var generator = new MarkdownGenerator(outputDirectory, modelTypeNames);
+                var variables = new Dictionary<string, string>
+                {
+                    { "GeneratedDate", DateTime.Now.ToString("yyyy-MM-dd") }
+                };
+                var indexPath = PathCompat.Join(projectFolder, "_index.md");
+                var headerTemplatePath = PathCompat.Join(projectFolder, "_header.md");
+                var footerTemplatePath = PathCompat.Join(projectFolder, "_footer.md");
+                var templateEngine = new TemplateEngine(headerTemplatePath, footerTemplatePath, variables);
+
+                var generator = new MarkdownGenerator(outputDirectory, models, templateEngine);
                 generator.GenerateClientMarkdown(clientData);
                 generator.GenerateModelsMarkdown(modelData);
                 generator.GenerateRequestsMarkdown(requestData);
+                generator.GenerateOthersMarkdown(othersData, indexPath);
             }
         }
     }

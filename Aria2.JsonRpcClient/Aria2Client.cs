@@ -356,14 +356,14 @@ namespace Aria2.JsonRpcClient
         /// <inheritdoc/>
         public Task<IReadOnlyList<string>> SystemListMethods(string? id = null)
         {
-            var request = new ListMethods(id);
+            var request = new SystemListMethods(id);
             return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
         public Task<IReadOnlyList<string>> SystemListNotifications(string? id = null)
         {
-            var request = new ListNotifications(id);
+            var request = new SystemListNotifications(id);
             return ExecuteRequest(request);
         }
 

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aria2.JsonRpcClient", "Aria2.JsonRpcClient\Aria2.JsonRpcClient.csproj", "{5E8037F9-4E1F-46BA-AAAF-6229E2A49934}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4EF17E6B-21D7-438A-83D5-F89AE5DB7951} = {4EF17E6B-21D7-438A-83D5-F89AE5DB7951}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aria2.JsonRpcClient.Test", "Aria2.JsonRpcClient.Test\Aria2.JsonRpcClient.Test.csproj", "{7B0BFC12-493B-46BF-A217-8EC306CA2FB1}"
 EndProject

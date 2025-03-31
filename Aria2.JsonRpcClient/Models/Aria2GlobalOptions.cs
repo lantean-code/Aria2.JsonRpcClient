@@ -4,7 +4,7 @@ namespace Aria2.JsonRpcClient.Models
 {
     /// <summary>
     /// Represents the global options.
-    /// Any options not mapped to a specific property are in <see cref="Aria2Options.AdditionalOptions"/>.
+    /// Any options not mapped to a specific property are in <see cref="AdditionalOptions"/>.
     /// </summary>
     public record Aria2GlobalOptions : Aria2Options
     {
@@ -215,5 +215,8 @@ namespace Aria2.JsonRpcClient.Models
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#cmdoption-truncate-console-readout"/>
         [JsonPropertyName("truncate-console-readout"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? TruncateConsoleReadout { get; init; }
+
+        /// <inheritdoc />
+        public new IDictionary<string, object> AdditionalOptions => base.AdditionalOptions;
     }
 }

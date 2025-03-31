@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,7 +14,7 @@ namespace ProjectDocumentationGenerator.Helpers
         private static string NormalizeText(string text)
         {
             var lines = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
-            for (int i = 0; i < lines.Length; i++)
+            for (var i = 0; i < lines.Length; i++)
             {
                 lines[i] = lines[i].TrimStart();
             }
@@ -39,7 +36,7 @@ namespace ProjectDocumentationGenerator.Helpers
                     var tokensToInclude = textSyntax.TextTokens.SkipWhile(token => string.IsNullOrWhiteSpace(token.ValueText));
                     foreach (var token in tokensToInclude)
                     {
-                        string tokenText = token.ValueText;
+                        var tokenText = token.ValueText;
                         if (!string.IsNullOrEmpty(tokenText))
                         {
                             fragments.Add(new TextFragment(tokenText));
@@ -77,7 +74,7 @@ namespace ProjectDocumentationGenerator.Helpers
         private static List<DocumentationFragment> ExtractFragmentFromElement(XmlElementSyntax element)
         {
             var fragments = new List<DocumentationFragment>();
-            string elementName = element.StartTag.Name.ToString();
+            var elementName = element.StartTag.Name.ToString();
             if (elementName == "paramref")
             {
                 // For <paramref>, extract the "name" attribute.
@@ -96,9 +93,9 @@ namespace ProjectDocumentationGenerator.Helpers
                 if (hrefAttr != null)
                 {
                     // Concatenate the text tokens from the attribute to get the href value.
-                    string hrefValue = string.Concat(hrefAttr.TextTokens.Select(t => t.ValueText)).Trim();
+                    var hrefValue = string.Concat(hrefAttr.TextTokens.Select(t => t.ValueText)).Trim();
                     // Use element.Content (filtered for XmlTextSyntax) to get the inner display text.
-                    string displayText = string.Concat(
+                    var displayText = string.Concat(
                         element.Content.OfType<XmlTextSyntax>()
                                .SelectMany(ts => ts.TextTokens)
                                .Select(t => t.ValueText)

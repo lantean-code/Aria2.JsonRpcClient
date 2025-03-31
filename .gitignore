@@ -257,9 +257,6 @@ FakesAssemblies/
 
 #Deployments
 /deploy
-/src/SlimmingWorld.Platform.CMS/preview
-/src/SlimmingWorld.Platform.Account.Web/version
-/src/SlimmingWorld.Platform.Account.Web/App_Data/frontend-configuration
 
 #Database project jfm files
 *.jfm
@@ -277,13 +274,8 @@ scripts/**/*.mof
 scripts/SwPlatformLocalIISDscConfiguration/
 lib
 *.stackdump
-/src/SlimmingWorld.Platform.Food.Web/Properties/PublishProfiles/uk-dev-food-slimmingworld - FTP.pubxml
-/src/SlimmingWorld.Platform.Food.Web/Properties/PublishProfiles/uk-dev-food-slimmingworld - Web Deploy.pubxml
-/SlimmingWorld.Platform.Admin.sln.startup.json
-/SlimmingWorld.Platform.Admin.sln
 /solutionfiltergenerator.exe
 /NDependOut
-/SlimmingWorld.Platform.ndproj
 
 #Secret local configs
 appsettings.Local.Secure.json
@@ -294,5 +286,5 @@ appsettings.Local.Secure.json
 
 #Ignore tokenprovider.json files generated when running locally
 tokenprovider.json
-/DocGenOutput/netstandard2.0
+/DocGenOutput/*
 /ProjectDocumentationGeneratorRunner/docs

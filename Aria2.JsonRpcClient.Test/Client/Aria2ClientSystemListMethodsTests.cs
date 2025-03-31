@@ -31,7 +31,7 @@ namespace Aria2.JsonRpcClient.Test.Client
             result.Should().BeEquivalentTo(expected);
 
             Mock.Get(_requestHandler)
-                .Verify(x => x.SendRequest<IReadOnlyList<string>>(It.Is<ListMethods>(r => r != null)), Times.Once());
+                .Verify(x => x.SendRequest<IReadOnlyList<string>>(It.Is<SystemListMethods>(r => r != null)), Times.Once());
         }
     }
 }

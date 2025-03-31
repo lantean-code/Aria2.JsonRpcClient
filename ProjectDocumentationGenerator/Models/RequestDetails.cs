@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ProjectDocumentationGenerator.Models
 {
     /// <summary>
@@ -10,7 +8,6 @@ namespace ProjectDocumentationGenerator.Models
     {
         public string Name { get; set; } = "";
         public RecordDetails Documentation { get; set; } = new();
-        public string DocumentName { get; set; } = "";
         public List<ConstructorDetails> Constructors { get; set; } = new();
     }
 }

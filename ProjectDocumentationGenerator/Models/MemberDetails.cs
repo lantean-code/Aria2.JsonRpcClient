@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ProjectDocumentationGenerator.Models
 {
     /// <summary>
@@ -12,5 +10,7 @@ namespace ProjectDocumentationGenerator.Models
         public List<DocumentationFragment> ReturnsFragments { get; set; } = new();
         public string ReturnType { get; set; } = "";
         public string SeeAlso { get; set; } = "";
+        public bool IsStatic { get; set; }
+        public ExceptionDocumentation? Exception { get; set; }
     }
 }

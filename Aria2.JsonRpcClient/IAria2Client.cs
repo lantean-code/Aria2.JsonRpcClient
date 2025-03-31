@@ -24,6 +24,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.addUri"/>
         /// <returns>The GID of the newly registered download.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<string> AddUri(string[] uris, Aria2DownloadOptions? options = null, int? position = null, string? id = null);
 
         /// <summary>
@@ -38,6 +39,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.addTorrent"/>
         /// <returns>The GID of the newly registered download.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<string> AddTorrent(string torrent, Aria2DownloadOptions? options = null, int? position = null, string? id = null);
 
         /// <summary>
@@ -52,6 +54,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.addMetalink"/>
         /// <returns>The GID of the newly registered download.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<string> AddMetalink(string metalink, Aria2DownloadOptions? options = null, int? position = null, string? id = null);
 
         #endregion Download Adding Methods
@@ -67,6 +70,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.remove"/>
         /// <returns>The GID of the removed download.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<string> Remove(string gid, string? id = null);
 
         /// <summary>
@@ -77,6 +81,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.forceRemove"/>
         /// <returns>The GID of the removed download.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<string> ForceRemove(string gid, string? id = null);
 
         /// <summary>
@@ -87,14 +92,15 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.pause"/>
         /// <returns>The GID of the paused download.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<string> Pause(string gid, string? id = null);
 
         /// <summary>
         /// Pauses all active and waiting downloads.
-        /// Returns "OK" upon success.
         /// </summary>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.pauseAll"/>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task PauseAll(string? id = null);
 
         /// <summary>
@@ -105,14 +111,15 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.forcePause"/>
         /// <returns>The GID of the paused download.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<string> ForcePause(string gid, string? id = null);
 
         /// <summary>
         /// Forcefully pauses all active and waiting downloads without extra actions.
-        /// Returns "OK" upon success.
         /// </summary>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.forcePauseAll"/>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task ForcePauseAll(string? id = null);
 
         /// <summary>
@@ -123,14 +130,15 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.unpause"/>
         /// <returns>The GID of the unpaused download.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<string> Unpause(string gid, string? id = null);
 
         /// <summary>
         /// Unpauses all paused downloads.
-        /// Returns "OK" upon success.
         /// </summary>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.unpauseAll"/>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task UnpauseAll(string? id = null);
 
         #endregion Download Removal & Pause Methods
@@ -147,6 +155,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellStatus"/>
         /// <returns>An <see cref="Aria2Status"/> object describing the download's status.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<Aria2Status> TellStatus(string gid, string[]? keys = null, string? id = null);
 
         /// <summary>
@@ -159,6 +168,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellStatus"/>
         /// <returns>An <see cref="Aria2Status"/> object describing the download's status.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<Aria2Status> TellStatus(string gid, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null);
 
         /// <summary>
@@ -169,6 +179,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.getUris"/>
         /// <returns>A read-only list of <see cref="Aria2Uri"/> objects.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<Aria2Uri>> GetUris(string gid, string? id = null);
 
         /// <summary>
@@ -179,6 +190,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.getFiles"/>
         /// <returns>A read-only list of <see cref="Aria2File"/> objects.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<Aria2File>> GetFiles(string gid, string? id = null);
 
         /// <summary>
@@ -189,6 +201,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.getPeers"/>
         /// <returns>A read-only list of <see cref="Aria2Peer"/> objects.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<Aria2Peer>> GetPeers(string gid, string? id = null);
 
         /// <summary>
@@ -199,6 +212,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.getServers"/>
         /// <returns>A read-only list of <see cref="Aria2Server"/> objects.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<Aria2Server>> GetServers(string gid, string? id = null);
 
         /// <summary>
@@ -209,6 +223,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellActive"/>
         /// <returns>A read-only list of active downloads.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<Aria2Status>> TellActive(string[]? keys = null, string? id = null);
 
         /// <summary>
@@ -219,6 +234,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellActive"/>
         /// <returns>A read-only list of active downloads.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<Aria2Status>> TellActive(Expression<Func<Aria2Status, object?>> keysSelector, string? id = null);
 
         /// <summary>
@@ -231,6 +247,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellWaiting"/>
         /// <returns>A read-only list of waiting downloads.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<Aria2Status>> TellWaiting(int offset, int num, string[]? keys = null, string? id = null);
 
         /// <summary>
@@ -243,6 +260,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellWaiting"/>
         /// <returns>A read-only list of waiting downloads.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<Aria2Status>> TellWaiting(int offset, int num, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null);
 
         /// <summary>
@@ -255,6 +273,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellStopped"/>
         /// <returns>A read-only list of stopped downloads.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<Aria2Status>> TellStopped(int offset, int num, string[]? keys = null, string? id = null);
 
         /// <summary>
@@ -267,6 +286,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellStopped"/>
         /// <returns>A read-only list of stopped downloads.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<Aria2Status>> TellStopped(int offset, int num, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null);
 
         #endregion Download Status & Information Methods
@@ -284,6 +304,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.changePosition"/>
         /// <returns>The new position.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<int> ChangePosition(string gid, int pos, string how, string? id = null);
 
         /// <summary>
@@ -299,6 +320,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.changeUri"/>
         /// <returns>An array of two integers: [number deleted, number added].</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<int>> ChangeUri(string gid, int fileIndex, IEnumerable<string> delUris, IEnumerable<string> addUris, int? position = null, string? id = null);
 
         #endregion Download Modification Methods
@@ -313,17 +335,18 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.getOption"/>
         /// <returns>An <see cref="Aria2Options"/> object with the download's options.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<Aria2Options> GetOption(string gid, string? id = null);
 
         /// <summary>
         /// Changes the options for the download denoted by <paramref name="gid"/>.
         /// <paramref name="options"/> is a struct containing option name/value pairs.
-        /// Returns "OK" upon success.
         /// </summary>
         /// <param name="gid">The GID of the download to modify.</param>
         /// <param name="options">The options to change.</param>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.changeOption"/>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task ChangeOption(string gid, Aria2Options options, string? id = null);
 
         /// <summary>
@@ -333,12 +356,12 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.getGlobalOption"/>
         /// <returns>A dictionary of global options.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<Aria2GlobalOptions> GetGlobalOption(string? id = null);
 
         /// <summary>
         /// Changes the global options dynamically.
         /// <paramref name="options"/> is a struct containing option name/value pairs.
-        /// Returns "OK" upon success.
         /// </summary>
         /// <param name="options">The global options to change.</param>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
@@ -356,6 +379,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.getGlobalStat"/>
         /// <returns>An <see cref="Aria2GlobalStat"/> object with global statistics.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<Aria2GlobalStat> GetGlobalStat(string? id = null);
 
         /// <summary>
@@ -364,6 +388,7 @@ namespace Aria2.JsonRpcClient
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.getVersion"/>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <returns>An <see cref="Aria2Version"/> object with version information.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<Aria2Version> GetVersion(string? id = null);
 
         /// <summary>
@@ -372,47 +397,48 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.getSessionInfo"/>
         /// <returns>An <see cref="Aria2SessionInfo"/> object with session information.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<Aria2SessionInfo> GetSessionInfo(string? id = null);
 
         /// <summary>
         /// Gracefully shuts down aria2, allowing active downloads to complete.
-        /// Returns "OK" upon success.
         /// </summary>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.shutdown"/>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task Shutdown(string? id = null);
 
         /// <summary>
         /// Forcefully shuts down aria2 immediately without waiting for active downloads.
-        /// Returns "OK" upon success.
         /// </summary>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.forceShutdown"/>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task ForceShutdown(string? id = null);
 
         /// <summary>
         /// Saves the current session to a file specified by the --save-session option.
-        /// Returns "OK" upon success.
         /// </summary>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.saveSession"/>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task SaveSession(string? id = null);
 
         /// <summary>
         /// Purges completed, error, or removed downloads from memory.
-        /// Returns "OK" upon success.
         /// </summary>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.purgeDownloadResult"/>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task PurgeDownloadResult(string? id = null);
 
         /// <summary>
         /// Removes a download result (completed/error/removed) from memory, identified by <paramref name="gid"/>.
-        /// Returns "OK" upon success.
         /// </summary>
         /// <param name="gid">The GID of the download result to remove.</param>
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#aria2.removeDownloadResult"/>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task RemoveDownloadResult(string gid, string? id = null);
 
         #endregion Global Status & Miscellaneous Methods
@@ -438,6 +464,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#system.multicall"/>
         /// <returns>A list of responses for the method calls.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<object?>> SystemMulticall(JsonRpcRequest[] methods, string? id = null);
 
         /// <summary>
@@ -446,6 +473,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#system.listMethods"/>
         /// <returns>A list of method names.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<string>> SystemListMethods(string? id = null);
 
         /// <summary>
@@ -454,6 +482,7 @@ namespace Aria2.JsonRpcClient
         /// <param name="id">The tracking id for the request. If this is omitted it will be generated automatically.</param>
         /// <seealso href="https://aria2.github.io/manual/en/html/aria2c.html#system.listNotifications"/>
         /// <returns>A list of notification names.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<IReadOnlyList<string>> SystemListNotifications(string? id = null);
 
         #endregion System Methods
@@ -466,12 +495,14 @@ namespace Aria2.JsonRpcClient
         /// <typeparam name="T">The type of the response expected from the request.</typeparam>
         /// <param name="request"></param>
         /// <returns>The result of the request.</returns>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task<T> ExecuteRequest<T>(JsonRpcRequest<T> request);
 
         /// <summary>
-        /// Executes a reqeuse with a void return type.
+        /// Executes a request with a void return type.
         /// </summary>
         /// <param name="request"></param>
+        /// <exception cref="Aria2Exception">Thrown when an aria2 error occurs.</exception>
         Task ExecuteRequest(JsonRpcRequest request);
 
         #endregion Execute Request Methods

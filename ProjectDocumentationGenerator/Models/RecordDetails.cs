@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ProjectDocumentationGenerator.Models
 {
     /// <summary>
@@ -31,5 +29,12 @@ namespace ProjectDocumentationGenerator.Models
         /// Documentation for each property in the record.
         /// </summary>
         public List<PropertyDocumentation> Properties { get; set; } = new();
+
+        public List<string>? TypeParameters { get; set; } = new();
+
+        public List<ConstructorDetails> Constructors { get; set; } = new();
+
+        public List<MethodDocumentation> Methods { get; set; } = new();
+        public bool IsAbstract { get; set; }
     }
 }

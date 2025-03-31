@@ -12,4 +12,9 @@
     <ProjectReference Include="..\ProjectDocumentationGenerator\ProjectDocumentationGenerator.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.13.9" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.7.8" />
+  </ItemGroup>
+
 </Project>

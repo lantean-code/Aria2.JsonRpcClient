@@ -62,16 +62,23 @@
     
   </ItemGroup>
 
-  <!--<UsingTask
-    TaskName="GenerateMarkdownDocumentationTask"
-    AssemblyFile="..\DocGenOutput\netstandard2.0\DocGen.dll" />
+  <!-- UsingTask for Visual Studio builds -->
+  <UsingTask TaskName="DocGen.GenerateMarkdownDocumentationTask"
+             AssemblyFile="$(MSBuildProjectDirectory)\..\DocGenOutput\net472\DocGen.dll"
+             Condition="'$(BuildingInsideVisualStudio)' == 'true'" />
 
-  <Target Name="GenerateDocs" AfterTargets="Build">
-    --><!-- $(MSBuildProjectFullPath) represents the full path to the csproj file being built --><!--
-    <LoadProjectDocumentationTask
+  <!-- UsingTask for dotnet build (or non-VS) builds -->
+  <UsingTask TaskName="DocGen.GenerateMarkdownDocumentationTask"
+             AssemblyFile="$(MSBuildProjectDirectory)\..\DocGenOutput\net8.0\DocGen.dll"
+             Condition="'$(BuildingInsideVisualStudio)' != 'true'" />
+
+  <Target Name="Generate" AfterTargets="Build"
+          Condition="'$(TargetFramework)' == 'net9.0'">
+    <DocGen.GenerateMarkdownDocumentationTask
         ProjectFile="$(MSBuildProjectFullPath)"
-        OutputFile="docs\$(MSBuildProjectName).md" />
-  </Target>-->
+        OutputDirectory="$(MSBuildProjectDirectory)\..\Artifacts\docs"
+        TargetFramework="$(TargetFramework)" />
+  </Target>
 
 </Project>
 

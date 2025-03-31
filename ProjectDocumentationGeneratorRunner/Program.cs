@@ -1,3 +1,4 @@
+using Microsoft.Build.Locator;
 using ProjectDocumentationGenerator;
 
 namespace ProjectDocumentationGeneratorRunner
@@ -6,9 +7,22 @@ namespace ProjectDocumentationGeneratorRunner
     {
         static async Task Main(string[] args)
         {
+            if (!MSBuildLocator.IsRegistered)
+            {
+                var instance = MSBuildLocator.QueryVisualStudioInstances().FirstOrDefault();
+                if (instance is null)
+                {
+                    MSBuildLocator.RegisterMSBuildPath("C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin");
+                }
+                else
+                {
+                    MSBuildLocator.RegisterInstance(instance);
+                }
+            }
+
             var gen = new Generator();
 
-            await gen.GenerateDocumentation(@"..\..\..\..\Aria2.JsonRpcClient\Aria2.JsonRpcClient.csproj", "..\\..\\..\\docs");
+            await Generator.GenerateDocumentation(@"..\..\..\..\Aria2.JsonRpcClient\Aria2.JsonRpcClient.csproj", "..\\..\\..\\docs", "net9.0");
         }
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ProjectDocumentationGenerator.Models
 {
     /// <summary>
@@ -20,6 +18,6 @@ namespace ProjectDocumentationGenerator.Models
         /// <summary>
         /// Documentation for each public method in the interface.
         /// </summary>
-        public List<ClientMethodDocumentation> Methods { get; set; } = new();
+        public List<MethodDocumentation> Methods { get; set; } = new();
     }
 }

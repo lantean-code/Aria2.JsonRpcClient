@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace ProjectDocumentationGenerator.Models
 {
     /// <summary>
@@ -22,9 +20,12 @@ namespace ProjectDocumentationGenerator.Models
         /// </summary>
         public string? JsonPropertyName { get; set; }
 
+        public bool IsStatic { get; set; }
+
         /// <summary>
         /// The property summary, stored as inline documentation fragments.
         /// </summary>
         public List<DocumentationFragment> SummaryFragments { get; set; } = new();
+        public string SeeAlso { get; set; } = "";
     }
 }
