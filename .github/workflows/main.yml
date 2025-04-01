@@ -41,13 +41,13 @@ jobs:
         run: dotnet restore
 
       - name: Build Docs
-        run: dotnet build .\DocGen\DocGen.csproj --configuration Release --no-restore
+        run: dotnet build ./DocGen/DocGen.csproj --configuration Release --no-restore
 
       - name: Build Client
-        run: dotnet build .\Aria2.JsonRpcClient\Aria2.JsonRpcClient.csproj --configuration Release --no-restore
+        run: dotnet build ./Aria2.JsonRpcClient/Aria2.JsonRpcClient.csproj --configuration Release --no-restore
 
       - name: Build Tests
-        run: dotnet build .\Aria2.JsonRpcClient.Test\Aria2.JsonRpcClient.Test.csproj --configuration Release --no-restore
+        run: dotnet build ./Aria2.JsonRpcClient.Test/Aria2.JsonRpcClient.Test.csproj --configuration Release --no-restore
 
       # Run tests for Linux-compatible frameworks
       - name: Run Tests for net8.0
