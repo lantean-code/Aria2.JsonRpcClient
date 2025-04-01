@@ -115,11 +115,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Upload the contents of ./Artifacts/docs/ as an artifact for GitHub Pages.
+      - name: Upload artifact for GitHub Pages
+        if: github.event_name == 'workflow_dispatch' || (github.ref == 'refs/heads/master' && env.RELEASE_EXISTS == 'false')
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./Artifacts/docs/
+
+      # Deploy the uploaded artifact to GitHub Pages.
       - name: Deploy to GitHub Pages
         if: github.event_name == 'workflow_dispatch' || (github.ref == 'refs/heads/master' && env.RELEASE_EXISTS == 'false')
         uses: actions/deploy-pages@v3
         with:
-          folder: ./Artifacts/docs/
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # artifact_name: pages  # Optional: defaults to "pages"
 
   net48:
     runs-on: windows-latest
