@@ -217,6 +217,7 @@ namespace Aria2.JsonRpcClient.Models
         public bool? TruncateConsoleReadout { get; init; }
 
         /// <inheritdoc />
-        public new IDictionary<string, object> AdditionalOptions => base.AdditionalOptions;
+        [JsonIgnore]
+        public override IDictionary<string, object> AdditionalOptions => base.AdditionalOptions;
     }
 }

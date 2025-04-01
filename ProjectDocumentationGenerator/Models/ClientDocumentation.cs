@@ -10,14 +10,18 @@ namespace ProjectDocumentationGenerator.Models
         /// </summary>
         public string InterfaceName { get; set; } = "";
 
-        /// <summary>
-        /// Documentation for the interface itself.
-        /// </summary>
-        public MemberDetails Documentation { get; set; } = new();
+        public List<DocumentationFragment> SummaryFragments { get; set; } = new();
+
+        public string SeeAlso { get; set; } = "";
 
         /// <summary>
         /// Documentation for each public method in the interface.
         /// </summary>
         public List<MethodDocumentation> Methods { get; set; } = new();
+
+        /// <summary>
+        /// Documentation for each public event in the interface.
+        /// </summary>
+        public List<EventDocumentation> Events { get; set; } = new();
     }
 }

@@ -1,1 +1,1 @@
-##### Aria2.JsonRpcClient Documentation  - [Home](index.md) | [Client](client.md) | [Requests](request_index.md) | [Models](model_index.md)
+##### Aria2.JsonRpcClient Documentation  - [Home](index.md) | [Client](client.md) | [Requests](requests.md) | [Models](models.md) | [Examples](examples.md)

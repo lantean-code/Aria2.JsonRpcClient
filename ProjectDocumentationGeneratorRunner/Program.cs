@@ -3,9 +3,9 @@ using ProjectDocumentationGenerator;
 
 namespace ProjectDocumentationGeneratorRunner
 {
-    internal class Program
+    internal static class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             if (!MSBuildLocator.IsRegistered)
             {
@@ -19,8 +19,6 @@ namespace ProjectDocumentationGeneratorRunner
                     MSBuildLocator.RegisterInstance(instance);
                 }
             }
-
-            var gen = new Generator();
 
             await Generator.GenerateDocumentation(@"..\..\..\..\Aria2.JsonRpcClient\Aria2.JsonRpcClient.csproj", "..\\..\\..\\docs", "net9.0");
         }

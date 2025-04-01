@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 namespace Aria2.JsonRpcClient.Models
 {
     /// <summary>
-    /// Represents the 110 aria2 download options.
+    /// Represents aria2 options for downloads.
     /// </summary>
     public record Aria2DownloadOptions
     {

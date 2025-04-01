@@ -23,7 +23,7 @@ namespace ProjectDocumentationGenerator.Models
         /// <summary>
         /// If this record inherits from another record, the name of the base record.
         /// </summary>
-        public string? BaseRecordName { get; set; }
+        public string? BaseTypeName { get; set; }
 
         /// <summary>
         /// Documentation for each property in the record.

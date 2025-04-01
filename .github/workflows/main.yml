@@ -40,8 +40,14 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+      - name: Build Docs
+        run: dotnet build .\DocGen\DocGen.csproj --configuration Release --no-restore
+
+      - name: Build Client
+        run: dotnet build .\Aria2.JsonRpcClient\Aria2.JsonRpcClient.csproj --configuration Release --no-restore
+
+      - name: Build Tests
+        run: dotnet build .\Aria2.JsonRpcClient.Test\Aria2.JsonRpcClient.Test.csproj --configuration Release --no-restore
 
       # Run tests for Linux-compatible frameworks
       - name: Run Tests for net8.0
@@ -105,6 +111,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'workflow_dispatch' || (github.ref == 'refs/heads/master' && env.RELEASE_EXISTS == 'false')
+        uses: actions/deploy-pages@v3
+        with:
+          folder: ./Artifacts/docs/
+
   net48:
     runs-on: windows-latest
     steps:
@@ -117,8 +129,14 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+      - name: Build Docs
+        run: dotnet build .\DocGen\DocGen.csproj --configuration Release --no-restore
+
+      - name: Build Client
+        run: dotnet build .\Aria2.JsonRpcClient\Aria2.JsonRpcClient.csproj --configuration Release --no-restore
+
+      - name: Build Tests
+        run: dotnet build .\Aria2.JsonRpcClient.Test\Aria2.JsonRpcClient.Test.csproj --configuration Release --no-restore
 
       - name: Run Tests for net48
         run: dotnet test --no-build --configuration Release --framework net48

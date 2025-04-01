@@ -20,6 +20,6 @@ namespace Aria2.JsonRpcClient.Models
         /// Gets a dictionary of option additional key-value pairs.
         /// </summary>
         [JsonExtensionData]
-        public IDictionary<string, object> AdditionalOptions { get; set; } = new Dictionary<string, object>();
+        public virtual IDictionary<string, object> AdditionalOptions { get; set; } = new Dictionary<string, object>();
     }
 }

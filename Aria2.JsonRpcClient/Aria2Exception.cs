@@ -16,8 +16,13 @@ namespace Aria2.JsonRpcClient
         }
 
         /// <summary>
-        /// Gets the error code.
+        /// The aria2 error code.
         /// </summary>
         public int Code { get; }
+
+        /// <summary>
+        /// The aria2 error message.
+        /// </summary>
+        public override string Message => base.Message;
     }
 }

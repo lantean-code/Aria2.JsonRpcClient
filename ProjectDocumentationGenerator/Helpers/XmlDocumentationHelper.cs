@@ -9,7 +9,7 @@ namespace ProjectDocumentationGenerator.Helpers
     {
         /// <summary>
         /// Parses XML documentation from the provided SyntaxTriviaList into a DocumentationComment.
-        /// This method processes the root elements: summary, param, returns, and seealso.
+        /// This method processes the root elements: summary, param, returns, seealso and exception.
         /// If an <inheritdoc> element is present, it returns an empty DocumentationComment.
         /// </summary>
         public static DocumentationComment GetDocumentationComment(SyntaxTriviaList trivia, SemanticModel semanticModel)
@@ -138,11 +138,10 @@ namespace ProjectDocumentationGenerator.Helpers
                                                 .FirstOrDefault(e => e.Name.ToString() == "seealso");
             if (seealsoElement != null)
             {
-                var hrefAttr = seealsoElement.Attributes
-                                             .FirstOrDefault(a => a.ToString().StartsWith("href=", StringComparison.OrdinalIgnoreCase));
+                var hrefAttr = seealsoElement.Attributes.OfType<XmlTextAttributeSyntax>().FirstOrDefault(t => t.Name.LocalName.Text == "href");
                 if (hrefAttr != null)
                 {
-                    var hrefValue = hrefAttr.ToString().Substring("href=".Length).Trim('\"');
+                    var hrefValue = string.Concat(hrefAttr.TextTokens.Select(t => t.ValueText)).Trim();
                     docComment.SeeAlso = hrefValue;
                 }
             }
@@ -169,7 +168,6 @@ namespace ProjectDocumentationGenerator.Helpers
                 }
 
                 docComment.Exception = exceptionDocumentation;
-
             }
             return docComment;
         }

@@ -1,6 +1,5 @@
 namespace ProjectDocumentationGenerator.Models
 {
-
     /// <summary>
     /// Represents an inline piece of documentation text.
     /// </summary>

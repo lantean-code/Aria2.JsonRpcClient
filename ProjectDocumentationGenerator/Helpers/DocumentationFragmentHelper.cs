@@ -33,14 +33,10 @@ namespace ProjectDocumentationGenerator.Helpers
                 if (node is XmlTextSyntax textSyntax)
                 {
                     // Skip leading tokens that are null, empty, or whitespace until a token with content is encountered.
-                    var tokensToInclude = textSyntax.TextTokens.SkipWhile(token => string.IsNullOrWhiteSpace(token.ValueText));
-                    foreach (var token in tokensToInclude)
+                    var text = textSyntax.TextTokens.TrimStartAndEnd(token => token.ValueText);
+                    foreach (var token in text)
                     {
-                        var tokenText = token.ValueText;
-                        if (!string.IsNullOrEmpty(tokenText))
-                        {
-                            fragments.Add(new TextFragment(tokenText));
-                        }
+                        fragments.Add(new TextFragment(token));
                     }
                 }
                 else if (node is XmlEmptyElementSyntax emptyElement)
@@ -55,6 +51,46 @@ namespace ProjectDocumentationGenerator.Helpers
             return fragments;
         }
 
+        private static IEnumerable<string> TrimStartAndEnd<T>(this IEnumerable<T> source, Func<T, string> selector)
+        {
+            var started = false;
+            // Buffer to hold potential trailing null/whitespace items.
+            var buffer = new List<string>();
+
+            foreach (var tt in source)
+            {
+                var item = selector(tt);
+                if (!started)
+                {
+                    // Skip leading null/whitespace until we find the first valid item.
+                    if (!string.IsNullOrWhiteSpace(item))
+                    {
+                        started = true;
+                        yield return item;
+                    }
+                }
+                else
+                {
+                    // We're inside the trimmed segment.
+                    if (!string.IsNullOrWhiteSpace(item))
+                    {
+                        // Flush any buffered items (they're not trailing).
+                        foreach (var buffered in buffer)
+                        {
+                            yield return buffered;
+                        }
+                        buffer.Clear();
+                        yield return item;
+                    }
+                    else
+                    {
+                        // Buffer the null/whitespace item in case it's interior.
+                        buffer.Add(item);
+                    }
+                }
+            }
+            // Any items left in the buffer at the end are trailing and are not yielded.
+        }
 
         /// <summary>
         /// Converts an XmlEmptyElementSyntax into a full XmlElementSyntax so it can be processed uniformly.

@@ -34,6 +34,5 @@ namespace ProjectDocumentationGenerator.Helpers
             // Otherwise, check that the first segment exactly matches the folder name.
             return segments.Length > 0 && segments[0].Equals(folderName, StringComparison.OrdinalIgnoreCase);
         }
-
     }
 }

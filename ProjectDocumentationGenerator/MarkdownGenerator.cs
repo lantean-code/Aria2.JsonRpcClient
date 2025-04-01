@@ -1,5 +1,3 @@
-using System;
-using System.Security.Claims;
 using System.Text;
 using ProjectDocumentationGenerator.Models;
 
@@ -36,16 +34,17 @@ namespace ProjectDocumentationGenerator
             sb.AppendLine();
             sb.AppendLine("## Overview");
             sb.AppendLine();
-            sb.AppendLine(RenderFragments(clientDoc.Documentation.SummaryFragments));
-            if (!string.IsNullOrWhiteSpace(clientDoc.Documentation.SeeAlso))
+            sb.AppendLine(RenderFragments(clientDoc.SummaryFragments));
+            if (!string.IsNullOrWhiteSpace(clientDoc.SeeAlso))
             {
                 sb.AppendLine();
-                sb.AppendLine($"> [{clientDoc.Documentation.SeeAlso}]({clientDoc.Documentation.SeeAlso})");
+                sb.AppendLine($"> [{clientDoc.SeeAlso}]({clientDoc.SeeAlso})");
             }
             sb.AppendLine();
             sb.AppendLine("---");
             sb.AppendLine();
             RenderMethods(clientDoc.Methods, sb);
+            RenderEvents(clientDoc.Events, sb);
             var content = sb.ToString();
             // Apply the header and footer via the template engine.
             var fullContent = _templateEngine.ApplyTemplate(content);
@@ -74,7 +73,6 @@ namespace ProjectDocumentationGenerator
 
                 RenderRecord(record, sb, "model_");
 
-                sb.AppendLine("[<- Models](model_index.md)");
                 var fileName = $"model_{record.Name}.md";
                 var pageContent = sb.ToString();
                 var fullPage = _templateEngine.ApplyTemplate(pageContent);
@@ -125,10 +123,10 @@ namespace ProjectDocumentationGenerator
             }
             var indexContent = indexSb.ToString();
             var fullIndex = _templateEngine.ApplyTemplate(indexContent);
-            File.WriteAllText(Path.Combine(OutputDirectory, "model_index.md"), fullIndex);
+            File.WriteAllText(Path.Combine(OutputDirectory, "models.md"), fullIndex);
         }
 
-        private void RenderEnum(EnumDocumentation en, StringBuilder sb)
+        private static void RenderEnum(EnumDocumentation en, StringBuilder sb)
         {
             sb.AppendLine($"# {en.Name} Enum");
             sb.AppendLine();
@@ -158,7 +156,7 @@ namespace ProjectDocumentationGenerator
         /// Each record page includes a "<- Records Index" link immediately before the Overview header.
         /// Separate tables for models and enums are generated in the index.
         /// </summary>
-        public void GenerateOthersMarkdown(OthersDocumentation othersDoc, string indexPath)
+        public void GenerateOthersMarkdown(OthersDocumentation othersDoc, string indexPath, string examplesPath)
         {
             var recordIndexEntries = new List<(string ModelLink, string Summary)>();
 
@@ -218,7 +216,6 @@ namespace ProjectDocumentationGenerator
 
             // Generate the models index page with separate tables for records and enums.
             var indexSb = new StringBuilder(File.ReadAllText(indexPath));
-            indexSb.AppendLine("# Others");
             indexSb.AppendLine();
 
             // Table for record models.
@@ -235,6 +232,11 @@ namespace ProjectDocumentationGenerator
             var indexContent = indexSb.ToString();
             var fullIndex = _templateEngine.ApplyTemplate(indexContent);
             File.WriteAllText(Path.Combine(OutputDirectory, "index.md"), fullIndex);
+
+            var examplesDb = new StringBuilder(File.ReadAllText(examplesPath));
+            var examplesContent = examplesDb.ToString();
+            var fullExamples = _templateEngine.ApplyTemplate(examplesContent);
+            File.WriteAllText(Path.Combine(OutputDirectory, "examples.md"), fullExamples);
         }
 
         /// <summary>
@@ -287,7 +289,7 @@ namespace ProjectDocumentationGenerator
             }
             var indexContent = indexSb.ToString();
             var fullIndex = _templateEngine.ApplyTemplate(indexContent);
-            File.WriteAllText(Path.Combine(OutputDirectory, "request_index.md"), fullIndex);
+            File.WriteAllText(Path.Combine(OutputDirectory, "requests.md"), fullIndex);
         }
 
         private static string RenderTypeParameter(List<string>? typeParameters)
@@ -375,10 +377,10 @@ namespace ProjectDocumentationGenerator
         /// Optionally uses current property names for local cref/paramref bookmark links,
         /// and an optional modelLinkPrefix for type links.
         /// </summary>
-        private string RenderFragments(
-            IEnumerable<DocumentationFragment> fragments,
-            IEnumerable<string>? currentPropertyNames = null,
-            string? modelLinkPrefix = null)
+        private static string RenderFragments(
+    IEnumerable<DocumentationFragment> fragments,
+    IEnumerable<string>? currentPropertyNames = null,
+    string? modelLinkPrefix = null)
         {
             var propNames = currentPropertyNames != null
                 ? new HashSet<string>(currentPropertyNames, StringComparer.OrdinalIgnoreCase)
@@ -407,7 +409,7 @@ namespace ProjectDocumentationGenerator
                             else
                             {
                                 var parts = crefValue.Split('.');
-                                var simpleName = parts.Last().Trim();
+                                var simpleName = parts[^1].Trim();
                                 var prefix = modelLinkPrefix ?? "";
                                 sb.Append($"[{cf.DisplayText}]({prefix}{simpleName}.md)");
                             }
@@ -454,6 +456,36 @@ namespace ProjectDocumentationGenerator
             foreach (var method in methods.Where(m => m.Documentation.IsStatic))
             {
                 RenderMethod(method, sb);
+            }
+            sb.AppendLine();
+        }
+
+        private void RenderEvents(List<EventDocumentation> events, StringBuilder sb)
+        {
+            if (events.Count == 0)
+            {
+                return;
+            }
+            sb.AppendLine("## Events");
+            foreach (var @event in events)
+            {
+                sb.AppendLine($"### {@event.Name}");
+                sb.AppendLine();
+                sb.AppendLine(RenderFragments(@event.SummaryFragments));
+                sb.AppendLine();
+                if (!string.IsNullOrWhiteSpace(@event.SeeAlso))
+                {
+                    sb.AppendLine($"> [{@event.SeeAlso}]({@event.SeeAlso})");
+                    sb.AppendLine();
+                }
+                sb.AppendLine();
+                sb.AppendLine("**Callback:**");
+                var renderedType = RenderParameterType(@event.Type);
+                sb.AppendLine(renderedType);
+                sb.AppendLine();
+                sb.AppendLine();
+                sb.AppendLine("---");
+                sb.AppendLine();
             }
             sb.AppendLine();
         }
@@ -528,7 +560,7 @@ namespace ProjectDocumentationGenerator
             }
             var cleanType = type.Replace("?", "").Trim();
             var parts = cleanType.Split('.');
-            var simpleType = parts.Last();
+            var simpleType = parts[^1];
             if (_modelTypeNames.TryGetValue(simpleType, out var prefix))
             {
                 return $"[`{simpleType}`]({prefix}{simpleType}.md)";
@@ -598,11 +630,20 @@ namespace ProjectDocumentationGenerator
                 sb.AppendLine();
                 sb.AppendLine($"> [{record.SeeAlso}]({record.SeeAlso})");
             }
-            if (!string.IsNullOrWhiteSpace(record.BaseRecordName))
+            if (!string.IsNullOrWhiteSpace(record.BaseTypeName))
             {
-                var simpleBaseName = record.BaseRecordName!.Split('.').Last().Trim();
+                var simpleBaseName = record.BaseTypeName!.Split('.')[^1].Trim();
+                string baseLink;
+                if (_modelTypeNames.TryGetValue(simpleBaseName, out var basePrefix))
+                {
+                    baseLink = $"[`{simpleBaseName}`]({basePrefix}{simpleBaseName}.md)";
+                }
+                else
+                {
+                    baseLink = $"`{simpleBaseName}`";
+                }
                 sb.AppendLine();
-                sb.AppendLine($"**Inherits from:** [{simpleBaseName}]({prefix}{simpleBaseName}.md)");
+                sb.AppendLine($"**Inherits from:** {baseLink}");
             }
             sb.AppendLine();
             sb.AppendLine("---");
@@ -626,11 +667,20 @@ namespace ProjectDocumentationGenerator
                 sb.AppendLine();
                 sb.AppendLine($"> [{@class.SeeAlso}]({@class.SeeAlso})");
             }
-            if (!string.IsNullOrWhiteSpace(@class.BaseRecordName))
+            if (!string.IsNullOrWhiteSpace(@class.BaseTypeName))
             {
-                var simpleBaseName = @class.BaseRecordName!.Split('.').Last().Trim();
+                var simpleBaseName = @class.BaseTypeName!.Split('.')[^1].Trim();
+                string baseLink;
+                if (_modelTypeNames.TryGetValue(simpleBaseName, out var basePrefix))
+                {
+                    baseLink = $"[`{simpleBaseName}`]({basePrefix}{simpleBaseName}.md)";
+                }
+                else
+                {
+                    baseLink = $"`{simpleBaseName}`";
+                }
                 sb.AppendLine();
-                sb.AppendLine($"**Inherits from:** [{simpleBaseName}]({simpleBaseName}.md)");
+                sb.AppendLine($"**Inherits from:** {baseLink}");
             }
             sb.AppendLine();
             sb.AppendLine("---");

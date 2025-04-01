@@ -3,7 +3,7 @@ using ProjectDocumentationGenerator.Parsers;
 
 namespace ProjectDocumentationGenerator
 {
-    public class Generator
+    public static class Generator
     {
         public static async Task GenerateDocumentation(string projectFile, string outputDirectory, string targetFramework)
         {
@@ -29,7 +29,7 @@ namespace ProjectDocumentationGenerator
                 var modelData = await ModelParser.ParseModelsAsync(project, compilation);
                 var othersData = await OthersParser.ParseOthersAsync(project, compilation);
 
-                Dictionary<string, string> models = new Dictionary<string, string>();
+                var models = new Dictionary<string, string>();
                 foreach (var model in modelData.Records)
                 {
                     models[model.Name] = "model_";
@@ -56,6 +56,7 @@ namespace ProjectDocumentationGenerator
                     { "GeneratedDate", DateTime.Now.ToString("yyyy-MM-dd") }
                 };
                 var indexPath = PathCompat.Join(projectFolder, "_index.md");
+                var examplesPath = PathCompat.Join(projectFolder, "_examples.md");
                 var headerTemplatePath = PathCompat.Join(projectFolder, "_header.md");
                 var footerTemplatePath = PathCompat.Join(projectFolder, "_footer.md");
                 var templateEngine = new TemplateEngine(headerTemplatePath, footerTemplatePath, variables);
@@ -64,7 +65,7 @@ namespace ProjectDocumentationGenerator
                 generator.GenerateClientMarkdown(clientData);
                 generator.GenerateModelsMarkdown(modelData);
                 generator.GenerateRequestsMarkdown(requestData);
-                generator.GenerateOthersMarkdown(othersData, indexPath);
+                generator.GenerateOthersMarkdown(othersData, indexPath, examplesPath);
             }
         }
     }

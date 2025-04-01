@@ -1,7 +1,7 @@
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
-using ProjectDocumentationGenerator.Models;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using ProjectDocumentationGenerator.Models;
 
 namespace ProjectDocumentationGenerator.Helpers
 {
@@ -31,7 +31,7 @@ namespace ProjectDocumentationGenerator.Helpers
             {
                 var fullBaseName = classDeclaration.BaseList.Types.First().Type.ToString();
                 var simpleBaseName = fullBaseName.Split('.').Last().Trim();
-                classDetails.BaseRecordName = simpleBaseName;
+                classDetails.BaseTypeName = simpleBaseName;
             }
 
             // Process each public property declared in this record.
@@ -185,16 +185,13 @@ namespace ProjectDocumentationGenerator.Helpers
                     foreach (var attr in attrList.Attributes)
                     {
                         var attrName = attr.Name.ToString();
-                        if (attrName.Contains("JsonStringEnumMemberName"))
+                        if (attrName.Contains("JsonStringEnumMemberName") && attr.ArgumentList?.Arguments.Count > 0)
                         {
-                            if (attr.ArgumentList?.Arguments.Count > 0)
+                            var argExpr = attr.ArgumentList.Arguments.First().Expression;
+                            if (argExpr is LiteralExpressionSyntax literal &&
+                                literal.IsKind(SyntaxKind.StringLiteralExpression))
                             {
-                                var argExpr = attr.ArgumentList.Arguments.First().Expression;
-                                if (argExpr is LiteralExpressionSyntax literal &&
-                                    literal.IsKind(Microsoft.CodeAnalysis.CSharp.SyntaxKind.StringLiteralExpression))
-                                {
-                                    memberDoc.JsonValue = literal.Token.ValueText;
-                                }
+                                memberDoc.JsonValue = literal.Token.ValueText;
                             }
                         }
                     }
@@ -250,6 +247,7 @@ namespace ProjectDocumentationGenerator.Helpers
                     Name = methodSymbol.Name,
                     Signature = signature,
                     SimpleSignature = simpleSignature,
+                    BasicSignature = basicSignature,
                     Documentation = memberDetails
                 });
             }
@@ -281,7 +279,7 @@ namespace ProjectDocumentationGenerator.Helpers
             {
                 var fullBaseName = recordDeclaration.BaseList.Types.First().Type.ToString();
                 var simpleBaseName = fullBaseName.Split('.').Last().Trim();
-                recordDetails.BaseRecordName = simpleBaseName;
+                recordDetails.BaseTypeName = simpleBaseName;
             }
 
             // Process each public property declared in this record.

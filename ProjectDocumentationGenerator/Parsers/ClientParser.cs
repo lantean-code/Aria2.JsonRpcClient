@@ -61,17 +61,37 @@ namespace ProjectDocumentationGenerator.Parsers
             var clientDocumentation = new ClientDocumentation
             {
                 InterfaceName = interfaceDeclaration.Identifier.Text,
-                Documentation = new MemberDetails
-                {
-                    SummaryFragments = docComment.SummaryFragments,
-                    SeeAlso = docComment.SeeAlso,
-                },
+                SummaryFragments = docComment.SummaryFragments,
+                SeeAlso = docComment.SeeAlso,
             };
 
             var methodDeclarations = interfaceDeclaration.Members.OfType<MethodDeclarationSyntax>();
             var methods = DocmentationHelper.GetMethods(methodDeclarations, semanticModel);
 
             clientDocumentation.Methods = methods;
+
+            var eventDeclarations = interfaceDeclaration.Members.OfType<EventFieldDeclarationSyntax>();
+            foreach (var eventDeclaration in eventDeclarations)
+            {
+                foreach (var variable in eventDeclaration.Declaration.Variables)
+                {
+                    if (semanticModel.GetDeclaredSymbol(variable) is not IEventSymbol eventSymbol || eventSymbol.DeclaredAccessibility != Accessibility.Public)
+                    {
+                        continue;
+                    }
+
+                    var eventDocComment = XmlDocumentationHelper.GetDocumentationComment(eventDeclaration.GetLeadingTrivia(), semanticModel);
+                    var eventDocumentation = new EventDocumentation
+                    {
+                        Name = eventSymbol.Name,
+                        SummaryFragments = eventDocComment.SummaryFragments,
+                        SeeAlso = eventDocComment.SeeAlso,
+                        Type = eventSymbol.Type.ToDisplayString(),
+                    };
+
+                    clientDocumentation.Events.Add(eventDocumentation);
+                }
+            }
 
             return clientDocumentation;
         }

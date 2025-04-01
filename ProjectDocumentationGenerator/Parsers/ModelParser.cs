@@ -11,7 +11,7 @@ namespace ProjectDocumentationGenerator.Parsers
         /// <summary>
         /// Parses all public model types (records and enums) from the project.
         /// Only models in the "Aria2.JsonRpcClient.Models" namespace are processed.
-        /// For each record, its XML documentation is parsed from the leading trivia via XmlDocumentationHelper and 
+        /// For each record, its XML documentation is parsed from the leading trivia via XmlDocumentationHelper and
         /// a new RecordDetails object is created inline. For each property declared in the record, a corresponding
         /// PropertyDocumentation is created. Public enum declarations are processed similarly.
         /// </summary>

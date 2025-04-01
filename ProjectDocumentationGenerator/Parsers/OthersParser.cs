@@ -86,9 +86,18 @@ namespace ProjectDocumentationGenerator.Parsers
                                 othersDoc.Enums.Add(enumDocumentation);
                             }
                         }
-                        
+
                         break;
                     case ObjectType.Exception:
+                        var exceptionDeclatations = root.DescendantNodes().OfType<ClassDeclarationSyntax>();
+                        foreach (var exceptionDeclaration in exceptionDeclatations)
+                        {
+                            var exceptionDocumentation = DocmentationHelper.GetClassDocumentation(exceptionDeclaration, semanticModel);
+                            if (exceptionDocumentation is not null)
+                            {
+                                othersDoc.Classes.Add(exceptionDocumentation);
+                            }
+                        }
                         break;
                     default:
                         break;
