@@ -1,7 +1,7 @@
 namespace Aria2.JsonRpcClient
 {
     /// <summary>
-    /// Represents an exception thrown by the Aria2 client.
+    /// Represents an exception thrown by the aria2 client.
     /// </summary>
     public class Aria2Exception : Exception
     {
