@@ -13,6 +13,9 @@ on:
 
 jobs:
   build:
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -35,6 +38,7 @@ jobs:
         run: |
           VERSION=$(dotnet gitversion /output json /showvariable FullSemVer)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo $VERSION
         shell: bash
 
       - name: Restore dependencies
