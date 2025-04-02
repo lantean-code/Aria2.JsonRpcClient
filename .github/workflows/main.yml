@@ -53,12 +53,12 @@ jobs:
       - name: Pack NuGet Package
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/release/')
         run: |
-          dotnet pack --configuration Release --no-build --output ./artifacts /p:PackageVersion=${{ env.VERSION }}
+          dotnet pack --configuration Release --no-build --output ./Artifacts /p:PackageVersion=${{ env.VERSION }}
 
       - name: Push NuGet Package
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/release/')
         run: |
-          dotnet nuget push ./artifacts/Aria2.JsonRpcClient.${{ env.VERSION }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+          dotnet nuget push ./Artifacts/Aria2.JsonRpcClient.${{ env.VERSION }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Check if Release Exists
         if: github.ref == 'refs/heads/master'
@@ -88,7 +88,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/Aria2.JsonRpcClient.${{ env.VERSION }}.nupkg
+          asset_path: ./Artifacts/Aria2.JsonRpcClient.${{ env.VERSION }}.nupkg
           asset_name: Aria2.JsonRpcClient.${{ env.VERSION }}.nupkg
           asset_content_type: application/zip
         env:
@@ -99,7 +99,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/Aria2.JsonRpcClient.xml
+          asset_path: ./Artifacts/Aria2.JsonRpcClient.xml
           asset_name: Aria2.JsonRpcClient.xml
           asset_content_type: application/xml
         env:
