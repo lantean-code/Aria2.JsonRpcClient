@@ -5,8 +5,8 @@ namespace Aria2.JsonRpcClient.Requests
     /// </summary>
     public sealed record Remove : JsonRpcRequest<string>
     {
-        /// <inheritdoc cref="IAria2Client.Remove(string)"/>
-        public Remove(string gid) : base("aria2.remove", gid)
+        /// <inheritdoc cref="IAria2Client.Remove"/>
+        public Remove(string gid, string? id = null) : base("aria2.remove", gid, id)
         {
         }
     }

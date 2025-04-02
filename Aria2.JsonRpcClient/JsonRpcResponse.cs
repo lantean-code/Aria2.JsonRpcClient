@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -15,8 +14,10 @@ namespace Aria2.JsonRpcClient
         [JsonPropertyName("id")]
         public required string Id { get; init; }
 
+#if DEBUG
         [JsonExtensionData]
-        public IDictionary<string, JsonElement> ExtensionData { get; init; } = new Dictionary<string, JsonElement>();
+        public IDictionary<string, JsonElement> ExtensionData { get; set; } = new Dictionary<string, JsonElement>();
+#endif
     }
 
     internal record JsonRpcResponse<T> : JsonRpcResponse

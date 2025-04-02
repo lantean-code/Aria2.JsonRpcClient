@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Aria2.JsonRpcClient.Models
 {
     /// <summary>
@@ -16,23 +18,62 @@ namespace Aria2.JsonRpcClient.Models
         public SizeType SizeType { get; set; }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Size"/> struct.
+        /// </summary>
+        public Size()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Size"/> struct.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="sizeType"></param>
+        public Size(double value, SizeType sizeType)
+        {
+            Value = value;
+            SizeType = sizeType;
+        }
+
+        /// <summary>
         /// Converts the size value to a string.
         /// </summary>
         /// <returns></returns>
         public override readonly string ToString()
         {
-            return $"{Value}{GetSize(SizeType)}";
+            return $"{Value.ToString("0.##", CultureInfo.InvariantCulture)}{GetSize(SizeType)}";
         }
 
         private static string GetSize(SizeType sizeType)
         {
             return sizeType switch
             {
+                SizeType.Bytes => "",
                 SizeType.Megabytes => "M",
                 SizeType.Kilobytes => "K",
                 _ => throw new ArgumentOutOfRangeException(nameof(sizeType), sizeType, null),
             };
         }
+
+        private static readonly Dictionary<char, SizeType> _sizeTypeMapping = new()
+        {
+            { 'B', SizeType.Bytes },
+            { 'b', SizeType.Bytes },
+            { 'K', SizeType.Kilobytes },
+            { 'k', SizeType.Kilobytes },
+            { 'M', SizeType.Megabytes },
+            { 'm', SizeType.Megabytes },
+        };
+
+        private static readonly HashSet<char> _validUnitChars = new()
+        {
+            { 'B' },
+            { 'b' },
+            { 'K' },
+            { 'k' },
+            { 'M' },
+            { 'm' },
+        };
 
         /// <summary>
         /// Tries to parse a size value from a string.
@@ -45,22 +86,25 @@ namespace Aria2.JsonRpcClient.Models
         {
             s = s.Trim();
 
-            var unit = s[^1];
-
-            if (unit != 'M' && unit != 'K' && unit != 'm' && unit != 'k')
+            if (string.IsNullOrEmpty(s))
             {
                 result = default;
                 return false;
             }
 
-            var sizeType = unit switch
+            var unit = s[^1];
+
+            if (char.IsDigit(unit))
             {
-                'M' => SizeType.Megabytes,
-                'm' => SizeType.Megabytes,
-                'K' => SizeType.Kilobytes,
-                'k' => SizeType.Kilobytes,
-                _ => throw new ArgumentOutOfRangeException(nameof(s), unit, null),
-            };
+                unit = 'B';
+                s += unit;
+            }
+
+            if (!_validUnitChars.Contains(unit))
+            {
+                result = default;
+                return false;
+            }
 
             if (!double.TryParse(s[..^1], out var sizeValue))
             {
@@ -71,7 +115,7 @@ namespace Aria2.JsonRpcClient.Models
             result = new Size
             {
                 Value = sizeValue,
-                SizeType = sizeType,
+                SizeType = _sizeTypeMapping[unit],
             };
 
             return true;

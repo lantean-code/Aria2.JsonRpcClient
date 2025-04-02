@@ -16,11 +16,12 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/lantean-code/Aria2.JsonRpcClient</RepositoryUrl>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>..\Artifacts\Aria2.JsonRpcClient.xml</DocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageTags>aria aria2 download manager jsonrpc json rpc client websocket</PackageTags>
     <Copyright>Copyright 2025 ahjephson</Copyright>
-    <ProjectUrl>https://github.com/lantean-code/Aria2.JsonRpcClient/wiki</ProjectUrl>  
+    <ProjectUrl>https://github.com/lantean-code/Aria2.JsonRpcClient/wiki</ProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -49,6 +50,16 @@
   <ItemGroup>
     <None Include="..\README.md" Pack="true" PackagePath="\" />
     <None Include="..\LICENSE.txt" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Aria2.JsonRpcClient.Test</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
+    </AssemblyAttribute>    
+    
   </ItemGroup>
 
 </Project>

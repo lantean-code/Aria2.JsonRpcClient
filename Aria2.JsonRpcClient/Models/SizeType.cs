@@ -14,5 +14,10 @@ namespace Aria2.JsonRpcClient.Models
         /// Uses the suffix K when defining size strings.
         /// </summary>
         Kilobytes,
+
+        /// <summary>
+        /// Uses the suffix B (or no suffix) when defining size strings.
+        /// </summary>
+        Bytes,
     }
 }

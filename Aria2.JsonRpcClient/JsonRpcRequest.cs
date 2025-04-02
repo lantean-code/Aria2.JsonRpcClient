@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace Aria2.JsonRpcClient
@@ -72,5 +73,44 @@ namespace Aria2.JsonRpcClient
         /// </summary>
         [JsonIgnore]
         public override Type ReturnType { get; } = typeof(T);
+
+        /// <summary>
+        /// A helper method to cast the response of a <see cref="Requests.MultiCall"/> to the correct type.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static T GetResult(object? value)
+        {
+            if (value is null)
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            if (value is JsonRpcError error)
+            {
+                throw new Aria2Exception(error.Code, error.Message);
+            }
+
+            return (T)value;
+        }
+
+        /// <summary>
+        /// Helper method to determine if the response of a <see cref="Requests.MultiCall"/> is an error.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="jsonRpcError"></param>
+        /// <returns></returns>
+        public static bool IsError(object? value, [NotNullWhen(true)] out JsonRpcError? jsonRpcError)
+        {
+            if (value is JsonRpcError error)
+            {
+                jsonRpcError = error;
+                return true;
+            }
+
+            jsonRpcError = null;
+            return false;
+        }
     }
 }

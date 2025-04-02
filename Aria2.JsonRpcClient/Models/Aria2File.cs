@@ -26,7 +26,7 @@ namespace Aria2.JsonRpcClient.Models
         public long Length { get; init; }
 
         /// <summary>
-        /// Completed length of this file in bytes. Please note that it is possible that sum of <see cref="CompletedLength"/> is less than the <seealso cref="CompletedLength"/> returned by the <see cref="IAria2Client.GetFiles"/> method. This is because completedLength in <see cref="IAria2Client.GetFiles"/> only includes completed pieces. On the other hand, completedLength in <see cref="IAria2Client.TellStatus"/> also includes partially completed pieces.
+        /// Completed length of this file in bytes. Please note that it is possible that sum of <see cref="CompletedLength"/> is less than the <seealso cref="CompletedLength"/> returned by the <see cref="IAria2Client.GetFiles"/> method. This is because completedLength in <see cref="IAria2Client.GetFiles"/> only includes completed pieces. On the other hand, completedLength in <see cref="IAria2Client.TellStatus(string, string[], string?)"/> also includes partially completed pieces.
         /// </summary>
         [JsonPropertyName("completedLength")]
         public long CompletedLength { get; init; }

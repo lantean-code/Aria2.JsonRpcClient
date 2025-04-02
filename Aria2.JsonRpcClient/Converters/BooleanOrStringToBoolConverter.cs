@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Aria2.JsonRpcClient.Converters
@@ -23,7 +23,7 @@ namespace Aria2.JsonRpcClient.Converters
 
         public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options)
         {
-            writer.WriteBooleanValue(value);
+            writer.WriteStringValue(value ? "true" : "false");
         }
     }
 }

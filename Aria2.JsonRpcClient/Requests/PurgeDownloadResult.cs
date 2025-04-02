@@ -6,7 +6,7 @@ namespace Aria2.JsonRpcClient.Requests
     public sealed record PurgeDownloadResult : JsonRpcRequest
     {
         /// <inheritdoc cref="IAria2Client.PurgeDownloadResult"/>/>
-        public PurgeDownloadResult() : base("aria2.purgeDownloadResult", JsonRpcParameters.Empty)
+        public PurgeDownloadResult(string? id = null) : base("aria2.purgeDownloadResult", JsonRpcParameters.Empty, id)
         {
         }
     }

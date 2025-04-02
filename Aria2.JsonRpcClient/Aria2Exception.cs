@@ -1,4 +1,3 @@
-
 namespace Aria2.JsonRpcClient
 {
     /// <summary>
@@ -12,17 +11,6 @@ namespace Aria2.JsonRpcClient
         /// <param name="code"></param>
         /// <param name="message"></param>
         public Aria2Exception(int code, string? message) : base(message)
-        {
-            Code = code;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Aria2Exception"/> class.
-        /// </summary>
-        /// <param name="code"></param>
-        /// <param name="message"></param>
-        /// <param name="innerException"></param>
-        public Aria2Exception(int code, string? message, Exception? innerException) : base(message, innerException)
         {
             Code = code;
         }

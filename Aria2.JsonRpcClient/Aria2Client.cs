@@ -1,6 +1,8 @@
+using System.Linq.Expressions;
+using System.Text.Json;
 using Aria2.JsonRpcClient.Models;
 using Aria2.JsonRpcClient.Requests;
-using System.Text.Json;
+using Aria2.JsonRpcClient.Services;
 
 namespace Aria2.JsonRpcClient
 {
@@ -17,7 +19,6 @@ namespace Aria2.JsonRpcClient
         public Aria2Client(IRequestHandler requestHandler, INotificationHandler notificationHandler)
         {
             _requestHandler = requestHandler;
-
             notificationHandler.OnDownloadStarted += gid => DownloadStarted?.Invoke(gid);
             notificationHandler.OnDownloadPaused += gid => DownloadPaused?.Invoke(gid);
             notificationHandler.OnDownloadStopped += gid => DownloadStopped?.Invoke(gid);
@@ -29,24 +30,24 @@ namespace Aria2.JsonRpcClient
         #region Download Adding Methods
 
         /// <inheritdoc/>
-        public Task<string> AddUri(string[] uris, Aria2DownloadOptions? options = null, int? position = null)
+        public Task<string> AddUri(string[] uris, Aria2DownloadOptions? options = null, int? position = null, string? id = null)
         {
-            var request = new AddUri(uris, options, position);
-            return ExecuteRequest<string>(request);
+            var request = new AddUri(uris, options, position, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<string> AddTorrent(string torrent, Aria2DownloadOptions? options = null, int? position = null)
+        public Task<string> AddTorrent(string torrent, Aria2DownloadOptions? options = null, int? position = null, string? id = null)
         {
-            var request = new AddTorrent(torrent, options, position);
-            return ExecuteRequest<string>(request);
+            var request = new AddTorrent(torrent, options, position, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<string> AddMetalink(string metalink, Aria2DownloadOptions? options = null, int? position = null)
+        public Task<string> AddMetalink(string metalink, Aria2DownloadOptions? options = null, int? position = null, string? id = null)
         {
-            var request = new AddMetalink(metalink, options, position);
-            return ExecuteRequest<string>(request);
+            var request = new AddMetalink(metalink, options, position, id);
+            return ExecuteRequest(request);
         }
 
         #endregion Download Adding Methods
@@ -54,58 +55,58 @@ namespace Aria2.JsonRpcClient
         #region Download Removal & Pause Methods
 
         /// <inheritdoc/>
-        public Task<string> Remove(string gid)
+        public Task<string> Remove(string gid, string? id = null)
         {
-            var request = new Remove(gid);
-            return ExecuteRequest<string>(request);
-        }
-
-        /// <inheritdoc/>
-        public Task<string> ForceRemove(string gid)
-        {
-            var request = new ForceRemove(gid);
-            return ExecuteRequest<string>(request);
-        }
-
-        /// <inheritdoc/>
-        public Task<string> Pause(string gid)
-        {
-            var request = new Pause(gid);
-            return ExecuteRequest<string>(request);
-        }
-
-        /// <inheritdoc/>
-        public Task PauseAll()
-        {
-            var request = new PauseAll();
+            var request = new Remove(gid, id);
             return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<string> ForcePause(string gid)
+        public Task<string> ForceRemove(string gid, string? id = null)
         {
-            var request = new ForcePause(gid);
-            return ExecuteRequest<string>(request);
-        }
-
-        /// <inheritdoc/>
-        public Task ForcePauseAll()
-        {
-            var request = new ForcePauseAll();
+            var request = new ForceRemove(gid, id);
             return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<string> Unpause(string gid)
+        public Task<string> Pause(string gid, string? id = null)
         {
-            var request = new Unpause(gid);
-            return ExecuteRequest<string>(request);
+            var request = new Pause(gid, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task UnpauseAll()
+        public Task PauseAll(string? id = null)
         {
-            var request = new UnpauseAll();
+            var request = new PauseAll(id);
+            return ExecuteRequest(request);
+        }
+
+        /// <inheritdoc/>
+        public Task<string> ForcePause(string gid, string? id = null)
+        {
+            var request = new ForcePause(gid, id);
+            return ExecuteRequest(request);
+        }
+
+        /// <inheritdoc/>
+        public Task ForcePauseAll(string? id = null)
+        {
+            var request = new ForcePauseAll(id);
+            return ExecuteRequest(request);
+        }
+
+        /// <inheritdoc/>
+        public Task<string> Unpause(string gid, string? id = null)
+        {
+            var request = new Unpause(gid, id);
+            return ExecuteRequest(request);
+        }
+
+        /// <inheritdoc/>
+        public Task UnpauseAll(string? id = null)
+        {
+            var request = new UnpauseAll(id);
             return ExecuteRequest(request);
         }
 
@@ -114,59 +115,85 @@ namespace Aria2.JsonRpcClient
         #region Download Status & Information Methods
 
         /// <inheritdoc/>
-        public Task<Aria2Status> TellStatus(string gid, string[]? keys = null)
+        public Task<Aria2Status> TellStatus(string gid, string[]? keys = null, string? id = null)
         {
-            var request = new TellStatus(gid, keys);
-            return ExecuteRequest<Aria2Status>(request);
+            var request = new TellStatus(gid, keys, id);
+            return ExecuteRequest(request);
+        }
+
+        public Task<Aria2Status> TellStatus(string gid, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null)
+        {
+            var request = new TellStatus(gid, keysSelector, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyList<Aria2Uri>> GetUris(string gid)
+        public Task<IReadOnlyList<Aria2Uri>> GetUris(string gid, string? id = null)
         {
-            var request = new GetUris(gid);
-            return ExecuteRequest<IReadOnlyList<Aria2Uri>>(request);
+            var request = new GetUris(gid, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyList<Aria2File>> GetFiles(string gid)
+        public Task<IReadOnlyList<Aria2File>> GetFiles(string gid, string? id = null)
         {
-            var request = new GetFiles(gid);
-            return ExecuteRequest<IReadOnlyList<Aria2File>>(request);
+            var request = new GetFiles(gid, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyList<Aria2Peer>> GetPeers(string gid)
+        public Task<IReadOnlyList<Aria2Peer>> GetPeers(string gid, string? id = null)
         {
-            var request = new GetPeers(gid);
-            return ExecuteRequest<IReadOnlyList<Aria2Peer>>(request);
+            var request = new GetPeers(gid, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyList<Aria2Server>> GetServers(string gid)
+        public Task<IReadOnlyList<Aria2Server>> GetServers(string gid, string? id = null)
         {
-            var request = new GetServers(gid);
-            return ExecuteRequest<IReadOnlyList<Aria2Server>>(request);
+            var request = new GetServers(gid, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyList<Aria2Status>> TellActive(string[]? keys = null)
+        public Task<IReadOnlyList<Aria2Status>> TellActive(string[]? keys = null, string? id = null)
         {
-            var request = new TellActive(keys);
-            return ExecuteRequest<IReadOnlyList<Aria2Status>>(request);
+            var request = new TellActive(keys, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyList<Aria2Status>> TellWaiting(int offset, int num, string[]? keys = null)
+        public Task<IReadOnlyList<Aria2Status>> TellActive(Expression<Func<Aria2Status, object?>> keysSelector, string? id = null)
         {
-            var request = new TellWaiting(offset, num, keys);
-            return ExecuteRequest<IReadOnlyList<Aria2Status>>(request);
+            var request = new TellActive(keysSelector, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyList<Aria2Status>> TellStopped(int offset, int num, string[]? keys = null)
+        public Task<IReadOnlyList<Aria2Status>> TellWaiting(int offset, int num, string[]? keys = null, string? id = null)
         {
-            var request = new TellStopped(offset, num, keys);
-            return ExecuteRequest<IReadOnlyList<Aria2Status>>(request);
+            var request = new TellWaiting(offset, num, keys, id);
+            return ExecuteRequest(request);
+        }
+
+        public Task<IReadOnlyList<Aria2Status>> TellWaiting(int offset, int num, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null)
+        {
+            var request = new TellWaiting(offset, num, keysSelector, id);
+            return ExecuteRequest(request);
+        }
+
+        /// <inheritdoc/>
+        public Task<IReadOnlyList<Aria2Status>> TellStopped(int offset, int num, string[]? keys = null, string? id = null)
+        {
+            var request = new TellStopped(offset, num, keys, id);
+            return ExecuteRequest(request);
+        }
+
+        /// <inheritdoc/>
+        public Task<IReadOnlyList<Aria2Status>> TellStopped(int offset, int num, Expression<Func<Aria2Status, object?>> keysSelector, string? id = null)
+        {
+            var request = new TellStopped(offset, num, keysSelector, id);
+            return ExecuteRequest(request);
         }
 
         #endregion Download Status & Information Methods
@@ -174,17 +201,17 @@ namespace Aria2.JsonRpcClient
         #region Download Modification Methods
 
         /// <inheritdoc/>
-        public Task<int> ChangePosition(string gid, int pos, string how)
+        public Task<int> ChangePosition(string gid, int pos, string how, string? id = null)
         {
-            var request = new ChangePosition(gid, pos, how);
-            return ExecuteRequest<int>(request);
+            var request = new ChangePosition(gid, pos, how, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyList<int>> ChangeUri(string gid, int fileIndex, IEnumerable<string> delUris, IEnumerable<string> addUris, int? position = null)
+        public Task<IReadOnlyList<int>> ChangeUri(string gid, int fileIndex, IEnumerable<string> delUris, IEnumerable<string> addUris, int? position = null, string? id = null)
         {
-            var request = new ChangeUri(gid, fileIndex, delUris, addUris, position);
-            return ExecuteRequest<IReadOnlyList<int>>(request);
+            var request = new ChangeUri(gid, fileIndex, delUris, addUris, position, id);
+            return ExecuteRequest(request);
         }
 
         #endregion Download Modification Methods
@@ -192,30 +219,30 @@ namespace Aria2.JsonRpcClient
         #region Option Methods
 
         /// <inheritdoc/>
-        public Task<Aria2Option> GetOption(string gid)
+        public Task<Aria2Options> GetOption(string gid, string? id = null)
         {
-            var request = new GetOption(gid);
-            return ExecuteRequest<Aria2Option>(request);
-        }
-
-        /// <inheritdoc/>
-        public Task ChangeOption(string gid, Aria2DownloadOptions options)
-        {
-            var request = new ChangeOption(gid, options);
+            var request = new GetOption(gid, id);
             return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyDictionary<string, string?>> GetGlobalOption()
+        public Task ChangeOption(string gid, Aria2Options options, string? id = null)
         {
-            var request = new GetGlobalOption();
-            return ExecuteRequest<IReadOnlyDictionary<string, string?>>(request);
+            var request = new ChangeOption(gid, options, id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task ChangeGlobalOption(Aria2DownloadOptions options)
+        public Task<Aria2GlobalOptions> GetGlobalOption(string? id = null)
         {
-            var request = new ChangeGlobalOption(options);
+            var request = new GetGlobalOption(id);
+            return ExecuteRequest(request);
+        }
+
+        /// <inheritdoc/>
+        public Task ChangeGlobalOption(Aria2GlobalOptions options, string? id = null)
+        {
+            var request = new ChangeGlobalOption(options, id);
             return ExecuteRequest(request);
         }
 
@@ -224,58 +251,58 @@ namespace Aria2.JsonRpcClient
         #region Global Status & Miscellaneous Methods
 
         /// <inheritdoc/>
-        public Task<Aria2GlobalStat> GetGlobalStat()
+        public Task<Aria2GlobalStat> GetGlobalStat(string? id = null)
         {
-            var request = new GetGlobalStat();
-            return ExecuteRequest<Aria2GlobalStat>(request);
-        }
-
-        /// <inheritdoc/>
-        public Task<Aria2Version> GetVersion()
-        {
-            var request = new GetVersion();
-            return ExecuteRequest<Aria2Version>(request);
-        }
-
-        /// <inheritdoc/>
-        public Task<Aria2SessionInfo> GetSessionInfo()
-        {
-            var request = new GetSessionInfo();
-            return ExecuteRequest<Aria2SessionInfo>(request);
-        }
-
-        /// <inheritdoc/>
-        public Task Shutdown()
-        {
-            var request = new Shutdown();
+            var request = new GetGlobalStat(id);
             return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task ForceShutdown()
+        public Task<Aria2Version> GetVersion(string? id = null)
         {
-            var request = new ForceShutdown();
+            var request = new GetVersion(id);
             return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task SaveSession()
+        public Task<Aria2SessionInfo> GetSessionInfo(string? id = null)
         {
-            var request = new SaveSession();
+            var request = new GetSessionInfo(id);
             return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task PurgeDownloadResult()
+        public Task Shutdown(string? id = null)
         {
-            var request = new PurgeDownloadResult();
+            var request = new Shutdown(id);
             return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task RemoveDownloadResult(string gid)
+        public Task ForceShutdown(string? id = null)
         {
-            var request = new RemoveDownloadResult(gid);
+            var request = new ForceShutdown(id);
+            return ExecuteRequest(request);
+        }
+
+        /// <inheritdoc/>
+        public Task SaveSession(string? id = null)
+        {
+            var request = new SaveSession(id);
+            return ExecuteRequest(request);
+        }
+
+        /// <inheritdoc/>
+        public Task PurgeDownloadResult(string? id = null)
+        {
+            var request = new PurgeDownloadResult(id);
+            return ExecuteRequest(request);
+        }
+
+        /// <inheritdoc/>
+        public Task RemoveDownloadResult(string gid, string? id = null)
+        {
+            var request = new RemoveDownloadResult(gid, id);
             return ExecuteRequest(request);
         }
 
@@ -284,10 +311,17 @@ namespace Aria2.JsonRpcClient
         #region System Methods
 
         /// <inheritdoc/>
-        public async Task<IReadOnlyList<object?>> SystemMulticall(params JsonRpcRequest[] methods)
+        public Task<IReadOnlyList<object?>> SystemMulticall(params JsonRpcRequest[] methods)
         {
-            var request = new MultiCall(methods);
-            var results = await ExecuteRequest<IReadOnlyList<JsonElement[]>>(request);
+            return SystemMulticall(methods, null);
+        }
+
+        /// <inheritdoc/>
+        public async Task<IReadOnlyList<object?>> SystemMulticall(JsonRpcRequest[] methods, string? id = null)
+        {
+            var multiCallRequest = new MultiCall(methods);
+            var multiCallResponse = await _requestHandler.SendRequest<IReadOnlyList<JsonElement>>(multiCallRequest);
+            var results = multiCallResponse.Result!;
 
             var responses = new List<object?>();
             for (var i = 0; i < methods.Length; i++)
@@ -295,13 +329,23 @@ namespace Aria2.JsonRpcClient
                 var method = methods[i];
                 var response = results[i];
                 object? value;
-                if (response.Length == 0 || method.ReturnType == typeof(void))
+                var element = response;
+                // a successful multicall response is an array with the response at 0
+                if (element.ValueKind == JsonValueKind.Array)
                 {
-                    value = null;
+                    if (method.ReturnType == typeof(void))
+                    {
+                        value = null;
+                    }
+                    else
+                    {
+                        value = Serializer.Deserialize(element.EnumerateArray().FirstOrDefault(), method.ReturnType);
+                    }
                 }
+                // otherwise it is an error object
                 else
                 {
-                    value = response[0].Deserialize(method.ReturnType);
+                    value = Serializer.Deserialize<JsonRpcError>(element);
                 }
                 responses.Add(value);
             }
@@ -310,28 +354,28 @@ namespace Aria2.JsonRpcClient
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyList<string>> SystemListMethods()
+        public Task<IReadOnlyList<string>> SystemListMethods(string? id = null)
         {
-            var request = new ListMethods();
-            return ExecuteRequest<IReadOnlyList<string>>(request);
+            var request = new ListMethods(id);
+            return ExecuteRequest(request);
         }
 
         /// <inheritdoc/>
-        public Task<IReadOnlyList<string>> SystemListNotifications()
+        public Task<IReadOnlyList<string>> SystemListNotifications(string? id = null)
         {
-            var request = new ListNotifications();
-            return ExecuteRequest<IReadOnlyList<string>>(request);
+            var request = new ListNotifications(id);
+            return ExecuteRequest(request);
         }
 
         #endregion System Methods
 
         #region Execute Request Methods
 
-        public async Task<T> ExecuteRequest<T>(JsonRpcRequest request)
+        public async Task<T> ExecuteRequest<T>(JsonRpcRequest<T> request)
         {
             if (typeof(T) != request.ReturnType)
             {
-                throw new ArgumentException("The return type of the request does not match the specified type.", nameof(T));
+                throw new ArgumentException("The return type of the request does not match the specified type.", nameof(request));
             }
             var response = await _requestHandler.SendRequest<T>(request);
             return EnsureSuccessResponse(response);
@@ -390,7 +434,7 @@ namespace Aria2.JsonRpcClient
 
             if (response.Result is null)
             {
-                throw new Exception("Invalid JSON-RPC response.");
+                throw new InvalidOperationException("Invalid JSON-RPC response.");
             }
 
             return response.Result;
