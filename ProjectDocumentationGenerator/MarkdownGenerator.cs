@@ -243,22 +243,22 @@ namespace ProjectDocumentationGenerator
         /// Generates Markdown files for each request record and an index page listing them.
         /// Each request page includes a "<- Requests Index" link immediately before the Overview header.
         /// </summary>
-        public void GenerateRequestsMarkdown(IEnumerable<RequestDetails> requests)
+        public void GenerateRequestsMarkdown(RequestDocumentation requestsDocumentation)
         {
             var indexEntries = new List<(string RequestLink, string Summary)>();
 
-            foreach (var request in requests)
+            foreach (var request in requestsDocumentation.Records)
             {
                 var sb = new StringBuilder();
                 sb.AppendLine($"# {request.Name}");
                 sb.AppendLine();
                 sb.AppendLine("## Overview");
                 sb.AppendLine();
-                sb.AppendLine(RenderFragments(request.Documentation.SummaryFragments, null, "request_"));
-                if (!string.IsNullOrWhiteSpace(request.Documentation.SeeAlso))
+                sb.AppendLine(RenderFragments(request.SummaryFragments, null, "request_"));
+                if (!string.IsNullOrWhiteSpace(request.SeeAlso))
                 {
                     sb.AppendLine();
-                    sb.AppendLine($"> [{request.Documentation.SeeAlso}]({request.Documentation.SeeAlso})");
+                    sb.AppendLine($"> [{request.SeeAlso}]({request.SeeAlso})");
                 }
                 sb.AppendLine();
                 sb.AppendLine("---");
@@ -271,7 +271,7 @@ namespace ProjectDocumentationGenerator
                 var fullPage = _templateEngine.ApplyTemplate(pageContent);
                 File.WriteAllText(Path.Combine(OutputDirectory, fileName), fullPage);
 
-                var shortSummary = request.Documentation.SummaryFragments.OfType<TextFragment>().FirstOrDefault()?.Text ?? "";
+                var shortSummary = request.SummaryFragments.OfType<TextFragment>().FirstOrDefault()?.Text ?? "";
                 indexEntries.Add(($"[{request.Name}]({fileName})", shortSummary));
             }
 
@@ -341,7 +341,7 @@ namespace ProjectDocumentationGenerator
                 if (constructor.Documentation.Parameters.Count != 0)
                 {
                     sb.AppendLine();
-                    sb.AppendLine("**Parameters:**");
+                    sb.AppendLine("#### Parameters");
                     foreach (var param in constructor.Documentation.Parameters)
                     {
                         RenderBookmark(LinkifySignature(constructor.Signature) + param.Name, sb);
@@ -353,14 +353,14 @@ namespace ProjectDocumentationGenerator
                 if (constructor.Documentation.ReturnsFragments.Count != 0)
                 {
                     sb.AppendLine();
-                    sb.AppendLine("**Returns:**");
+                    sb.AppendLine("#### Returns");
                     sb.AppendLine();
                     sb.AppendLine(RenderFragments(constructor.Documentation.ReturnsFragments, null, "model_"));
                 }
                 if (constructor.Documentation.Exception is not null)
                 {
                     sb.AppendLine();
-                    sb.AppendLine("**Throws:**");
+                    sb.AppendLine("#### Throws");
                     sb.AppendLine();
                     sb.AppendLine(RenderParameterType(constructor.Documentation.Exception.Type));
                     sb.AppendLine(RenderFragments(constructor.Documentation.Exception.Description));
@@ -479,7 +479,7 @@ namespace ProjectDocumentationGenerator
                     sb.AppendLine();
                 }
                 sb.AppendLine();
-                sb.AppendLine("**Callback:**");
+                sb.AppendLine("#### Callback");
                 var renderedType = RenderParameterType(@event.Type);
                 sb.AppendLine(renderedType);
                 sb.AppendLine();
@@ -519,7 +519,7 @@ namespace ProjectDocumentationGenerator
             if (method.Documentation.Parameters.Count != 0)
             {
                 sb.AppendLine();
-                sb.AppendLine("**Parameters:**");
+                sb.AppendLine("#### Parameters");
                 foreach (var param in method.Documentation.Parameters)
                 {
                     RenderBookmark(LinkifySignature(method.Signature + param.Name), sb);
@@ -531,14 +531,14 @@ namespace ProjectDocumentationGenerator
             if (method.Documentation.ReturnsFragments.Count != 0)
             {
                 sb.AppendLine();
-                sb.AppendLine("**Returns:**");
+                sb.AppendLine("#### Returns");
                 sb.AppendLine();
                 sb.AppendLine(RenderFragments(method.Documentation.ReturnsFragments, null, "model_"));
             }
             if (method.Documentation.Exception is not null)
             {
                 sb.AppendLine();
-                sb.AppendLine("**Throws:**");
+                sb.AppendLine("#### Throws");
                 sb.AppendLine();
                 sb.AppendLine(RenderParameterType(method.Documentation.Exception.Type));
                 sb.AppendLine(RenderFragments(method.Documentation.Exception.Description));
@@ -704,24 +704,21 @@ namespace ProjectDocumentationGenerator
             sb.AppendLine("## Conversion Operators");
             foreach (var @operator in operators)
             {
-                sb.AppendLine("**Documentation:**");
-                sb.AppendLine();
                 sb.AppendLine(RenderFragments(@operator.Documentation.SummaryFragments));
                 if (@operator.Documentation.Parameters.Count != 0)
                 {
-                    sb.AppendLine();
-                    sb.AppendLine("**Parameters:**");
                     foreach (var param in @operator.Documentation.Parameters)
                     {
                         var renderedType = RenderParameterType(param.Type);
                         var optionalInfo = param.IsOptional ? $" (optional, default: {param.DefaultValue})" : "";
-                        sb.AppendLine($"- `{param.Name}` ({renderedType}{optionalInfo}): {RenderFragments(param.DocumentationFragments)}");
+                        sb.AppendLine($"- `{param.Name}` ({renderedType}{optionalInfo}){(param.DocumentationFragments.Count == 0 ? "" : ":")} {RenderFragments(param.DocumentationFragments)}");
+                        sb.AppendLine();
                     }
                 }
                 if (@operator.Documentation.ReturnsFragments.Count != 0)
                 {
                     sb.AppendLine();
-                    sb.AppendLine("**Returns:**");
+                    sb.AppendLine("#### Returns");
                     sb.AppendLine();
                     sb.AppendLine(RenderFragments(@operator.Documentation.ReturnsFragments, null, "models/"));
                 }

@@ -20,7 +20,7 @@ namespace Aria2.JsonRpcClient.Services
         /// <param name="httpClient">
         /// An instance of <see cref="HttpClient"/> which should have its BaseAddress property set to the aria2 JSON‑RPC endpoint URL.
         /// </param>
-        /// <param name="options">The Aria2 options.</param>
+        /// <param name="options">The aria2 options.</param>
         public HttpGetRequestHandler(HttpClient httpClient, IOptions<Aria2ClientOptions> options)
         {
             _httpClient = httpClient;

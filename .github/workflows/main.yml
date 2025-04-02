@@ -118,7 +118,7 @@ jobs:
       # Upload the contents of ./Artifacts/docs/ as an artifact for GitHub Pages.
       - name: Upload artifact for GitHub Pages
         if: github.event_name == 'workflow_dispatch' || (github.ref == 'refs/heads/master' && env.RELEASE_EXISTS == 'false')
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./Artifacts/docs/
 

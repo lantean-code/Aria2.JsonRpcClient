@@ -3,7 +3,7 @@ using System.Net.WebSockets;
 namespace Aria2.JsonRpcClient
 {
     /// <summary>
-    /// Represents the options for the Aria2 client.
+    /// Represents the options for the aria2 client.
     /// </summary>
     public record Aria2ClientOptions
     {
@@ -18,12 +18,12 @@ namespace Aria2.JsonRpcClient
         public bool ReceiveNotifications { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets the host of the Aria2 server.
+        /// Gets or sets the host of the aria2 server.
         /// </summary>
         public string Host { get; set; } = "localhost";
 
         /// <summary>
-        /// Gets or sets the port of the Aria2 server.
+        /// Gets or sets the port of the aria2 server.
         /// </summary>
         public int Port { get; set; } = 6800;
 

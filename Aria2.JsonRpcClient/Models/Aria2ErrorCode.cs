@@ -1,7 +1,7 @@
 namespace Aria2.JsonRpcClient.Models
 {
     /// <summary>
-    /// Represents the error codes returned by Aria2.
+    /// Represents the error codes returned by aria2.
     /// </summary>
     public enum Aria2ErrorCode
     {
@@ -26,7 +26,7 @@ namespace Aria2.JsonRpcClient.Models
         ResourceNotFound = 3,
 
         /// <summary>
-        /// If Aria2 saw the specified number of "resource not found" errors.
+        /// If aria2 saw the specified number of "resource not found" errors.
         /// See --max-file-not-found option.
         /// </summary>
         MaxFileNotFoundExceeded = 4,
@@ -45,7 +45,7 @@ namespace Aria2.JsonRpcClient.Models
         /// <summary>
         /// If there were unfinished downloads.
         /// This error is only reported if all finished downloads were successful
-        /// and there were unfinished downloads in a queue when Aria2 exited
+        /// and there were unfinished downloads in a queue when aria2 exited
         /// by pressing Ctrl-C or sending a TERM or INT signal.
         /// </summary>
         UnfinishedDownloads = 7,
@@ -68,12 +68,12 @@ namespace Aria2.JsonRpcClient.Models
         PieceLengthMismatch = 10,
 
         /// <summary>
-        /// If Aria2 was downloading the same file at that moment.
+        /// If aria2 was downloading the same file at that moment.
         /// </summary>
         DownloadingSameFile = 11,
 
         /// <summary>
-        /// If Aria2 was downloading the same info hash torrent at that moment.
+        /// If aria2 was downloading the same info hash torrent at that moment.
         /// </summary>
         DownloadingSameTorrent = 12,
 
@@ -90,12 +90,12 @@ namespace Aria2.JsonRpcClient.Models
         FileRenameFailed = 14,
 
         /// <summary>
-        /// If Aria2 could not open an existing file.
+        /// If aria2 could not open an existing file.
         /// </summary>
         CannotOpenFile = 15,
 
         /// <summary>
-        /// If Aria2 could not create a new file or truncate an existing file.
+        /// If aria2 could not create a new file or truncate an existing file.
         /// </summary>
         CannotCreateOrTruncateFile = 16,
 
@@ -105,7 +105,7 @@ namespace Aria2.JsonRpcClient.Models
         FileIOError = 17,
 
         /// <summary>
-        /// If Aria2 could not create a directory.
+        /// If aria2 could not create a directory.
         /// </summary>
         CannotCreateDirectory = 18,
 
@@ -115,7 +115,7 @@ namespace Aria2.JsonRpcClient.Models
         NameResolutionFailed = 19,
 
         /// <summary>
-        /// If Aria2 could not parse a Metalink document.
+        /// If aria2 could not parse a Metalink document.
         /// </summary>
         MetalinkParseError = 20,
 
@@ -140,13 +140,13 @@ namespace Aria2.JsonRpcClient.Models
         HttpAuthorizationFailed = 24,
 
         /// <summary>
-        /// If Aria2 could not parse a bencoded file (usually a ".torrent" file).
+        /// If aria2 could not parse a bencoded file (usually a ".torrent" file).
         /// </summary>
         BencodeParseError = 25,
 
         /// <summary>
         /// If the ".torrent" file was corrupted or missing information
-        /// that Aria2 needed.
+        /// that aria2 needed.
         /// </summary>
         TorrentFileCorrupted = 26,
 
@@ -168,7 +168,7 @@ namespace Aria2.JsonRpcClient.Models
         RemoteServerOverloaded = 29,
 
         /// <summary>
-        /// If Aria2 could not parse a JSON-RPC request.
+        /// If aria2 could not parse a JSON-RPC request.
         /// </summary>
         JsonRpcParseError = 30,
 

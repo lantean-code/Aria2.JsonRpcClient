@@ -20,12 +20,12 @@ namespace ProjectDocumentationGenerator.Parsers
         /// <param name="compilation">The full Compilation for semantic analysis.</param>
         /// <param name="clientDoc">The already–parsed client interface documentation.</param>
         /// <returns>A collection of RequestDetails objects.</returns>
-        public static async Task<IEnumerable<RequestDetails>> ParseRequestsAsync(
+        public static async Task<RequestDocumentation> ParseRequestsAsync(
             Project project,
             Compilation compilation,
             ClientDocumentation clientDoc)
         {
-            var requestDetailsList = new List<RequestDetails>();
+            var recordDetailsList = new List<RecordDetails>();
 
             var projectDir = !string.IsNullOrEmpty(project.FilePath)
                 ? Path.GetDirectoryName(project.FilePath)
@@ -102,16 +102,16 @@ namespace ProjectDocumentationGenerator.Parsers
                         }
                     }
 
-                    requestDetailsList.Add(new RequestDetails
-                    {
-                        Name = record.Identifier.Text,
-                        Documentation = recordDetails, // RecordDetails object for the record.
-                        Constructors = constructorDetailsList
-                    });
+                    recordDetails.Constructors = constructorDetailsList;
+
+                    recordDetailsList.Add(recordDetails);
                 }
             }
 
-            return requestDetailsList;
+            return new RequestDocumentation
+            {
+                Records = recordDetailsList,
+            };
         }
     }
 }
