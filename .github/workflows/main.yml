@@ -35,6 +35,7 @@ jobs:
         run: |
           VERSION=$(dotnet gitversion /output json /showvariable SemVer)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo ${{ env.VERSION }}
         shell: bash
 
       - name: Restore dependencies
