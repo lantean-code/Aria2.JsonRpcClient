@@ -20,7 +20,7 @@ namespace ProjectDocumentationGeneratorRunner
                 }
             }
 
-            await Generator.GenerateDocumentation(@"..\..\..\..\Aria2.JsonRpcClient\Aria2.JsonRpcClient.csproj", "..\\..\\..\\docs", "net9.0");
+            await Generator.GenerateDocumentation(@"..\..\..\..\Aria2.JsonRpcClient\Aria2.JsonRpcClient.csproj", "..\\..\\..\\..\\docs", "net9.0");
         }
     }
 }
