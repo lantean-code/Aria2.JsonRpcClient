@@ -152,5 +152,34 @@ namespace Aria2.JsonRpcClient.Test.Client
             Mock.Get(_requestHandler)
                 .Verify(x => x.SendRequest<IReadOnlyList<JsonElement>>(It.Is<MultiCall>(r => r != null)), Times.Once());
         }
+
+        [Fact]
+        public async Task GIVEN_RequestWithErrorResponseGetResult_WHEN_SystemMulticall_THEN_ShouldThrowException()
+        {
+            var jsonResponse = new JsonRpcResponse<IReadOnlyList<JsonElement>>
+            {
+                Result = new List<JsonElement>
+                {
+                    JsonDocument.Parse("{\"code\":-32600,\"message\":\"Invalid Request\",\"customKey\":\"customValue\"}").RootElement,
+                }.AsReadOnly(),
+                Error = null,
+                Id = "Id",
+                JsonRpc = "JsonRpc"
+            };
+            var methods = new JsonRpcRequest[] { new TellActive() };
+
+            Mock.Get(_requestHandler)
+                .Setup(x => x.SendRequest<IReadOnlyList<JsonElement>>(It.IsAny<JsonRpcRequest>()))
+                .ReturnsAsync(jsonResponse);
+
+            var result = await _target.SystemMulticall(methods);
+
+            var act = () => TellActive.GetResult(result[0]);
+
+            act.Should().Throw<Aria2Exception>();
+
+            Mock.Get(_requestHandler)
+                .Verify(x => x.SendRequest<IReadOnlyList<JsonElement>>(It.Is<MultiCall>(r => r != null)), Times.Once());
+        }
     }
 }

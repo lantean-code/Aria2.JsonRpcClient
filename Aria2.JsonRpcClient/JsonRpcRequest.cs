@@ -87,6 +87,11 @@ namespace Aria2.JsonRpcClient
                 throw new ArgumentNullException("value");
             }
 
+            if (value is JsonRpcError error)
+            {
+                throw new Aria2Exception(error.Code, error.Message);
+            }
+
             return (T)value;
         }
 
